@@ -3,7 +3,7 @@
 /**
  * ECSHOP
  * ============================================================================
- * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -11,8 +11,9 @@
  * republish the program code, on the premise of that your behavior is not for
  * commercial purposes.
  * ============================================================================
- * $Author: liubo $
- * $Id: snatch.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: wj $
+ * $Date: 2007-02-08 17:19:36 +0800 (Thursday, 08 February 2007) $
+ * $Id: snatch.php 5457 2007-02-08 09:19:36Z wj $
 */
 
 $_LANG['snatch_id'] = 'ID';
@@ -66,7 +67,7 @@ $_LANG['js_languages']['no_name'] = 'Please enter Dutch auction name.';
 $_LANG['js_languages']['no_desc'] = 'Please enter Dutch auction description.';
 $_LANG['js_languages']['no_goods_id'] = 'Please select products.';
 $_LANG['js_languages']['invalid_min_price'] = 'Min price must not be blank, and must be a figure.';
-$_LANG['js_languages']['invalid_max_price'] = 'Most will pay the price figure is empty or not';
+$_LANG['js_languages']['invalid_max_price'] = '最多需支付的价格为空或不是数字';
 $_LANG['js_languages']['invalid_integral'] = 'Wrong, consume points is blank or isn\'t an integer.';
 $_LANG['js_languages']['invalid_starttime'] = 'The starting time format is invalid, month, time should enough 2 bits.';
 $_LANG['js_languages']['invalid_endtime'] = 'The cut-off time format is invalid, month, time should enough 2 bits.';

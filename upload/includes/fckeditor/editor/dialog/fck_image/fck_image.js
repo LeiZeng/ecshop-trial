@@ -1,6 +1,6 @@
 ﻿/*
  * FCKeditor - The text editor for Internet - http://www.fckeditor.net
- * Copyright (C) 2003-2008 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2007 Frederico Caldeira Knabben
  *
  * == BEGIN LICENSE ==
  *
@@ -21,29 +21,27 @@
  * Scripts related to the Image dialog window (see fck_image.html).
  */
 
-var dialog		= window.parent ;
-var oEditor		= dialog.InnerDialogLoaded() ;
+var oEditor		= window.parent.InnerDialogLoaded() ;
 var FCK			= oEditor.FCK ;
 var FCKLang		= oEditor.FCKLang ;
 var FCKConfig	= oEditor.FCKConfig ;
 var FCKDebug	= oEditor.FCKDebug ;
-var FCKTools	= oEditor.FCKTools ;
 
 var bImageButton = ( document.location.search.length > 0 && document.location.search.substr(1) == 'ImageButton' ) ;
 
 //#### Dialog Tabs
 
 // Set the dialog tabs.
-dialog.AddTab( 'Info', FCKLang.DlgImgInfoTab ) ;
+window.parent.AddTab( 'Info', FCKLang.DlgImgInfoTab ) ;
 
 if ( !bImageButton && !FCKConfig.ImageDlgHideLink )
-	dialog.AddTab( 'Link', FCKLang.DlgImgLinkTab ) ;
+	window.parent.AddTab( 'Link', FCKLang.DlgImgLinkTab ) ;
 
 if ( FCKConfig.ImageUpload )
-	dialog.AddTab( 'Upload', FCKLang.DlgLnkUpload ) ;
+	window.parent.AddTab( 'Upload', FCKLang.DlgLnkUpload ) ;
 
 if ( !FCKConfig.ImageDlgHideAdvanced )
-	dialog.AddTab( 'Advanced', FCKLang.DlgAdvancedTag ) ;
+	window.parent.AddTab( 'Advanced', FCKLang.DlgAdvancedTag ) ;
 
 // Function called when a dialog tag is selected.
 function OnDialogTabChange( tabCode )
@@ -55,13 +53,13 @@ function OnDialogTabChange( tabCode )
 }
 
 // Get the selected image (if available).
-var oImage = dialog.Selection.GetSelectedElement() ;
+var oImage = FCK.Selection.GetSelectedElement() ;
 
 if ( oImage && oImage.tagName != 'IMG' && !( oImage.tagName == 'INPUT' && oImage.type == 'image' ) )
 	oImage = null ;
 
 // Get the active link.
-var oLink = dialog.Selection.GetSelection().MoveToAncestorNode( 'A' ) ;
+var oLink = FCK.Selection.MoveToAncestorNode( 'A' ) ;
 
 var oImageOriginal ;
 
@@ -113,12 +111,10 @@ window.onload = function()
 	if ( FCKConfig.ImageUpload )
 		GetE('frmUpload').action = FCKConfig.ImageUploadURL ;
 
-	dialog.SetAutoSize( true ) ;
+	window.parent.SetAutoSize( true ) ;
 
 	// Activate the "OK" button.
-	dialog.SetOkButton( true ) ;
-
-	SelectField( 'txtUrl' ) ;
+	window.parent.SetOkButton( true ) ;
 }
 
 function LoadSelection()
@@ -147,7 +143,6 @@ function LoadSelection()
 		{
 			iWidth = aMatchW[1] ;
 			oImage.style.width = '' ;
-			SetAttribute( oImage, 'width' , iWidth ) ;
 		}
 	}
 
@@ -158,7 +153,6 @@ function LoadSelection()
 		{
 			iHeight = aMatchH[1] ;
 			oImage.style.height = '' ;
-			SetAttribute( oImage, 'height', iHeight ) ;
 		}
 	}
 
@@ -174,7 +168,7 @@ function LoadSelection()
 
 	if ( oEditor.FCKBrowserInfo.IsIE )
 	{
-		GetE('txtAttClasses').value = oImage.className || '' ;
+		GetE('txtAttClasses').value = oImage.getAttribute('className') || '' ;
 		GetE('txtAttStyle').value = oImage.style.cssText ;
 	}
 	else
@@ -201,7 +195,7 @@ function Ok()
 {
 	if ( GetE('txtUrl').value.length == 0 )
 	{
-		dialog.SetSelectedTab( 'Info' ) ;
+		window.parent.SetSelectedTab( 'Info' ) ;
 		GetE('txtUrl').focus() ;
 
 		alert( FCKLang.DlgImgAlertUrl ) ;
@@ -222,18 +216,19 @@ function Ok()
 			oImage = null ;
 	}
 
-	oEditor.FCKUndo.SaveUndoStep() ;
 	if ( !bHasImage )
 	{
 		if ( bImageButton )
 		{
-			oImage = FCK.EditorDocument.createElement( 'input' ) ;
+			oImage = FCK.EditorDocument.createElement( 'INPUT' ) ;
 			oImage.type = 'image' ;
-			oImage = FCK.InsertElement( oImage ) ;
+			oImage = FCK.InsertElementAndGetIt( oImage ) ;
 		}
 		else
-			oImage = FCK.InsertElement( 'img' ) ;
+			oImage = FCK.CreateElement( 'IMG' ) ;
 	}
+	else
+		oEditor.FCKUndo.SaveUndoStep() ;
 
 	UpdateImage( oImage ) ;
 
@@ -253,7 +248,7 @@ function Ok()
 			if ( !bHasImage )
 				oEditor.FCKSelection.SelectNode( oImage ) ;
 
-			oLink = oEditor.FCK.CreateLink( sLnkUrl )[0] ;
+			oLink = oEditor.FCK.CreateLink( sLnkUrl ) ;
 
 			if ( !bHasImage )
 			{
@@ -289,18 +284,13 @@ function UpdateImage( e, skipId )
 	SetAttribute( e, 'dir'		, GetE('cmbAttLangDir').value ) ;
 	SetAttribute( e, 'lang'		, GetE('txtAttLangCode').value ) ;
 	SetAttribute( e, 'title'	, GetE('txtAttTitle').value ) ;
+	SetAttribute( e, 'class'	, GetE('txtAttClasses').value ) ;
 	SetAttribute( e, 'longDesc'	, GetE('txtLongDesc').value ) ;
 
 	if ( oEditor.FCKBrowserInfo.IsIE )
-	{
-		e.className = GetE('txtAttClasses').value ;
 		e.style.cssText = GetE('txtAttStyle').value ;
-	}
 	else
-	{
-		SetAttribute( e, 'class'	, GetE('txtAttClasses').value ) ;
 		SetAttribute( e, 'style', GetE('txtAttStyle').value ) ;
-	}
 }
 
 var eImgPreview ;
@@ -357,7 +347,7 @@ function SwitchLock( lockButton )
 // Fired when the width or height input texts change
 function OnSizeChanged( dimension, value )
 {
-	// Verifies if the aspect ration has to be maintained
+	// Verifies if the aspect ration has to be mantained
 	if ( oImageOriginal && bLockRatio )
 	{
 		var e = dimension == 'Width' ? GetE('txtHeight') : GetE('txtWidth') ;
@@ -384,11 +374,6 @@ function OnSizeChanged( dimension, value )
 function ResetSizes()
 {
 	if ( ! oImageOriginal ) return ;
-	if ( oEditor.FCKBrowserInfo.IsGecko && !oImageOriginal.complete )
-	{
-		setTimeout( ResetSizes, 50 ) ;
-		return ;
-	}
 
 	GetE('txtWidth').value  = oImageOriginal.width ;
 	GetE('txtHeight').value = oImageOriginal.height ;
@@ -442,40 +427,48 @@ function SetUrl( url, width, height, alt )
 		UpdateOriginal( true ) ;
 	}
 
-	dialog.SetSelectedTab( 'Info' ) ;
+	window.parent.SetSelectedTab( 'Info' ) ;
 }
 
 function OnUploadCompleted( errorNumber, fileUrl, fileName, customMsg )
 {
-	// Remove animation
-	window.parent.Throbber.Hide() ;
-	GetE( 'divUpload' ).style.display  = '' ;
-
-	switch ( errorNumber )
+	switch ( errorNumber )//调用中文语言包项，如果没有找到语言项则调用默认语言项 modified by liupeng(ecshop.com) @ 2006-4-2
 	{
 		case 0 :	// No errors
-			alert( 'Your file has been successfully uploaded' ) ;
+		    if (FCKLang.DlgUploaded)
+			   alert( FCKLang.DlgUploaded );
+			else
+			   alert( 'Your file has been successfully uploaded' ) ;
 			break ;
-		case 1 :	// Custom error
+		case 1 :	
 			alert( customMsg ) ;
 			return ;
-		case 101 :	// Custom warning
+		case 101 :	
 			alert( customMsg ) ;
 			break ;
 		case 201 :
-			alert( 'A file with the same name is already available. The uploaded file has been renamed to "' + fileName + '"' ) ;
+			if (FCKLang.DlgFileRename)
+			   alert( FCKLang.DlgFileRename.replace("{filename}",fileName) ) ;
+			else
+			   alert( 'A file with the same name is already available. The uploaded file has been renamed to "' + fileName + '"' ) ;
 			break ;
 		case 202 :
-			alert( 'Invalid file type' ) ;
+		    if (FCKLang.DlgInvalidfiletype)
+			  alert( FCKLang.DlgInvalidfiletype ) ;
+			else
+			  alert( 'Invalid file type' ) ;
 			return ;
 		case 203 :
+		    if (FCKLang.DlgSecurityerror)
+			   alert( FCKLang.DlgSecurityerror);
+			else
 			alert( "Security error. You probably don't have enough permissions to upload. Please check your server." ) ;
 			return ;
-		case 500 :
-			alert( 'The connector is disabled' ) ;
-			break ;
 		default :
-			alert( 'Error on file upload. Error number: ' + errorNumber ) ;
+		    if (FCKLang.DlgOtherError)
+			   alert( FCKLang.DlgOtherError+errorNumber );
+			else
+			   alert( 'Error on file upload. Error number: ' + errorNumber ) ;
 			return ;
 	}
 
@@ -503,10 +496,6 @@ function CheckUpload()
 		OnUploadCompleted( 202 ) ;
 		return false ;
 	}
-
-	// Show animation
-	window.parent.Throbber.Show( 100 ) ;
-	GetE( 'divUpload' ).style.display  = 'none' ;
 
 	return true ;
 }

@@ -3,11 +3,11 @@
 /**
  * ECSHOP 专题管理语言包
  * ============================================================================
- * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com；
+ * 版权所有 (C) 2005-2006 康盛创想（北京）科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com
  * ----------------------------------------------------------------------------
- * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
- * 使用；不允许对程序代码以任何形式任何目的的再发布。
+ * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
+ * 进行修改、使用和再发布。
  * ============================================================================
  * @author:     webboy <laupeng@163.com>
  * @version:    v2.0
@@ -38,8 +38,6 @@ $_LANG['js_languages']['sort_name_empty'] = '请输入分类名称';
 $_LANG['js_languages']['move_item_confirm'] = '已选商品已经转移到\"className\"分类下';
 $_LANG['js_languages']['item_upper_limit'] = '每个分类下的商品不能超过50个';
 $_LANG['js_languages']['start_lt_end'] = '专题开始时间不能大于结束时间';
-$_LANG['invalid_type'] = '您上传的图片格式不正确！';
-$_LANG['web_url_no'] = '远程地址错误。请填写完整的 URL 地址！';
 
 /* 专题信息字段 */
 $_LANG['topic_id'] = '编号';
@@ -50,23 +48,8 @@ $_LANG['end_time'] = '结束时间';
 $_LANG['cycle'] = '活动周期';
 $_LANG['template_file'] = '专题模板文件';
 $_LANG['style_sheet'] = '专题样式表';
-$_LANG['lable_topic_type'] = '图片类型';
-$_LANG['lable_base_style'] = '基本风格样式';
-$_LANG['lable_title_upload'] = '商品分类标题图片';
-$_LANG['lable_topic_keywords'] = '专题页面关键字';
-$_LANG['lable_topic_description'] = '专题页面描述';
-
-$_LANG['tips_width_height'] = '此模板的图片标准宽度为：%s 标准高度为：%s';
-$_LANG['tips_upload_notice'] = '上传该广告的图片文件,或者你也可以指定一个远程URL地址为广告的图片';
-$_LANG['tips_title_width_height'] = '此模板的图片标准宽度为：%s 标准高度为：%s';
 
 $_LANG['all_goods'] = '可选商品';
 $_LANG['selected_goods'] = '已选商品';
-$_LANG['top_img'] = '图片';
-$_LANG['top_flash'] = 'Flash';
-$_LANG['top_html'] = '代码';
 
-$_LANG['lable_upload'] = '上传';
-$_LANG['lable_from_web'] = '或者远程URL地址';
-$_LANG['lable_content'] = '内容';
 ?>

@@ -3,14 +3,15 @@
 /**
  * ECSHOP 生成商品列表
  * ============================================================================
- * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com；
+ * 版权所有 (C) 2005-2007 康盛创想（北京）科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com
  * ----------------------------------------------------------------------------
- * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
- * 使用；不允许对程序代码以任何形式任何目的的再发布。
+ * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
+ * 进行修改、使用和再发布。
  * ============================================================================
- * $Author: liubo $
- * $Id: goods_script.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: testyang $
+ * $Date: 2008-01-28 18:33:06 +0800 (星期一, 28 一月 2008) $
+ * $Id: goods_script.php 14079 2008-01-28 10:33:06Z testyang $
  */
 
 define('IN_ECS', true);
@@ -23,12 +24,7 @@ if ((DEBUG_MODE & 2) != 2)
     $smarty->caching = true;
 }
 
-$charset = empty($_GET['charset']) ? EC_CHARSET : $_GET['charset'];
-$type = empty($_GET['type']) ? '' : 'collection';
-if (strtolower($charset) == 'gb2312')
-{
-    $charset = 'gbk';
-}
+$charset = empty($_GET['charset']) ? 'UTF8' : $_GET['charset'];
 header('content-type: application/x-javascript; charset=' . ($charset == 'UTF8' ? 'utf-8' : $charset));
 
 /*------------------------------------------------------ */
@@ -37,17 +33,14 @@ header('content-type: application/x-javascript; charset=' . ($charset == 'UTF8' 
 /* 缓存编号 */
 $cache_id = sprintf('%X', crc32($_SERVER['QUERY_STRING']));
 
-$tpl = ROOT_PATH . DATA_DIR . '/goods_script.html';
+$tpl = ROOT_PATH . 'data/goods_script.html';
 if (!$smarty->is_cached($tpl, $cache_id))
 {
     $time = gmtime();
-    $sql='';
     /* 根据参数生成查询语句 */
-    if ($type == '')
+    if (empty($_GET['type']))
     {
-        $sitename = !empty($_GET['sitename']) ?  $_GET['sitename'] : '';
-        $_from = (!empty($_GET['charset']) && $_GET['charset'] != 'UTF8')? urlencode(ecs_iconv('UTF-8', 'GBK', $sitename)) : urlencode(@$sitename);
-        $goods_url = $ecs->url() . 'affiche.php?ad_id=-1&amp;from=' . $_from . '&amp;goods_id=';
+        $goods_url = $ecs->url() . 'affiche.php?ad_id=-1&amp;from=' . urlencode(@$_GET['sitename']) . '&amp;goods_id=';
 
         $sql  = 'SELECT goods_id, goods_name, market_price, goods_thumb, RAND() AS rnd, ' .
                     "IF(is_promote = 1 AND '$time' >= promote_start_date AND ".
@@ -74,16 +67,16 @@ if (!$smarty->is_cached($tpl, $cache_id))
                 }
                 else
                 {
+                    $sql .= " AND " . $_GET['intro_type'] . " = 1 ORDER BY add_time DESC";
                     if ($_GET['intro_type'] == 'is_promote')
                     {
                         $sql  .= " AND promote_start_date <= '$time' AND promote_end_date >= '$time'";
                     }
-                    $sql .= " AND " . $_GET['intro_type'] . " = 1 ORDER BY add_time DESC";
                 }
             }
         }
     }
-    elseif ($type == 'collection')
+    elseif ($_GET['type'] == 'collection')
     {
         $uid = (int)$_GET['u'];
         $goods_url = $ecs->url() . "goods.php?u=$uid&id=";
@@ -99,41 +92,18 @@ if (!$smarty->is_cached($tpl, $cache_id))
     {
         // 转换编码
         $goods['goods_price'] = price_format($goods['goods_price']);
-        if ($charset != EC_CHARSET)
+        if ($charset != 'UTF8')
         {
-            if (EC_CHARSET == 'gbk')
-            {
-                $tmp_goods_name = htmlentities($goods['goods_name'], ENT_QUOTES, 'gb2312');
-            }
-            else
-            {
-                $tmp_goods_name = htmlentities($goods['goods_name'], ENT_QUOTES, EC_CHARSET);
-            }
-            $goods['goods_name']  = ecs_iconv(EC_CHARSET, $charset, $tmp_goods_name);
-            $goods['goods_price'] = ecs_iconv(EC_CHARSET, $charset, $goods['goods_price']);
+            $goods['goods_name']  = ecs_iconv('UTF8', $charset, htmlentities($goods['goods_name'], ENT_QUOTES, 'UTF-8'));
+            $goods['goods_price'] = ecs_iconv('UTF8', $charset, $goods['goods_price']);
         }
-        $goods['goods_name']  = $GLOBALS['_CFG']['goods_name_length'] > 0 ? sub_str($goods['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $goods['goods_name'];
-        $goods['goods_thumb'] = get_image_path($goods['goods_id'], $goods['goods_thumb'], true);
         $goods_list[] = $goods;
     }
+    $smarty->assign('goods_list', $goods_list);
 
     /* 排列方式 */
     $arrange = empty($_GET['arrange']) || !in_array($_GET['arrange'], array('h', 'v')) ? 'h' : $_GET['arrange'];
-
-    /* 排列显示条目个数 */
-    $goods_num = !empty($_GET['goods_num']) ? intval($_GET['goods_num']) : 10;
-    $rows_num = !empty($_GET['rows_num']) ? intval($_GET['rows_num']) : '1';
-    if($arrange == 'h')
-    {
-        $goods_items = array_chunk($goods_list,$rows_num);
-    }
-    else
-    {
-        $columns_num = ceil($goods_num / $rows_num);
-        $goods_items = array_chunk($goods_list,$columns_num);
-    }
-    $smarty->assign('goods_list', $goods_items);
-
+    $smarty->assign('arrange', $arrange);
 
     /* 是否需要图片 */
     $need_image = empty($_GET['need_image']) || $_GET['need_image'] == 'true' ? 1 : 0;

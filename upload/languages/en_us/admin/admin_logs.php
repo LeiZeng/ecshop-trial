@@ -3,7 +3,7 @@
 /**
  * ECSHOP Control panel operate language file
  * ============================================================================
- * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -11,8 +11,9 @@
  * republish the program code, on the premise of that your behavior is not for
  * commercial purposes.
  * ============================================================================
- * $Author: liubo $
- * $Id: admin_logs.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: weberliu $
+ * $Date: 2006-07-17 09:23:23 +0800 (Monday, 17 July 2006) $
+ * $Id: log_action.php 232 2006-07-17 01:23:23Z weberliu $
 */
 /* Field information */
 $_LANG['log_id'] = 'NO.';

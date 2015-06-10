@@ -3,14 +3,15 @@
 /**
  * ECSHOP 团购商品前台文件
  * ============================================================================
- * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com；
+ * 版权所有 (C) 2005-2007 康盛创想（北京）科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com
  * ----------------------------------------------------------------------------
- * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
- * 使用；不允许对程序代码以任何形式任何目的的再发布。
+ * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
+ * 进行修改、使用和再发布。
  * ============================================================================
- * $Author: liubo $
- * $Id: group_buy.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: testyang $
+ * $Date: 2008-02-01 23:40:15 +0800 (星期五, 01 二月 2008) $
+ * $Id: group_buy.php 14122 2008-02-01 15:40:15Z testyang $
  */
 
 define('IN_ECS', true);
@@ -70,7 +71,23 @@ if ($_REQUEST['act'] == 'list')
             $smarty->assign('gb_list',  $gb_list);
 
             /* 设置分页链接 */
-            $pager = get_pager('group_buy.php', array('act' => 'list'), $count, $page, $size);
+            $url = 'group_buy.php?act=list&amp;page=';
+            $pager = array(
+                'search'       => array('act' => 'list'),
+                'page'         => $page,
+                'size'         => $size,
+                'record_count' => $count,
+                'page_count'   => $page_count,
+                'page_first'   => $url . '1',
+                'page_prev'    => $page > 1 ? $url . ($page - 1) : 'javascript:;',
+                'page_next'    => $page < $page_count ? $url . ($page + 1) : 'javascript:;',
+                'page_last'    => $url . $page_count,
+                'array'        => array()
+            );
+            for ($i = 1; $i <= $page_count; $i++)
+            {
+                $pager['array'][$i] = $i;
+            }
             $smarty->assign('pager', $pager);
         }
 
@@ -84,9 +101,8 @@ if ($_REQUEST['act'] == 'list')
         $smarty->assign('helps',      get_shop_help());       // 网店帮助
         $smarty->assign('top_goods',  get_top10());           // 销售排行
         $smarty->assign('promotion_info', get_promotion_info());
-        $smarty->assign('feed_url',         ($_CFG['rewrite'] == 1) ? "feed-typegroup_buy.xml" : 'feed.php?type=group_buy'); // RSS URL
 
-        assign_dynamic('group_buy_list');
+        assign_dynamic('goods');
     }
 
     /* 显示模板 */
@@ -108,7 +124,6 @@ elseif ($_REQUEST['act'] == 'view')
 
     /* 取得团购活动信息 */
     $group_buy = group_buy_info($group_buy_id);
-
     if (empty($group_buy))
     {
         ecs_header("Location: ./\n");
@@ -143,7 +158,7 @@ elseif ($_REQUEST['act'] == 'view')
             exit;
         }
         $goods['url'] = build_uri('goods', array('gid' => $goods_id), $goods['goods_name']);
-        $smarty->assign('gb_goods', $goods);
+        $smarty->assign('goods', $goods);
 
         /* 取得商品的规格 */
         $properties = get_goods_properties($goods_id);
@@ -161,7 +176,7 @@ elseif ($_REQUEST['act'] == 'view')
         $smarty->assign('helps',      get_shop_help());       // 网店帮助
         $smarty->assign('top_goods',  get_top10());           // 销售排行
         $smarty->assign('promotion_info', get_promotion_info());
-        assign_dynamic('group_buy_goods');
+        assign_dynamic('goods');
     }
 
     //更新商品点击次数
@@ -169,7 +184,6 @@ elseif ($_REQUEST['act'] == 'view')
            "WHERE goods_id = '" . $group_buy['goods_id'] . "'";
     $db->query($sql);
 
-    $smarty->assign('now_time',  gmtime());           // 当前系统时间
     $smarty->display('group_buy_goods.dwt', $cache_id);
 }
 
@@ -179,13 +193,13 @@ elseif ($_REQUEST['act'] == 'view')
 
 elseif ($_REQUEST['act'] == 'buy')
 {
-    /* 查询：判断是否登录 */
+    /* 判断是否登录 */
     if ($_SESSION['user_id'] <= 0)
     {
         show_message($_LANG['gb_error_login'], '', '', 'error');
     }
 
-    /* 查询：取得参数：团购活动id */
+    /* 取得参数：团购活动id */
     $group_buy_id = isset($_POST['group_buy_id']) ? intval($_POST['group_buy_id']) : 0;
     if ($group_buy_id <= 0)
     {
@@ -193,11 +207,11 @@ elseif ($_REQUEST['act'] == 'buy')
         exit;
     }
 
-    /* 查询：取得数量 */
+    /* 取得数量 */
     $number = isset($_POST['number']) ? intval($_POST['number']) : 1;
     $number = $number < 1 ? 1 : $number;
 
-    /* 查询：取得团购活动信息 */
+    /* 取得团购活动信息 */
     $group_buy = group_buy_info($group_buy_id, $number);
     if (empty($group_buy))
     {
@@ -205,13 +219,13 @@ elseif ($_REQUEST['act'] == 'buy')
         exit;
     }
 
-    /* 查询：检查团购活动是否是进行中 */
+    /* 检查团购活动是否是进行中 */
     if ($group_buy['status'] != GBS_UNDER_WAY)
     {
         show_message($_LANG['gb_error_status'], '', '', 'error');
     }
 
-    /* 查询：取得团购商品信息 */
+    /* 取得团购商品信息 */
     $goods = goods_info($group_buy['goods_id']);
     if (empty($goods))
     {
@@ -219,14 +233,14 @@ elseif ($_REQUEST['act'] == 'buy')
         exit;
     }
 
-    /* 查询：判断数量是否足够 */
-    if (($group_buy['restrict_amount'] > 0 && $number > ($group_buy['restrict_amount'] - $group_buy['valid_goods'])) || $number > $goods['goods_number'])
+    /* 判断数量是否足够 */
+    if ($group_buy['restrict_amount'] > 0 && $number > $group_buy['restrict_amount'] - $group_buy['valid_goods'])
     {
         show_message($_LANG['gb_error_goods_lacking'], '', '', 'error');
     }
 
-    /* 查询：取得规格 */
-    $specs = '';
+    /* 取得规格 */
+    $specs = '0';
     foreach ($_POST as $key => $value)
     {
         if (strpos($key, 'spec_') !== false)
@@ -234,24 +248,8 @@ elseif ($_REQUEST['act'] == 'buy')
             $specs .= ',' . intval($value);
         }
     }
-    $specs = trim($specs, ',');
 
-    /* 查询：如果商品有规格则取规格商品信息 配件除外 */
-    if ($specs)
-    {
-        $_specs = explode(',', $specs);
-        $product_info = get_products_info($goods['goods_id'], $_specs);
-    }
-
-    empty($product_info) ? $product_info = array('product_number' => 0, 'product_id' => 0) : '';
-
-    /* 查询：判断指定规格的货品数量是否足够 */
-    if ($specs && $number > $product_info['product_number'])
-    {
-        show_message($_LANG['gb_error_goods_lacking'], '', '', 'error');
-    }
-
-    /* 查询：查询规格名称和值，不考虑价格 */
+    /* 查询规格名称和值，不考虑价格 */
     $attr_list = array();
     $sql = "SELECT a.attr_name, g.attr_value " .
             "FROM " . $ecs->table('goods_attr') . " AS g, " .
@@ -265,17 +263,16 @@ elseif ($_REQUEST['act'] == 'buy')
     }
     $goods_attr = join(chr(13) . chr(10), $attr_list);
 
-    /* 更新：清空购物车中所有团购商品 */
+    /* 清空购物车中所有团购商品 */
     include_once(ROOT_PATH . 'includes/lib_order.php');
     clear_cart(CART_GROUP_BUY_GOODS);
 
-    /* 更新：加入购物车 */
+    /* 加入购物车 */
     $goods_price = $group_buy['deposit'] > 0 ? $group_buy['deposit'] : $group_buy['cur_price'];
     $cart = array(
         'user_id'        => $_SESSION['user_id'],
         'session_id'     => SESS_ID,
         'goods_id'       => $group_buy['goods_id'],
-        'product_id'     => $product_info['product_id'],
         'goods_sn'       => addslashes($goods['goods_sn']),
         'goods_name'     => addslashes($goods['goods_name']),
         'market_price'   => $goods['market_price'],
@@ -291,7 +288,7 @@ elseif ($_REQUEST['act'] == 'buy')
     );
     $db->autoExecute($ecs->table('cart'), $cart, 'INSERT');
 
-    /* 更新：记录购物流程类型：团购 */
+    /* 记录购物流程类型：团购 */
     $_SESSION['flow_type'] = CART_GROUP_BUY_GOODS;
     $_SESSION['extension_code'] = 'group_buy';
     $_SESSION['extension_id'] = $group_buy_id;
@@ -308,7 +305,7 @@ function group_buy_count()
     $sql = "SELECT COUNT(*) " .
             "FROM " . $GLOBALS['ecs']->table('goods_activity') .
             "WHERE act_type = '" . GAT_GROUP_BUY . "' " .
-            "AND start_time <= '$now' AND is_finished < 3";
+            "AND start_time <= '$now'";
 
     return $GLOBALS['db']->getOne($sql);
 }
@@ -329,7 +326,7 @@ function group_buy_list($size, $page)
             "FROM " . $GLOBALS['ecs']->table('goods_activity') . " AS b " .
                 "LEFT JOIN " . $GLOBALS['ecs']->table('goods') . " AS g ON b.goods_id = g.goods_id " .
             "WHERE b.act_type = '" . GAT_GROUP_BUY . "' " .
-            "AND b.start_time <= '$now' AND b.is_finished < 3 ORDER BY b.act_id DESC";
+            "AND b.start_time <= '$now'";
     $res = $GLOBALS['db']->selectLimit($sql, $size, ($page - 1) * $size);
     while ($group_buy = $GLOBALS['db']->fetchRow($res))
     {
@@ -361,7 +358,7 @@ function group_buy_list($size, $page)
         /* 处理图片 */
         if (empty($group_buy['goods_thumb']))
         {
-            $group_buy['goods_thumb'] = get_image_path($group_buy['goods_id'], $group_buy['goods_thumb'], true);
+            $group_buy['goods_thumb'] = $GLOBALS['_CFG']['no_picture'];
         }
         /* 处理链接 */
         $group_buy['url'] = build_uri('group_buy', array('gbid'=>$group_buy['group_buy_id']));

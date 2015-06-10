@@ -3,14 +3,15 @@
 /**
  * ECSHOP 用户级错误处理类
  * ============================================================================
- * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com；
+ * 版权所有 (C) 2005-2007 康盛创想（北京）科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com
  * ----------------------------------------------------------------------------
- * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
- * 使用；不允许对程序代码以任何形式任何目的的再发布。
+ * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
+ * 进行修改、使用和再发布。
  * ============================================================================
- * $Author: liubo $
- * $Id: cls_error.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: hackfan $
+ * $Date: 2007-10-15 13:58:43 +0800 (星期一, 15 十月 2007) $
+ * $Id: cls_error.php 12919 2007-10-15 05:58:43Z hackfan $
 */
 
 if (!defined('IN_ECS'))
@@ -118,10 +119,8 @@ class ecs_error
         {
             $message = array();
 
-            $link = (empty($link)) ? $GLOBALS['_LANG']['back_up_page'] : $link;
-            $href = (empty($href)) ? 'javascript:history.back();' : $href;
-            $message['url_info'][$link] = $href;
-            $message['back_url'] = $href;
+            $message['link'] = (empty($link)) ? $GLOBALS['_LANG']['back_up_page'] : $link;
+            $message['href'] = (empty($href)) ? 'javascript:history.back();' : $href;
 
             foreach ($this->_message AS $msg)
             {
@@ -131,7 +130,6 @@ class ecs_error
             if (isset($GLOBALS['smarty']))
             {
                 assign_template();
-                $GLOBALS['smarty']->assign('auto_redirect', true);
                 $GLOBALS['smarty']->assign('message', $message);
                 $GLOBALS['smarty']->display($this->_template);
             }

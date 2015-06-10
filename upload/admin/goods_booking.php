@@ -3,20 +3,21 @@
 /**
  * ECSHOP 缺货处理管理程序
  * ============================================================================
- * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com；
+ * 版权所有 (C) 2005-2007 康盛创想（北京）科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com
  * ----------------------------------------------------------------------------
- * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
- * 使用；不允许对程序代码以任何形式任何目的的再发布。
+ * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
+ * 进行修改、使用和再发布。
  * ============================================================================
- * $Author: liubo $
- * $Id: goods_booking.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: testyang $
+ * $Date: 2008-02-01 23:40:15 +0800 (星期五, 01 二月 2008) $
+ * $Id: goods_booking.php 14122 2008-02-01 15:40:15Z testyang $
 */
 
 define('IN_ECS', true);
 
 require(dirname(__FILE__) . '/includes/init.php');
-admin_priv('booking');
+
 /*------------------------------------------------------ */
 //-- 列出所有订购信息
 /*------------------------------------------------------ */
@@ -83,7 +84,6 @@ if ($_REQUEST['act']=='detail')
 {
     $id = intval($_REQUEST['id']);
 
-    $smarty->assign('send_fail',    !empty($_REQUEST['send_ok']));
     $smarty->assign('booking',      get_booking_info($id));
     $smarty->assign('ur_here',      $_LANG['detail']);
     $smarty->assign('action_link',  array('text' => $_LANG['06_undispose_booking'], 'href'=>'goods_booking.php?act=list_all'));
@@ -106,40 +106,7 @@ if ($_REQUEST['act'] =='update')
             " WHERE rec_id='$_REQUEST[rec_id]'";
     $db->query($sql);
 
-    /* 邮件通知处理流程 */
-    if (!empty($_POST['send_email_notice']) or isset($_POST['remail']))
-    {
-        //获取邮件中的必要内容
-        $sql = 'SELECT bg.email, bg.link_man, bg.goods_id, g.goods_name ' .
-               'FROM ' .$ecs->table('booking_goods'). ' AS bg, ' .$ecs->table('goods'). ' AS g ' .
-               "WHERE bg.goods_id = g.goods_id AND bg.rec_id='$_REQUEST[rec_id]'";
-        $booking_info = $db->getRow($sql);
-
-        /* 设置缺货回复模板所需要的内容信息 */
-        $template    = get_mail_template('goods_booking');
-        $goods_link = $ecs->url() . 'goods.php?id=' . $booking_info['goods_id'];
-
-        $smarty->assign('user_name',   $booking_info['link_man']);
-        $smarty->assign('goods_link', $goods_link);
-        $smarty->assign('goods_name', $booking_info['goods_name']);
-        $smarty->assign('dispose_note', $dispose_note);
-        $smarty->assign('shop_name',   "<a href='".$ecs->url()."'>" . $_CFG['shop_name'] . '</a>');
-        $smarty->assign('send_date',   date('Y-m-d'));
-
-        $content = $smarty->fetch('str:' . $template['template_content']);
-
-        /* 发送邮件 */
-        if (send_mail($booking_info['link_man'], $booking_info['email'], $template['template_subject'], $content, $template['is_html']))
-        {
-            $send_ok = 0;
-        }
-        else
-        {
-            $send_ok = 1;
-        }
-    }
-
-    ecs_header("Location: ?act=detail&id=".$_REQUEST['rec_id']."&send_ok=$send_ok\n");
+    ecs_header("Location: ?act=detail&id=".$_REQUEST['rec_id']."\n");
     exit;
 }
 
@@ -154,10 +121,6 @@ function get_bookinglist()
 {
     /* 查询条件 */
     $filter['keywords']   = empty($_REQUEST['keywords']) ? '' : trim($_REQUEST['keywords']);
-    if (isset($_REQUEST['is_ajax']) && $_REQUEST['is_ajax'] == 1)
-    {
-        $filter['keywords'] = json_str_iconv($filter['keywords']);
-    }
     $filter['dispose']    = empty($_REQUEST['dispose']) ? 0 : intval($_REQUEST['dispose']);
     $filter['sort_by']    = empty($_REQUEST['sort_by']) ? 'sort_order' : trim($_REQUEST['sort_by']);
     $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC' : trim($_REQUEST['sort_order']);

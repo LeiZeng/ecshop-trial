@@ -3,7 +3,7 @@
 /**
  * ECSHOP Batch upload products,modification language item
  * ============================================================================
- * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -11,8 +11,9 @@
  * republish the program code, on the premise of that your behavior is not for
  * commercial purposes.
  * ============================================================================
- * $Author: liubo $
- * $Id: goods_batch.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: scottye $
+ * $Date: 2007-02-06 15:40:38 +0800 (Tuesday, 06 February 2007) $
+ * $Id: goods_batch.php 5241 2007-02-06 07:40:38Z scottye $
  */
 
 $_LANG['select_method'] ='Product method:';
@@ -29,27 +30,20 @@ $_LANG['edit_each'] ='One by one';
 $_LANG['edit_all'] ='Unify';
 $_LANG['go_edit'] ='Enter';
 
-$_LANG['notice_edit'] = 'Member price -1 express Member price will be calculated in proportion to Member discounts grading';
+$_LANG['notice_edit'] = '会员价格为-1表示会员价格将根据会员等级折扣比例计算';
 
 $_LANG['goods_class'] = 'Goods Class';
 $_LANG['g_class'][G_REAL] = 'Real Goods';
 $_LANG['g_class'][G_CARD] = 'Virtual Card';
 
-$_LANG['goods_sn'] = 'NO';
 $_LANG['goods_name'] ='Name';
 $_LANG['market_price'] ='Market price';
 $_LANG['shop_price'] ='Shop price';
-$_LANG['integral'] = 'Purchase Points';
-$_LANG['give_integral'] = 'Free points';
+$_LANG['integral'] = '积分购买';
+$_LANG['give_integral'] = '赠送积分';
 $_LANG['goods_number'] ='Stock';
 $_LANG['brand'] ='Brand';
 
-$_LANG['export_format'] = 'Data formats';
-$_LANG['export_ecshop'] = 'ecshop to support data formats';
-$_LANG['export_taobao'] = 'taobao Assistant to support data formats';
-$_LANG['export_taobao46'] = 'taobao Assistant4.6 to support data formats';
-$_LANG['export_paipai'] = 'paipai Assistant to support data formats';
-$_LANG['export_paipai3'] = 'paipai 3.0 Assistant to support data formats';
 $_LANG['batch_edit_ok'] ='Batch modify successfully.';
 
 $_LANG['goods_cat'] ='Category:';
@@ -63,9 +57,7 @@ $_LANG['use_help'] ='Help:' .
           '<Li>Fill in the csv file, can use the excel or text editor to open a csv file;<br />' .
               'If "Best product" and so on, fill in numeral 0 or 1, 0 means "NO", 1 mean "YES";<br />' .
               'Please fill in file name with path for product picture and thumbnail, the path is relative path [root directory]/images/, for example, the picture path is [root catalogue]/images/200610/abc.jpg, fill in 200610/abc.jpg;<br />'.
-              '<font style="color:#FE596A;">If Taobao Assistant cvs encoding format, make sure the code on the site, such as the code is incorrect, you can use editing software transcoding.</font></li>' .
           '<Li>Upload the product picture and thumbnail to correspond directory, for example:[Root catalogue]/images/200610/;</li>' .
-              '<font style="color:#FE596A;">Please upload pictures of goods and commodities csv file and upload the thumbnails, or picture can not be processed.</font></li>' .
           '<Li>Select category and file code to upload, upload the csv file.</li>'.
         '</ol>';
 

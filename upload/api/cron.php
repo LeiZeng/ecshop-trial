@@ -3,20 +3,21 @@
 /**
  * ECSHOP 程序说明
  * ===========================================================
- * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com；
+ * 版权所有 (C) 2005-2007 康盛创想（北京）科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com
  * ----------------------------------------------------------
- * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
- * 使用；不允许对程序代码以任何形式任何目的的再发布。
+ * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
+ * 进行修改、使用和再发布。
  * ==========================================================
- * $Author: liubo $
- * $Id: cron.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author$
+ * $Date$
+ * $Id$
  */
 
 define('IN_ECS', true);
 
 require('./init.php');
-//require('../includes/lib_time.php');
+require('../includes/lib_time.php');
 
 $timestamp = gmtime();
 check_method();
@@ -33,7 +34,7 @@ foreach ($crondb AS $key => $cron_val)
     {
         if (!empty($cron_val['allow_ip'])) // 设置了允许ip
         {
-            $allow_ip = explode(',', $cron_val['allow_ip']);
+            $allow_ip = explode(' ', $cron_val['allow_ip']);
             $server_ip = real_server_ip();
             if (!in_array($server_ip, $allow_ip))
             {
@@ -42,7 +43,7 @@ foreach ($crondb AS $key => $cron_val)
         }
         if (!empty($cron_val['minute'])) // 设置了允许分钟段
         {
-            $m = explode(',', $cron_val['minute']);
+            $m = explode(' ', $cron_val['minute']);
             $m_now = intval(local_date('i',$timestamp));
             if (!in_array($m_now, $m))
             {
@@ -199,7 +200,7 @@ function check_method()
         {
             die('Hacking attempt');
         }
-        elseif (!isset($_GET['t']) || $GLOBALS['timestamp'] - intval($_GET['t']) > 60 || empty($_SERVER['HTTP_REFERER']))
+        elseif (!isset($_GET['t']) || $GLOBALS['timestamp'] - $_GET['t'] > 60 || empty($_SERVER['HTTP_REFERER']))
         {
             exit;
         }

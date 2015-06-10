@@ -3,7 +3,7 @@
 /**
  * ECSHOP Control panel associates product language file
  * ============================================================================
- * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -11,8 +11,9 @@
  * republish the program code, on the premise of that your behavior is not for
  * commercial purposes.
  * ============================================================================
- * $Author: liubo $
- * $Id: group_buy.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: liry $
+ * $Date: 2007-02-08 17:54:02 +0800 (Thursday, 08 February 2007) $
+ * $Id: group_buy.php 5466 2007-02-08 09:54:02Z liry $
 */
 
 /* Current page title and useable link name */
@@ -77,8 +78,6 @@ $_LANG['js_languages']['fail_confirm'] = 'The operation is nonreversible, are yo
 $_LANG['button_mail'] = 'Send mail';
 $_LANG['notice_mail'] = '(Notice customer pay the rest money for shipping)';
 $_LANG['mail_result'] = 'There are %s availably orders, send %s mails successfully.';
-$_LANG['invalid_time'] = 'You have entered an invalid buy time.';
-
 $_LANG['add_success'] = 'Add successfully';
 $_LANG['edit_success'] = 'Edit successfully';
 $_LANG['back_list'] = 'Return';
@@ -88,19 +87,17 @@ $_LANG['continue_add'] = 'Continue add';
 $_LANG['error_goods_null'] = 'Please select product of associates!';
 $_LANG['error_goods_exist'] = 'There is an associates for your selected product!';
 $_LANG['error_price_ladder'] = 'Please enter an effective price step value!';
-$_LANG['error_restrict_amount'] = 'Sales quantity is less than the price ladder should not the largest quantity';
+$_LANG['error_restrict_amount'] = '限购数量不能小于价格阶梯中的最大数量';
 
 $_LANG['js_languages']['error_goods_null'] = 'Please select product of associates!';
 $_LANG['js_languages']['error_deposit'] = 'Insurance must be an integer!';
 $_LANG['js_languages']['error_restrict_amount'] = 'Limit quantity must be an integer!';
 $_LANG['js_languages']['error_gift_integral'] = 'Present points must be an integer!';
-$_LANG['js_languages']['search_is_null'] = 'Did not search any products, please re-search';
 
 /* Delete associates */
 $_LANG['js_languages']['batch_drop_confirm'] = 'Are you sure delete the checked associates?';
 $_LANG['error_exist_order'] = 'There are orders in the associates, can\'t be deleted!';
 $_LANG['batch_drop_success'] = '%s records has be deleted successfully.(You can\'t delete associates with orders)';
-$_LANG['no_select_group_buy'] = 'Events do not buy your records!';
 
 /* Operation logs */
 $_LANG['log_action']['group_buy'] = 'Associates product';

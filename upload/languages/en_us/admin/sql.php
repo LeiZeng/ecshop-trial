@@ -3,7 +3,7 @@
 /**
  * ECSHOP SQL query language item
  * ============================================================================
- * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -11,8 +11,9 @@
  * republish the program code, on the premise of that your behavior is not for
  * commercial purposes.
  * ============================================================================
- * $Author: liubo $
- * $Id: sql.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: weberliu $
+ * $Date: 2006-09-14 02:51:33 +0800 (Tuesday, 14 Sep 2006) $
+ * $Id: card.php 1510 2006-09-13 18:51:33Z weberliu $
 */
 
 $_LANG['title'] = 'Run the SQL query';

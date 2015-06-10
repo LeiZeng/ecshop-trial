@@ -3,22 +3,20 @@
 /**
  * ECSHOP 站点地图生成程序
  * ============================================================================
- * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com；
+ * 版权所有 (C) 2005-2007 康盛创想（北京）科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com
  * ----------------------------------------------------------------------------
- * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
- * 使用；不允许对程序代码以任何形式任何目的的再发布。
+ * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
+ * 进行修改、使用和再发布。
  * ============================================================================
- * $Author: liubo $
- * $Id: sitemap.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: testyang $
+ * $Date: 2008-01-28 18:33:06 +0800 (星期一, 28 一月 2008) $
+ * $Id: sitemap.php 14079 2008-01-28 10:33:06Z testyang $
 */
 
 define('IN_ECS', true);
 
 require(dirname(__FILE__) . '/includes/init.php');
-
-/* 检查权限 */
-admin_priv('sitemap');
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET')
 {
@@ -60,46 +58,45 @@ else
     $db->query("UPDATE " .$ecs->table('shop_config'). " SET VALUE='$config' WHERE code='sitemap'");
 
     /* 商品分类 */
-    $sql = "SELECT cat_id,cat_name FROM " .$ecs->table('category'). " ORDER BY parent_id";
+    $sql = "SELECT cat_id FROM " .$ecs->table('category'). " ORDER BY parent_id";
     $res = $db->query($sql);
 
     while ($row = $db->fetchRow($res))
     {
-        $smi =& new google_sitemap_item($domain . build_uri('category', array('cid' => $row['cat_id']), $row['cat_name']), $today,
+        $smi =& new google_sitemap_item($domain . build_uri('category', array('cid' => $row['cat_id'])), $today,
             $_POST['category_changefreq'], $_POST['category_priority']);
         $sm->add_item($smi);
     }
 
     /* 文章分类 */
-    $sql = "SELECT cat_id,cat_name FROM " .$ecs->table('article_cat'). " WHERE cat_type=1";
+    $sql = "SELECT cat_id FROM " .$ecs->table('article_cat'). " WHERE cat_type=1";
     $res = $db->query($sql);
 
     while ($row = $db->fetchRow($res))
     {
-        $smi =& new google_sitemap_item($domain . build_uri('article_cat', array('acid' => $row['cat_id']), $row['cat_name']), $today,
+        $smi =& new google_sitemap_item($domain . build_uri('article_cat', array('acid' => $row['cat_id'])), $today,
             $_POST['category_changefreq'], $_POST['category_priority']);
         $sm->add_item($smi);
     }
 
     /* 商品 */
-    $sql = "SELECT goods_id, goods_name FROM " .$ecs->table('goods'). " WHERE is_delete = 0";
+    $sql = "SELECT goods_id FROM " .$ecs->table('goods'). " WHERE is_delete = 0";
     $res = $db->query($sql);
 
     while ($row = $db->fetchRow($res))
     {
-        $smi =& new google_sitemap_item($domain . build_uri('goods', array('gid' => $row['goods_id']), $row['goods_name']), $today,
+        $smi =& new google_sitemap_item($domain . build_uri('goods', array('gid' => $row['goods_id'])), $today,
             $_POST['content_changefreq'], $_POST['content_priority']);
         $sm->add_item($smi);
     }
 
     /* 文章 */
-    $sql = "SELECT article_id,title,file_url,open_type FROM " .$ecs->table('article'). " WHERE is_open=1";
+    $sql = "SELECT article_id FROM " .$ecs->table('article'). " WHERE is_open=1";
     $res = $db->query($sql);
 
     while ($row = $db->fetchRow($res))
     {
-        $article_url=$row['open_type'] != 1 ? build_uri('article', array('aid'=>$row['article_id']), $row['title']) : trim($row['file_url']);
-        $smi =& new google_sitemap_item($domain . $article_url,
+        $smi =& new google_sitemap_item($domain . build_uri('article', array('aid' => $row['article_id'])),
             $today, $_POST['content_changefreq'], $_POST['content_priority']);
         $sm->add_item($smi);
     }
@@ -113,10 +110,10 @@ else
     }
     else
     {
-        $sm_file = '../' . DATA_DIR . '/sitemaps.xml';
+        $sm_file = '../data/sitemaps.xml';
         if ($sm->build($sm_file))
         {
-            sys_msg(sprintf($_LANG['generate_success'], $ecs->url(). DATA_DIR . '/sitemaps.xml'));
+            sys_msg(sprintf($_LANG['generate_success'], $ecs->url()."data/sitemaps.xml"));
         }
         else
         {

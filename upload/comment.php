@@ -3,27 +3,28 @@
 /**
  * ECSHOP 提交用户评论
  * ============================================================================
- * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com；
+ * 版权所有 (C) 2005-2007 康盛创想（北京）科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com
  * ----------------------------------------------------------------------------
- * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
- * 使用；不允许对程序代码以任何形式任何目的的再发布。
+ * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
+ * 进行修改、使用和再发布。
  * ============================================================================
- * $Author: liubo $
- * $Id: comment.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: testyang $
+ * $Date: 2008-02-01 23:40:15 +0800 (星期五, 01 二月 2008) $
+ * $Id: comment.php 14122 2008-02-01 15:40:15Z testyang $
 */
 
 define('IN_ECS', true);
 
 require(dirname(__FILE__) . '/includes/init.php');
 require(ROOT_PATH . 'includes/cls_json.php');
+
 if (!isset($_REQUEST['cmt']) && !isset($_REQUEST['act']))
 {
     /* 只有在没有提交评论内容以及没有act的情况下才跳转 */
     ecs_header("Location: ./\n");
     exit;
 }
-$_REQUEST['cmt'] = isset($_REQUEST['cmt']) ? json_str_iconv($_REQUEST['cmt']) : '';
 
 $json   = new JSON;
 $result = array('error' => 0, 'message' => '', 'content' => '');
@@ -36,18 +37,11 @@ if (empty($_REQUEST['act']))
      */
     $cmt  = $json->decode($_REQUEST['cmt']);
     $cmt->page = 1;
-    $cmt->id   = !empty($cmt->id)   ? intval($cmt->id) : 0;
-    $cmt->type = !empty($cmt->type) ? intval($cmt->type) : 0;
 
     if (empty($cmt) || !isset($cmt->type) || !isset($cmt->id))
     {
         $result['error']   = 1;
         $result['message'] = $_LANG['invalid_comments'];
-    }
-    elseif (!is_email($cmt->email))
-    {
-        $result['error']   = 1;
-        $result['message'] = $_LANG['error_email'];
     }
     else
     {
@@ -83,7 +77,7 @@ if (empty($_REQUEST['act']))
                             {
                                 $sql = "SELECT o.order_id FROM " . $ecs->table('order_info') . " AS o ".
                                        " WHERE user_id = '" . $_SESSION['user_id'] . "'".
-                                       " AND (o.order_status = '" . OS_CONFIRMED . "' or o.order_status = '" . OS_SPLITED . "') ".
+                                       " AND o.order_status = '" . OS_CONFIRMED . "' ".
                                        " AND (o.pay_status = '" . PS_PAYED . "' OR o.pay_status = '" . PS_PAYING . "') ".
                                        " AND (o.shipping_status = '" . SS_SHIPPED . "' OR o.shipping_status = '" . SS_RECEIVED . "') ".
                                        " LIMIT 1";
@@ -102,6 +96,7 @@ if (empty($_REQUEST['act']))
                                 $result['message'] = $_LANG['comment_custom'];
                             }
                             break;
+
                         case COMMENT_BOUGHT :
                             if ($_SESSION['user_id'] > 0)
                             {
@@ -111,7 +106,7 @@ if (empty($_REQUEST['act']))
                                        " WHERE o.order_id = og.order_id".
                                        " AND o.user_id = '" . $_SESSION['user_id'] . "'".
                                        " AND og.goods_id = '" . $cmt->id . "'".
-                                       " AND (o.order_status = '" . OS_CONFIRMED . "' or o.order_status = '" . OS_SPLITED . "') ".
+                                       " AND o.order_status = '" . OS_CONFIRMED . "' ".
                                        " AND (o.pay_status = '" . PS_PAYED . "' OR o.pay_status = '" . PS_PAYING . "') ".
                                        " AND (o.shipping_status = '" . SS_SHIPPED . "' OR o.shipping_status = '" . SS_RECEIVED . "') ".
                                        " LIMIT 1";
@@ -172,7 +167,7 @@ if (empty($_REQUEST['act']))
                             {
                                 $sql = "SELECT o.order_id FROM " . $ecs->table('order_info') . " AS o ".
                                        " WHERE user_id = '" . $_SESSION['user_id'] . "'".
-                                       " AND (o.order_status = '" . OS_CONFIRMED . "' or o.order_status = '" . OS_SPLITED . "') ".
+                                       " AND o.order_status = '" . OS_CONFIRMED . "' ".
                                        " AND (o.pay_status = '" . PS_PAYED . "' OR o.pay_status = '" . PS_PAYING . "') ".
                                        " AND (o.shipping_status = '" . SS_SHIPPED . "' OR o.shipping_status = '" . SS_RECEIVED . "') ".
                                        " LIMIT 1";
@@ -201,7 +196,7 @@ if (empty($_REQUEST['act']))
                                        " WHERE o.order_id = og.order_id".
                                        " AND o.user_id = '" . $_SESSION['user_id'] . "'".
                                        " AND og.goods_id = '" . $cmt->id . "'".
-                                       " AND (o.order_status = '" . OS_CONFIRMED . "' or o.order_status = '" . OS_SPLITED . "') ".
+                                       " AND o.order_status = '" . OS_CONFIRMED . "' ".
                                        " AND (o.pay_status = '" . PS_PAYED . "' OR o.pay_status = '" . PS_PAYING . "') ".
                                        " AND (o.shipping_status = '" . SS_SHIPPED . "' OR o.shipping_status = '" . SS_RECEIVED . "') ".
                                        " LIMIT 1";
@@ -239,7 +234,7 @@ else
     $cmt = new stdClass();
     $cmt->id   = !empty($_GET['id'])   ? intval($_GET['id'])   : 0;
     $cmt->type = !empty($_GET['type']) ? intval($_GET['type']) : 0;
-    $cmt->page = isset($_GET['page'])   && intval($_GET['page'])  > 0 ? intval($_GET['page'])  : 1;
+    $cmt->page = !empty($_GET['page']) ? intval($_GET['page']) : 1;
 }
 
 if ($result['error'] == 0)
@@ -284,22 +279,20 @@ function add_comment($cmt)
 
     $user_id = empty($_SESSION['user_id']) ? 0 : $_SESSION['user_id'];
     $email = empty($cmt->email) ? $_SESSION['email'] : trim($cmt->email);
-    $user_name = empty($cmt->username) ? $_SESSION['user_name'] : '';
+    $user_name = empty($cmt->username) ? $_SESSION['user_name'] : trim($cmt->username);
     $email = htmlspecialchars($email);
     $user_name = htmlspecialchars($user_name);
 
     /* 保存评论内容 */
-    $sql = "INSERT INTO " .$GLOBALS['ecs']->table('comment') .
-           "(comment_type, id_value, email, user_name, content, comment_rank, add_time, ip_address, status, parent_id, user_id) VALUES " .
-           "('" .$cmt->type. "', '" .$cmt->id. "', '$email', '$user_name', '" .$cmt->content."', '".$cmt->rank."', ".gmtime().", '".real_ip()."', '$status', '0', '$user_id')";
+    $sql = "INSERT INTO " .$GLOBALS['ecs']->table('comment'). " ".
+                "(comment_type, id_value, email, user_name, content, comment_rank, add_time, ip_address, status, parent_id, user_id".
+            ") VALUES (".
+                "'" .$cmt->type. "', '" .$cmt->id. "', '$email', '$user_name', ".
+                "'" .$cmt->content."', '".$cmt->rank."', ".gmtime().", '".real_ip()."', '$status', '0', '$user_id')";
 
-    $result = $GLOBALS['db']->query($sql);
     clear_cache_files('comments_list.lbi');
-    /*if ($status > 0)
-    {
-        add_feed($GLOBALS['db']->insert_id(), COMMENT_GOODS);
-    }*/
-    return $result;
+
+    return $GLOBALS['db']->query($sql);
 }
 
 ?>

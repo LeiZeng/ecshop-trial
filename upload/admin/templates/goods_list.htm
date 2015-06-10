@@ -1,4 +1,4 @@
-<!-- $Id: goods_list.htm 17126 2010-04-23 10:30:26Z liuhui $ -->
+<!-- $Id: goods_list.htm 13167 2007-10-25 02:12:20Z wj $ -->
 
 {if $full_page}
 {include file="pageheader.htm"}
@@ -24,7 +24,6 @@
     <th><a href="javascript:listTable.sort('is_best'); ">{$lang.is_best}</a>{$sort_is_best}</th>
     <th><a href="javascript:listTable.sort('is_new'); ">{$lang.is_new}</a>{$sort_is_new}</th>
     <th><a href="javascript:listTable.sort('is_hot'); ">{$lang.is_hot}</a>{$sort_is_hot}</th>
-    <th><a href="javascript:listTable.sort('sort_order'); ">{$lang.sort_order}</a>{$sort_sort_order}</th>
     {if $use_storage}
     <th><a href="javascript:listTable.sort('goods_number'); ">{$lang.goods_number}</a>{$sort_goods_number}</th>
     {/if}
@@ -35,23 +34,19 @@
     <td><input type="checkbox" name="checkboxes[]" value="{$goods.goods_id}" />{$goods.goods_id}</td>
     <td class="first-cell" style="{if $goods.is_promote}color:red;{/if}"><span onclick="listTable.edit(this, 'edit_goods_name', {$goods.goods_id})">{$goods.goods_name|escape:html}</span></td>
     <td><span onclick="listTable.edit(this, 'edit_goods_sn', {$goods.goods_id})">{$goods.goods_sn}</span></td>
-    <td align="right"><span onclick="listTable.edit(this, 'edit_goods_price', {$goods.goods_id})">{$goods.shop_price}
-
-    </span></td>
+    <td align="right"><span onclick="listTable.edit(this, 'edit_goods_price', {$goods.goods_id})">{$goods.shop_price}</span></td>
     <td align="center"><img src="images/{if $goods.is_on_sale}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_on_sale', {$goods.goods_id})" /></td>
     <td align="center"><img src="images/{if $goods.is_best}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_best', {$goods.goods_id})" /></td>
     <td align="center"><img src="images/{if $goods.is_new}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_new', {$goods.goods_id})" /></td>
     <td align="center"><img src="images/{if $goods.is_hot}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_hot', {$goods.goods_id})" /></td>
-    <td align="center"><span onclick="listTable.edit(this, 'edit_sort_order', {$goods.goods_id})">{$goods.sort_order}</span></td>
     {if $use_storage}
-    <td align="right"><span onclick="listTable.edit(this, 'edit_goods_number', {$goods.goods_id})">{$goods.goods_number}</span></td>
+    <td align="right">{if $code eq 'virtual_card'}{$goods.goods_number}{else}<span onclick="listTable.edit(this, 'edit_goods_number', {$goods.goods_id})">{$goods.goods_number}</span>{/if}</td>
     {/if}
     <td align="center">
       <a href="../goods.php?id={$goods.goods_id}" target="_blank" title="{$lang.view}"><img src="images/icon_view.gif" width="16" height="16" border="0" /></a>
       <a href="goods.php?act=edit&goods_id={$goods.goods_id}{if $code neq 'real_goods'}&extension_code={$code}{/if}" title="{$lang.edit}"><img src="images/icon_edit.gif" width="16" height="16" border="0" /></a>
       <a href="goods.php?act=copy&goods_id={$goods.goods_id}{if $code neq 'real_goods'}&extension_code={$code}{/if}" title="{$lang.copy}"><img src="images/icon_copy.gif" width="16" height="16" border="0" /></a>
       <a href="javascript:;" onclick="listTable.remove({$goods.goods_id}, '{$lang.trash_goods_confirm}')" title="{$lang.trash}"><img src="images/icon_trash.gif" width="16" height="16" border="0" /></a>
-      {if $specifications[$goods.goods_type] neq ''}<a href="goods.php?act=product_list&goods_id={$goods.goods_id}" title="{$lang.item_list}"><img src="images/icon_docs.gif" width="16" height="16" border="0" /></a>{else}<img src="images/empty.gif" width="16" height="16" border="0" />{/if}
       {if $add_handler}
         |
         {foreach from=$add_handler item=handler}
@@ -92,24 +87,10 @@
     <option value="hot">{$lang.hot}</option>
     <option value="not_hot">{$lang.not_hot}</option>
     <option value="move_to">{$lang.move_to}</option>
-	{if $suppliers_list > 0}
-    <option value="suppliers_move_to">{$lang.suppliers_move_to}</option>
-	{/if}    
   </select>
   <select name="target_cat" style="display:none">
     <option value="0">{$lang.select_please}</option>{$cat_list}
   </select>
-	{if $suppliers_list > 0}
-  <!--二级主菜单：转移供货商-->
-  <select name="suppliers_id" style="display:none">
-    <option value="-1">{$lang.select_please}</option>
-    <option value="0">{$lang.lab_to_shopex}</option>
-    {foreach name=sln from=$suppliers_list item=sl}
-      <option value="{$sl.suppliers_id}">{$sl.suppliers_name}</option>
-    {/foreach}
-  </select>
-  <!--end!-->
-	{/if}  
   {if $code neq 'real_goods'}
   <input type="hidden" name="extension_code" value="{$code}" />
   {/if}
@@ -166,10 +147,6 @@
 
       // 切换分类列表的显示
       frm.elements['target_cat'].style.display = frm.elements['type'].value == 'move_to' ? '' : 'none';
-			
-			{if $suppliers_list > 0}
-      frm.elements['suppliers_id'].style.display = frm.elements['type'].value == 'suppliers_move_to' ? '' : 'none';
-			{/if}
 
       if (!document.getElementById('btnSubmit').disabled &&
           confirmSubmit(frm, false))

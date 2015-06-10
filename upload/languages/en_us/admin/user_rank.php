@@ -3,7 +3,7 @@
 /**
  * ECSHOP Control panel common language file
  * ============================================================================
- * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -11,8 +11,9 @@
  * republish the program code, on the premise of that your behavior is not for
  * commercial purposes.
  * ============================================================================
- * $Author: liubo $
- * $Id: user_rank.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: weberliu $
+ * $Date: 2006-11-23 17:01:45 +0800 (Thursday, 23 November 2006) $
+ * $Id: user_rank.php 2901 2006-11-23 09:01:45Z weberliu $
 */
 
 $_LANG['rank_name'] = 'Rank name';
@@ -26,7 +27,6 @@ $_LANG['notice_special'] = 'Special member can\'t be changed as points changed.'
 $_LANG['add_continue'] = 'Continue add user rank.';
 $_LANG['back_list'] = 'Return to user rank list.';
 $_LANG['show_price_short'] = 'Display the price.';
-$_LANG['notice_discount'] = 'Please fill in for the 0-100 integer, such as fill in 80, said the initial discount rate of 8 packs';
 
 $_LANG['rank_name_exists'] = 'The user rank name %s already exists.';
 $_LANG['add_rank_success'] = 'The user rank has added successfully.';

@@ -3,7 +3,7 @@
 /**
  * ECSHOP Region list management language file
  * ============================================================================
- * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -11,8 +11,9 @@
  * republish the program code, on the premise of that your behavior is not for
  * commercial purposes.
  * ============================================================================
- * $Author: liubo $
- * $Id: area_manage.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: liry $
+ * $Date: 2007-02-03 19:41:07 +0800 (Saturday, 03 February 2007) $
+ * $Id: area_manage.php 5062 2007-02-03 11:41:07Z liry $
 */
 
 /* Field information */
@@ -50,6 +51,5 @@ $_LANG['add_area_error'] = 'Add new region failed!';
 $_LANG['region_name_exist'] = 'The region name already exists.';
 $_LANG['parent_id_exist'] = 'You can\'t delete it, because the region contains subregions!';
 $_LANG['form_notic'] = 'View subregion';
-$_LANG['area_drop_confirm'] = 'If the default order or the user mode using the following distribution areas, where information will be displayed as empty. Are you sure you want to delete this record?';
 
 ?>

@@ -3,7 +3,7 @@
 /**
  * ECSHOP Brand management language item
  * ============================================================================
- * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -11,8 +11,9 @@
  * republish the program code, on the premise of that your behavior is not for
  * commercial purposes.
  * ============================================================================
- * $Author: liubo $
- * $Id: brand.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: wj $
+ * $Date: 2007-02-08 18:32:45 +0800 (Thursday, 08 February 2007) $
+ * $Id: brand.php 5476 2007-02-08 10:32:45Z wj $
 */
 
 $_LANG['brand_name'] = 'Brand';
@@ -52,7 +53,7 @@ $_LANG['continue_add'] = 'Continue add new brand';
 $_LANG['upfile_type_error'] = "The uploaded image type must be jpg,gif or png.";
 $_LANG['upfile_error'] = "Wrong, please ensure files\' writability of data directory!";
 
-$_LANG['visibility_notes'] = 'When brand merchandise under no time and the breakdown of home pages of the brand areas will not be displayed to the brand.';
+$_LANG['visibility_notes'] = '當品牌下還沒有商品的時候，首頁及分類頁的品牌區將不會顯示該品牌。';
 
 /*JS language item*/
 $_LANG['js_languages']['no_brandname'] = 'Please enter brand name!';

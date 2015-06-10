@@ -3,14 +3,15 @@
 /**
  * ECSHOP 文章分类管理程序
  * ============================================================================
- * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com；
+ * 版权所有 (C) 2005-2007 康盛创想（北京）科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com
  * ----------------------------------------------------------------------------
- * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
- * 使用；不允许对程序代码以任何形式任何目的的再发布。
+ * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
+ * 进行修改、使用和再发布。
  * ============================================================================
- * $Author: liubo $
- * $Id: articlecat.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: testyang $
+ * $Date: 2008-02-01 23:40:15 +0800 (星期五, 01 二月 2008) $
+ * $Id: articlecat.php 14122 2008-02-01 15:40:15Z testyang $
 */
 
 define('IN_ECS', true);
@@ -112,7 +113,7 @@ elseif ($_REQUEST['act'] == 'insert')
         $vieworder = $db->getOne("SELECT max(vieworder) FROM ". $ecs->table('nav') . " WHERE type = 'middle'");
         $vieworder += 2;
         //显示在自定义导航栏中
-        $sql = "INSERT INTO " . $ecs->table('nav') . " (name,ctype,cid,ifshow,vieworder,opennew,url,type) VALUES('" . $_POST['cat_name'] . "', 'a', '" . $db->insert_id() . "','1','$vieworder','0', '" . build_uri('article_cat', array('acid'=> $db->insert_id()), $_POST['cat_name']) . "','middle')";
+        $sql = "INSERT INTO " . $ecs->table('nav') . " (name,ctype,cid,ifshow,vieworder,opennew,url,type) VALUES('" . $_POST['cat_name'] . "', 'a', '" . $db->insert_id() . "','1','$vieworder','0', '" . build_uri('article_cat', array('acid'=> $db->insert_id())) . "','middle')";
         $db->query($sql);
     }
 
@@ -254,7 +255,7 @@ elseif ($_REQUEST['act'] == 'update')
                 {
                     $vieworder = $db->getOne("SELECT max(vieworder) FROM ". $ecs->table('nav') . " WHERE type = 'middle'");
                     $vieworder += 2;
-                    $uri = build_uri('article_cat', array('acid'=> $_POST['id']), $_POST['cat_name']);
+                    $uri = build_uri('article_cat', array('acid'=> $_POST['id']));
                     //不存在
                     $sql = "INSERT INTO " . $ecs->table('nav') .
                         " (name,ctype,cid,ifshow,vieworder,opennew,url,type) ".
@@ -296,7 +297,7 @@ elseif ($_REQUEST['act'] == 'edit_sort_order')
     check_authz_json('article_cat');
 
     $id    = intval($_POST['id']);
-    $order = json_str_iconv(trim($_POST['val']));
+    $order = trim($_POST['val']);
 
     /* 检查输入的值是否合法 */
     if (!preg_match("/^[0-9]+$/", $order))
@@ -383,7 +384,7 @@ if ($_REQUEST['act'] == 'toggle_show_in_nav')
                 $vieworder = $db->getOne("SELECT max(vieworder) FROM ". $ecs->table('nav') . " WHERE type = 'middle'");
                 $vieworder += 2;
                 $catname = $db->getOne("SELECT cat_name FROM ". $ecs->table('article_cat') . " WHERE cat_id = '$id'");
-                $uri = build_uri('article_cat', array('acid'=> $id), $_POST['cat_name']);
+                $uri = build_uri('article_cat', array('acid'=> $id));
 
                 $sql = "INSERT INTO " . $ecs->table('nav') . " (name,ctype,cid,ifshow,vieworder,opennew,url,type) ".
                     "VALUES('" . $catname . "', 'a', '$id','1','$vieworder','0', '" . $uri . "','middle')";

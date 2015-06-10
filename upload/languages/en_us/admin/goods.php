@@ -3,7 +3,7 @@
 /**
  * ECSHOP Manage a center start page language file
  * ============================================================================
- * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -11,8 +11,9 @@
  * republish the program code, on the premise of that your behavior is not for
  * commercial purposes.
  * ============================================================================
- * $Author: liubo $
- * $Id: goods.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: scottye $
+ * $Date: 2006-12-28 11:30:30 +0800 (Thursday,28 Decembers 2006) $
+ * $Id: goods.php 3809 2006-12-28 03:30:30Z scottye $
 */
 
 $_LANG['edit_goods'] ='Edit';
@@ -29,7 +30,6 @@ $_LANG['drop_goods_confirm']    = 'Are you sure delete the product?';
 $_LANG['batch_drop_confirm']    = 'All related products will be deleted if you thorough delete the pruduct!';
 $_LANG['trash_goods_confirm']   = 'Are you sure move the product to recycle bin?';
 $_LANG['batch_trash_confirm']   = 'Are you sure move the checked product to recycle bin?';
-$_LANG['trash_product_confirm'] = 'Are you sure you take the goods removed?';
 $_LANG['restore_goods_confirm'] = 'Are you sure restore the product?';
 $_LANG['batch_restore_confirm'] = 'Are you sure restore the checked product?';
 $_LANG['batch_on_sale_confirm'] = 'Are you sure set the checked product as on sale?';
@@ -41,8 +41,6 @@ $_LANG['batch_not_new_confirm'] = 'Are you sure cancel the checked new product?'
 $_LANG['batch_hot_confirm']     = 'Are you sure set the checked product as hot?';;
 $_LANG['batch_not_hot_confirm']='Are you surecancel the checked hot product?';
 $_LANG['cannot_found_goods'] = 'Don\'t find appointed product.';
-$_LANG['sel_goods_type'] = 'Please choose the type of merchandise';
-$_LANG['sel_goods_suppliers'] = 'Please select the suppliers';
 
 /*------------------------------------------------------ */
 //-- The picture processing is related to hint an information
@@ -59,14 +57,12 @@ $_LANG['not_writable_warning']='The %s directory can\'t be wrote, you need to co
 /*------------------------------------------------------ */
 $_LANG['goods_cat'] ='All Categories';
 $_LANG['goods_brand'] ='All Brands';
-$_LANG['intro_type'] =' All';
+$_LANG['intro_type'] ='Recommend';
 $_LANG['keyword'] ='Keywords';
 $_LANG['is_best'] ='Best';
 $_LANG['is_new'] ='New';
 $_LANG['is_hot'] ='Hot';
 $_LANG['is_promote'] ='Sales promotion';
-$_LANG['all_type'] = 'All recommend';
-$_LANG['sort_order'] = 'Recommend to sort';
 
 $_LANG['goods_name'] ='Name';
 $_LANG['goods_sn'] ='NO.';
@@ -75,7 +71,6 @@ $_LANG['is_on_sale'] ='On sale';
 $_LANG['goods_number'] ='Stock';
 
 $_LANG['copy'] ='Copy';
-$_LANG['item_list'] = 'Item List';
 
 $_LANG['integral'] ='Points limit';
 $_LANG['on_sale'] ='On sale';
@@ -92,7 +87,6 @@ $_LANG['move_to'] ='Move to category';
 $_LANG['goods_name_null'] ='Please enter product name.';
 $_LANG['goods_sn_null'] ='Please enter product NO..';
 $_LANG['shop_price_not_number']='Price must be a figure.';
-$_LANG['shop_price_invalid'] = 'You have entered an illegal market price.';
 $_LANG['goods_sn_exists'] ='The product NO. already exist, please change a number.';
 
 /*------------------------------------------------------ */
@@ -123,39 +117,28 @@ $_LANG['auto_thumb'] ='Create thumbnail automatically';
 $_LANG['lab_keywords'] ='Keywords:';
 $_LANG['lab_goods_brief'] ='Brief:';
 $_LANG['lab_seller_note'] ='Shop notice:';
-$_LANG['lab_goods_type'] = 'Goods type：';
-$_LANG['lab_picture_url'] = 'Merchandise picture external URL';
-$_LANG['lab_thumb_url'] = 'External merchandise Thumbnail URL';
 
 $_LANG['lab_goods_weight'] ='Weight:';
 $_LANG['unit_g'] ='Gram';
 $_LANG['unit_kg'] ='Kilogram';
 $_LANG['lab_goods_number'] ='Stock quantity:';
 $_LANG['lab_warn_number'] ='Stock warning quantity:';
-$_LANG['lab_integral'] ='Integral purchase amount:';
-$_LANG['lab_give_integral'] = 'Consumption presented a few points:';
-$_LANG['lab_rank_integral'] = 'Presented a number of grade points:';
+$_LANG['lab_integral'] ='Points limit for buying:';
+$_LANG['lab_give_integral'] = '赠送积分数：';
 $_LANG['lab_intro'] ='Recommend:';
 $_LANG['lab_is_on_sale'] ='On sale:';
 $_LANG['lab_is_alone_sale'] ='Common product:';
-$_LANG['lab_is_free_shipping'] = 'Free shipping：';
-
 
 $_LANG['compute_by_mp'] ='Calculate';
 
 $_LANG['notice_goods_sn'] ='If you don\'t enter product NO., the system will create unique NO. automatically.';
-$_LANG['notice_integral'] ='（This required amount）Buy the goods can use points.';
-$_LANG['notice_give_integral'] = 'Purchase the merchandise when presented fraction of consumption, express -1 presented by commodity prices';
-$_LANG['notice_rank_integral'] = 'Purchase the merchandise when presented fraction grading, express -1 presented by commodity prices';
+$_LANG['notice_integral'] ='How many points buy the product can be used.';
 $_LANG['notice_seller_note'] ='Only provide information for shop owner.';
-$_LANG['notice_storage'] = 'Inventories of goods for the virtual goods or commodities when there is non-editable state of goods, inventory value depends on its quantity or volume of goods virtual goods';
 $_LANG['notice_keywords'] ='Divided by blank character.';
-$_LANG['notice_user_price'] = 'Member price is -1, said member prices Member grade discount rate. You can also specify a hierarchy for each fixed-price';
-$_LANG['notice_goods_type'] = 'Please select the type of the goods, then complete the attributes of the goods';
+$_LANG['notice_user_price'] = '会员价格为-1时表示会员价格按会员等级折扣率计算。你也可以为每个等级指定一个固定价格';
 
 $_LANG['on_sale_desc'] ='Checked means it can be allowed to sale, otherwise can be disallowed to sale.';
 $_LANG['alone_sale'] ='Checked means it can be sold as common product, otherwise can be sold as accessories or gifts.';
-$_LANG['free_shipping'] = 'Checked means it can shipped free, otherwise as regular.';
 
 $_LANG['invalid_goods_img'] ='Product picture format inaccuracy!';
 $_LANG['invalid_goods_thumb']='Product thumbnail format inaccuracy!';
@@ -179,17 +162,6 @@ $_LANG['category_manage'] = 'Category manage';
 $_LANG['brand_manage'] = 'Brand manage';
 $_LANG['hide'] = 'Hide';
 
-$_LANG['lab_volume_price'] = 'Goods favourable price：';
-$_LANG['volume_number'] = 'volume number';
-$_LANG['volume_price'] = 'Favourable price';
-$_LANG['notice_volume_price'] = 'Purchase quantity discount when the total number of preferential prices';
-$_LANG['volume_number_continuous'] = 'Repeat quantity discount!';
-
-$_LANG['label_suppliers']          = 'Choice of supplier:';
-$_LANG['suppliers_no']             = 'Do not specify a supplier of goods belonging to our';
-$_LANG['suppliers_move_to']        = 'Transferred to the supplier';
-$_LANG['lab_to_shopex']         = 'Transferred to the Shop';
-
 /*------------------------------------------------------ */
 //-- Connection product
 /*------------------------------------------------------ */
@@ -200,7 +172,6 @@ $_LANG['single'] ='Single';
 $_LANG['double'] ='Double';
 $_LANG['all_article'] ='Choose product';
 $_LANG['goods_article'] ='Relational articles';
-$_LANG['top_cat'] = 'Top Categories';
 
 /*------------------------------------------------------ */
 //-- Combine a product
@@ -215,7 +186,6 @@ $_LANG['price'] ='Price';
 
 $_LANG['img_desc'] ='Description';
 $_LANG['img_url'] ='Upload a file';
-$_LANG['img_file'] = 'or input the url of the image';
 
 /*------------------------------------------------------ */
 //-- Connection article
@@ -242,8 +212,6 @@ $_LANG['js_languages']['market_price_not_number']='The market price isn\'t a fig
 $_LANG['js_languages']['goods_number_not_int'] ='The product stock isn\'t an integer.';
 $_LANG['js_languages']['warn_number_not_int'] ='The stock warning isn\'t an integer.';
 $_LANG['js_languages']['promote_not_lt'] = 'Sales start date can not be greater than the end date';
-$_LANG['js_languages']['promote_start_not_null'] = 'Promotions start time should not be empty';
-$_LANG['js_languages']['promote_end_not_null'] = 'Ending time promotions should not be empty';
 
 $_LANG['js_languages']['drop_img_confirm'] = 'Are you sure delete the picture?';
 $_LANG['js_languages']['batch_no_on_sale'] = 'Are you sure stop sale the checked product?';
@@ -251,46 +219,9 @@ $_LANG['js_languages']['batch_trash_confirm'] = 'Are you sure move the checked p
 $_LANG['js_languages']['go_category_page'] = "This page's data will lost, are you sure to go to adding category page？";
 $_LANG['js_languages']['go_brand_page'] = "This page's data will lost, are you sure to go to adding brand page？";
 
-$_LANG['js_languages']['volume_num_not_null'] = 'Please enter a quantity discount';
-$_LANG['js_languages']['volume_num_not_number'] = 'Quantity discount is not a figure';
-$_LANG['js_languages']['volume_price_not_null'] = 'Please enter at preferential prices';
-$_LANG['js_languages']['volume_price_not_number'] = 'Discounted prices not figure';
-
-$_LANG['js_languages']['cancel_color'] = 'no font';
-
 /* 虚拟卡 */
-$_LANG['card'] = 'See the virtual card information';
-$_LANG['replenish'] = 'Replenishment';
-$_LANG['batch_card_add'] = 'Batch Replenishment';
-$_LANG['add_replenish'] = 'Add virtual Kaka Micronesia';
-
-$_LANG['goods_number_error'] = 'Merchandise inventory quantity errors';
-
-/*------------------------------------------------------ */
-//-- 货品
-/*------------------------------------------------------ */
-$_LANG['product'] = 'Goods';
-$_LANG['product_info'] = 'Item Information';
-$_LANG['specifications'] = 'Specifications';
-$_LANG['total'] = 'Total:';
-$_LANG['add_products'] = 'Add Item';
-$_LANG['save_products'] = 'Save the success of goods';
-$_LANG['product_id_null'] = 'Goods id is empty';
-$_LANG['cannot_found_products'] = 'Specified items not found';
-$_LANG['product_batch_del_success'] = 'Remove the success of bulk goods';
-$_LANG['product_batch_del_failure'] = 'Goods bulk delete failed';
-$_LANG['batch_product_add'] = 'Bulk Add';
-$_LANG['batch_product_edit'] = 'Batch Edit';
-$_LANG['products_title'] = 'Product Name:%s';
-$_LANG['products_title_2'] = 'Item:%s';
-$_LANG['good_shop_price'] = '(Price:%d)';
-$_LANG['good_goods_sn'] = '(Product Code:%s)';
-$_LANG['exist_same_goods_sn'] = 'Item No. Item and products are not allowed to repeat';
-$_LANG['exist_same_product_sn'] = 'No duplication of goods';
-$_LANG['cannot_add_products'] = 'Add a failure of goods';
-$_LANG['exist_same_goods_attr'] = 'Item Specifications Property repeat';
-$_LANG['cannot_goods_number'] = 'Item Specifications Property repeat';
-$_LANG['not_exist_goods_attr'] = 'This product does not exist specifications, please add the size of their';
-$_LANG['goods_sn_exists'] = 'The goods_sn you entered already exists';
+$_LANG['card'] = '查看虚拟卡信息';
+$_LANG['replenish'] = '补货';
+$_LANG['batch_card_add'] = '批量补货';
 
 ?>

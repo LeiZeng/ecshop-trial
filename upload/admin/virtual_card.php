@@ -3,14 +3,15 @@
 /**
  * ECSHOP 虚拟卡商品管理程序
  * ============================================================================
- * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com；
+ * 版权所有 (C) 2005-2006 康盛创想（北京）科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com
  * ----------------------------------------------------------------------------
- * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
- * 使用；不允许对程序代码以任何形式任何目的的再发布。
+ * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
+ * 进行修改、使用和再发布。
  * ============================================================================
- * $Author: liubo $
- * $Id: virtual_card.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: testyang $
+ * $Date: 2008-02-01 23:40:15 +0800 (星期五, 01 二月 2008) $
+ * $Id: virtual_card.php 14122 2008-02-01 15:40:15Z testyang $
  */
 
 define('IN_ECS', true);
@@ -355,8 +356,6 @@ elseif ($_REQUEST['act'] == 'submit_change')
             sys_msg($_LANG['same_string'], 1);
         }
 
-
-
         // 重新加密卡号和密码
         $old_crc32 = crc32($_POST['old_string']);
         $new_crc32 = crc32($_POST['new_string']);
@@ -440,26 +439,25 @@ elseif ($_REQUEST['act'] == 'remove_card')
 
 elseif ($_REQUEST['act'] == 'start_change')
 {
-    $old_key = json_str_iconv(trim($_GET['old_key']));
-    $new_key = json_str_iconv(trim($_GET['new_key']));
+    $old_key = trim($_GET['old_key']);
+    $new_key = trim($_GET['new_key']);
+
+    if ($old_key != OLD_AUTH_KEY)
+    {
+        make_json_error($GLOBALS['_LANG']['invalid_old_string']);
+    }
+
+    // 检查新加密串是否正确
+    if ($new_key != AUTH_KEY)
+    {
+        make_json_error($GLOBALS['_LANG']['invalid_new_string']);
+    }
+
     // 检查原加密串和新加密串是否相同
     if ($old_key == $new_key || crc32($old_key) == crc32($new_key))
     {
         make_json_error($GLOBALS['_LANG']['same_string']);
     }
-    if ($old_key != AUTH_KEY)
-    {
-        make_json_error($GLOBALS['_LANG']['invalid_old_string']);
-    }
-    else
-    {
-        $f=ROOT_PATH . 'data/config.php';
-        file_put_contents($f,str_replace("'AUTH_KEY', '".AUTH_KEY."'","'AUTH_KEY', '".$new_key."'",file_get_contents($f)));
-        file_put_contents($f,str_replace("'OLD_AUTH_KEY', '".OLD_AUTH_KEY."'","'OLD_AUTH_KEY', '".$old_key."'",file_get_contents($f)));
-        @fclose($fp);
-    }
-
-
 
     // 查询统计信息：总记录，使用原串的记录，使用新串的记录，使用未知串的记录
     $stat = array('all' => 0, 'new' => 0, 'old' => 0, 'unknown' => 0);
@@ -558,10 +556,6 @@ function get_replenish_list()
     $filter['search_type'] = empty($_REQUEST['search_type']) ? 0 : trim($_REQUEST['search_type']);
     $filter['order_sn']    = empty($_REQUEST['order_sn'])    ? 0 : trim($_REQUEST['order_sn']);
     $filter['keyword']     = empty($_REQUEST['keyword'])     ? 0 : trim($_REQUEST['keyword']);
-    if (isset($_REQUEST['is_ajax']) && $_REQUEST['is_ajax'] == 1)
-    {
-        $filter['keyword'] = json_str_iconv($filter['keyword']);
-    }
     $filter['sort_by']     = empty($_REQUEST['sort_by'])     ? 'card_id' : trim($_REQUEST['sort_by']);
     $filter['sort_order']  = empty($_REQUEST['sort_order'])  ? 'DESC' : trim($_REQUEST['sort_order']);
 

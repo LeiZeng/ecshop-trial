@@ -3,14 +3,15 @@
 /**
  * ECSHOP 站外JS投放的统计程序
  * ============================================================================
- * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com；
+ * 版权所有 (C) 2005-2007 康盛创想（北京）科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com
  * ----------------------------------------------------------------------------
- * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
- * 使用；不允许对程序代码以任何形式任何目的的再发布。
+ * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
+ * 进行修改、使用和再发布。
  * ============================================================================
- * $Author: liubo $
- * $Id: adsense.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: testyang $
+ * $Date: 2008-01-28 19:27:47 +0800 (星期一, 28 一月 2008) $
+ * $Id: adsense.php 14080 2008-01-28 11:27:47Z testyang $
 */
 
 define('IN_ECS', true);
@@ -45,7 +46,6 @@ if ($_REQUEST['act'] == 'list' || $_REQUEST['act'] == 'download')
     while ($rows = $db->fetchRow($res))
     {
         /* 获取当前广告所产生的订单总数 */
-        $rows['referer']=addslashes($rows['referer']);
         $sql2 = 'SELECT COUNT(order_id) FROM ' .$ecs->table('order_info'). " WHERE from_ad='$rows[ad_id]' AND referer='$rows[referer]'";
         $rows['order_num'] = $db->getOne($sql2);
 
@@ -67,11 +67,9 @@ if ($_REQUEST['act'] == 'list' || $_REQUEST['act'] == 'download')
     while ($rows2 = $db->fetchRow($goods_res))
     {
         /* 获取当前广告所产生的订单总数 */
-        $rows2['referer']=addslashes($rows2['referer']);
         $rows2['order_num'] = $db->getOne("SELECT COUNT(order_id) FROM " .$ecs->table('order_info'). " WHERE referer='$rows2[referer]'");
 
         /* 当前广告所产生的已完成的有效订单 */
-
         $sql = "SELECT COUNT(order_id) FROM " .$ecs->table('order_info').
                " WHERE referer='$rows2[referer]'" . order_query_sql('finished');
         $rows2['order_confirm'] = $db->getOne($sql);
@@ -81,7 +79,7 @@ if ($_REQUEST['act'] == 'list' || $_REQUEST['act'] == 'download')
     }
     if ($_REQUEST['act'] == 'download')
     {
-        header("Content-type: application/vnd.ms-excel; charset=utf-8");
+        header("Content-type: application/vnd.ms-excel; charset=GB2312");
         header("Content-Disposition: attachment; filename=ad_statistics.xls");
         $data = "$_LANG[adsense_name]\t$_LANG[cleck_referer]\t$_LANG[click_count]\t$_LANG[confirm_order]\t$_LANG[gen_order_amount]\n";
         $res = array_merge($goods_stats, $ads_stats);
@@ -89,7 +87,7 @@ if ($_REQUEST['act'] == 'list' || $_REQUEST['act'] == 'download')
         {
             $data .= "$row[ad_name]\t$row[referer]\t$row[clicks]\t$row[order_confirm]\t$row[order_num]\n";
         }
-        echo ecs_iconv(EC_CHARSET, 'GB2312', $data);
+        echo ecs_iconv('UTF8', 'GB2312', $data);
         exit;
     }
     $smarty->assign('goods_stats', $goods_stats);

@@ -3,14 +3,15 @@
 /**
  * ECSHOP 会员管理程序
  * ============================================================================
- * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com；
+ * 版权所有 (C) 2005-2007 康盛创想（北京）科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com
  * ----------------------------------------------------------------------------
- * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
- * 使用；不允许对程序代码以任何形式任何目的的再发布。
+ * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
+ * 进行修改、使用和再发布。
  * ============================================================================
- * $Author: liubo $
- * $Id: users.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: testyang $
+ * $Date: 2008-01-28 18:33:06 +0800 (星期一, 28 一月 2008) $
+ * $Id: users.php 14079 2008-01-28 10:33:06Z testyang $
 */
 
 define('IN_ECS', true);
@@ -23,8 +24,6 @@ require(dirname(__FILE__) . '/includes/init.php');
 
 if ($_REQUEST['act'] == 'list')
 {
-    /* 检查权限 */
-    admin_priv('users_manage');
     $sql = "SELECT rank_id, rank_name, min_points FROM ".$ecs->table('user_rank')." ORDER BY min_points ASC ";
     $rs = $db->query($sql);
 
@@ -82,10 +81,6 @@ elseif ($_REQUEST['act'] == 'add')
                     'sex'           => 0,
                     'credit_line'   => 0
                     );
-    /* 取出注册扩展字段 */
-    $sql = 'SELECT * FROM ' . $ecs->table('reg_fields') . ' WHERE type < 2 AND display = 1 AND id != 6 ORDER BY dis_order, id';
-    $extend_info_list = $db->getAll($sql);
-    $smarty->assign('extend_info_list', $extend_info_list);
 
     $smarty->assign('ur_here',          $_LANG['04_users_add']);
     $smarty->assign('action_link',      array('text' => $_LANG['03_users_list'], 'href'=>'users.php?act=list'));
@@ -115,28 +110,12 @@ elseif ($_REQUEST['act'] == 'insert')
 
     $users =& init_users();
 
-    if (!$users->add_user($username, $password, $email))
+    if (!$users->add_user($username, $password, $email, $sex, $birthday, gmtime()))
     {
         /* 插入会员数据失败 */
-        if ($users->error == ERR_INVALID_USERNAME)
-        {
-            $msg = $_LANG['username_invalid'];
-        }
-        elseif ($users->error == ERR_USERNAME_NOT_ALLOW)
-        {
-            $msg = $_LANG['username_not_allow'];
-        }
-        elseif ($users->error == ERR_USERNAME_EXISTS)
+        if ($users->error == ERR_USERNAME_EXISTS)
         {
             $msg = $_LANG['username_exists'];
-        }
-        elseif ($users->error == ERR_INVALID_EMAIL)
-        {
-            $msg = $_LANG['email_invalid'];
-        }
-        elseif ($users->error == ERR_EMAIL_NOT_ALLOW)
-        {
-            $msg = $_LANG['email_not_allow'];
         }
         elseif ($users->error == ERR_EMAIL_EXISTS)
         {
@@ -144,7 +123,7 @@ elseif ($_REQUEST['act'] == 'insert')
         }
         else
         {
-            //die('Error:'.$users->error_msg());
+            die('Error:'.$users->error_msg());
         }
         sys_msg($msg, 1);
     }
@@ -155,45 +134,19 @@ elseif ($_REQUEST['act'] == 'insert')
         log_account_change($_SESSION['user_id'], 0, 0, $GLOBALS['_CFG']['register_points'], $GLOBALS['_CFG']['register_points'], $_LANG['register_points']);
     }
 
-    /*把新注册用户的扩展信息插入数据库*/
-    $sql = 'SELECT id FROM ' . $ecs->table('reg_fields') . ' WHERE type = 0 AND display = 1 ORDER BY dis_order, id';   //读出所有扩展字段的id
-    $fields_arr = $db->getAll($sql);
-
-    $extend_field_str = '';    //生成扩展字段的内容字符串
-    $user_id_arr = $users->get_profile_by_name($username);
-    foreach ($fields_arr AS $val)
-    {
-        $extend_field_index = 'extend_field' . $val['id'];
-        if(!empty($_POST[$extend_field_index]))
-        {
-            $temp_field_content = strlen($_POST[$extend_field_index]) > 100 ? mb_substr($_POST[$extend_field_index], 0, 99) : $_POST[$extend_field_index];
-            $extend_field_str .= " ('" . $user_id_arr['user_id'] . "', '" . $val['id'] . "', '" . $temp_field_content . "'),";
-        }
-    }
-    $extend_field_str = substr($extend_field_str, 0, -1);
-
-    if ($extend_field_str)      //插入注册扩展数据
-    {
-        $sql = 'INSERT INTO '. $ecs->table('reg_extend_info') . ' (`user_id`, `reg_field_id`, `content`) VALUES' . $extend_field_str;
-        $db->query($sql);
-    }
-
     /* 更新会员的其它信息 */
     $other =  array();
     $other['credit_line'] = $credit_line;
-    $other['user_rank']  = $rank;
-    $other['sex']        = $sex;
-    $other['birthday']   = $birthday;
-    $other['reg_time'] = local_strtotime(local_date('Y-m-d H:i:s'));
-
-    $other['msn'] = isset($_POST['extend_field1']) ? htmlspecialchars(trim($_POST['extend_field1'])) : '';
-    $other['qq'] = isset($_POST['extend_field2']) ? htmlspecialchars(trim($_POST['extend_field2'])) : '';
-    $other['office_phone'] = isset($_POST['extend_field3']) ? htmlspecialchars(trim($_POST['extend_field3'])) : '';
-    $other['home_phone'] = isset($_POST['extend_field4']) ? htmlspecialchars(trim($_POST['extend_field4'])) : '';
-    $other['mobile_phone'] = isset($_POST['extend_field5']) ? htmlspecialchars(trim($_POST['extend_field5'])) : '';
-
+    $other['user_rank'] = $rank;
+    foreach ($_POST['other'] as $key=>$val)
+    {
+        if (!empty($val))
+        {
+            $other[$key] = htmlspecialchars(trim($val));
+        }
+    }
     $db->autoExecute($ecs->table('users'), $other, 'UPDATE', "user_name = '$username'");
-
+    
     /* 记录管理员操作 */
     admin_log($_POST['username'], 'add', 'users');
 
@@ -212,16 +165,15 @@ elseif ($_REQUEST['act'] == 'edit')
     /* 检查权限 */
     admin_priv('users_manage');
 
-    $sql = "SELECT u.user_name, u.sex, u.birthday, u.pay_points, u.rank_points, u.user_rank , u.user_money, u.frozen_money, u.credit_line, u.parent_id, u2.user_name as parent_username, u.qq, u.msn, u.office_phone, u.home_phone, u.mobile_phone".
+    $sql = "SELECT u.user_name, u.sex, u.birthday, u.pay_points, u.rank_points, u.user_rank , u.user_money, u.frozen_money, u.credit_line, u.parent_id, u2.user_name as parent_username, u.qq, u.msn, u.office_phone, u.home_phone, u.mobile_phone ".
         " FROM " .$ecs->table('users'). " u LEFT JOIN " . $ecs->table('users') . " u2 ON u.parent_id = u2.user_id WHERE u.user_id='$_GET[id]'";
 
     $row = $db->GetRow($sql);
-    $row['user_name'] = addslashes($row['user_name']);
+
     $users  =& init_users();
     $user   = $users->get_user_info($row['user_name']);
 
-    $sql = "SELECT u.user_id, u.sex, u.birthday, u.pay_points, u.rank_points, u.user_rank , u.user_money, u.frozen_money, u.credit_line, u.parent_id, u2.user_name as parent_username, u.qq, u.msn,
-    u.office_phone, u.home_phone, u.mobile_phone".
+    $sql = "SELECT u.user_id, u.sex, u.birthday, u.pay_points, u.rank_points, u.user_rank , u.user_money, u.frozen_money, u.credit_line, u.parent_id, u2.user_name as parent_username, u.qq, u.msn, u.office_phone, u.home_phone, u.mobile_phone ".
         " FROM " .$ecs->table('users'). " u LEFT JOIN " . $ecs->table('users') . " u2 ON u.parent_id = u2.user_id WHERE u.user_id='$_GET[id]'";
 
     $row = $db->GetRow($sql);
@@ -249,82 +201,15 @@ elseif ($_REQUEST['act'] == 'edit')
     }
     else
     {
-          $link[] = array('text' => $_LANG['go_back'], 'href'=>'users.php?act=list');
-          sys_msg($_LANG['username_invalid'], 0, $links);
-//        $user['sex']            = 0;
-//        $user['pay_points']     = 0;
-//        $user['rank_points']    = 0;
-//        $user['user_money']     = 0;
-//        $user['frozen_money']   = 0;
-//        $user['credit_line']    = 0;
-//        $user['formated_user_money'] = price_format(0);
-//        $user['formated_frozen_money'] = price_format(0);
+        $user['sex']            = 0;
+        $user['pay_points']     = 0;
+        $user['rank_points']    = 0;
+        $user['user_money']     = 0;
+        $user['frozen_money']   = 0;
+        $user['credit_line']    = 0;
+        $user['formated_user_money'] = price_format(0);
+        $user['formated_frozen_money'] = price_format(0);
      }
-
-    /* 取出注册扩展字段 */
-    $sql = 'SELECT * FROM ' . $ecs->table('reg_fields') . ' WHERE type < 2 AND display = 1 AND id != 6 ORDER BY dis_order, id';
-    $extend_info_list = $db->getAll($sql);
-
-    $sql = 'SELECT reg_field_id, content ' .
-           'FROM ' . $ecs->table('reg_extend_info') .
-           " WHERE user_id = $user[user_id]";
-    $extend_info_arr = $db->getAll($sql);
-
-    $temp_arr = array();
-    foreach ($extend_info_arr AS $val)
-    {
-        $temp_arr[$val['reg_field_id']] = $val['content'];
-    }
-
-    foreach ($extend_info_list AS $key => $val)
-    {
-        switch ($val['id'])
-        {
-            case 1:     $extend_info_list[$key]['content'] = $user['msn']; break;
-            case 2:     $extend_info_list[$key]['content'] = $user['qq']; break;
-            case 3:     $extend_info_list[$key]['content'] = $user['office_phone']; break;
-            case 4:     $extend_info_list[$key]['content'] = $user['home_phone']; break;
-            case 5:     $extend_info_list[$key]['content'] = $user['mobile_phone']; break;
-            default:    $extend_info_list[$key]['content'] = empty($temp_arr[$val['id']]) ? '' : $temp_arr[$val['id']] ;
-        }
-    }
-
-    $smarty->assign('extend_info_list', $extend_info_list);
-
-    /* 当前会员推荐信息 */
-    $affiliate = unserialize($GLOBALS['_CFG']['affiliate']);
-    $smarty->assign('affiliate', $affiliate);
-
-    empty($affiliate) && $affiliate = array();
-
-    if(empty($affiliate['config']['separate_by']))
-    {
-        //推荐注册分成
-        $affdb = array();
-        $num = count($affiliate['item']);
-        $up_uid = "'$_GET[id]'";
-        for ($i = 1 ; $i <=$num ;$i++)
-        {
-            $count = 0;
-            if ($up_uid)
-            {
-                $sql = "SELECT user_id FROM " . $ecs->table('users') . " WHERE parent_id IN($up_uid)";
-                $query = $db->query($sql);
-                $up_uid = '';
-                while ($rt = $db->fetch_array($query))
-                {
-                    $up_uid .= $up_uid ? ",'$rt[user_id]'" : "'$rt[user_id]'";
-                    $count++;
-                }
-            }
-            $affdb[$i]['num'] = $count;
-        }
-        if ($affdb[1]['num'] > 0)
-        {
-            $smarty->assign('affdb', $affdb);
-        }
-    }
-
 
     assign_query_info();
     $smarty->assign('ur_here',          $_LANG['users_edit']);
@@ -344,7 +229,7 @@ elseif ($_REQUEST['act'] == 'update')
     /* 检查权限 */
     admin_priv('users_manage');
     $username = empty($_POST['username']) ? '' : trim($_POST['username']);
-    $password = empty($_POST['password']) ? '' : trim($_POST['password']);
+    //$password = empty($_POST['password']) ? '' : trim($_POST['password']);
     $email = empty($_POST['email']) ? '' : trim($_POST['email']);
     $sex = empty($_POST['sex']) ? 0 : intval($_POST['sex']);
     $sex = in_array($sex, array(0, 1, 2)) ? $sex : 0;
@@ -354,7 +239,7 @@ elseif ($_REQUEST['act'] == 'update')
 
     $users  =& init_users();
 
-    if (!$users->edit_user(array('username'=>$username, 'password'=>$password, 'email'=>$email, 'gender'=>$sex, 'bday'=>$birthday ), 1))
+    if (!$users->edit_user(array('username'=>$username, 'email'=>$email, 'gender'=>$sex, 'bday'=>$birthday )))
     {
         if ($users->error == ERR_EMAIL_EXISTS)
         {
@@ -366,49 +251,18 @@ elseif ($_REQUEST['act'] == 'update')
         }
         sys_msg($msg, 1);
     }
-    if(!empty($password))
-    {
-			$sql="UPDATE ".$ecs->table('users'). "SET `ec_salt`='0' WHERE user_name= '".$username."'";
-			$db->query($sql);
-	}
-    /* 更新用户扩展字段的数据 */
-    $sql = 'SELECT id FROM ' . $ecs->table('reg_fields') . ' WHERE type = 0 AND display = 1 ORDER BY dis_order, id';   //读出所有扩展字段的id
-    $fields_arr = $db->getAll($sql);
-    $user_id_arr = $users->get_profile_by_name($username);
-    $user_id = $user_id_arr['user_id'];
-
-    foreach ($fields_arr AS $val)       //循环更新扩展用户信息
-    {
-        $extend_field_index = 'extend_field' . $val['id'];
-        if(isset($_POST[$extend_field_index]))
-        {
-            $temp_field_content = strlen($_POST[$extend_field_index]) > 100 ? mb_substr($_POST[$extend_field_index], 0, 99) : $_POST[$extend_field_index];
-
-            $sql = 'SELECT * FROM ' . $ecs->table('reg_extend_info') . "  WHERE reg_field_id = '$val[id]' AND user_id = '$user_id'";
-            if ($db->getOne($sql))      //如果之前没有记录，则插入
-            {
-                $sql = 'UPDATE ' . $ecs->table('reg_extend_info') . " SET content = '$temp_field_content' WHERE reg_field_id = '$val[id]' AND user_id = '$user_id'";
-            }
-            else
-            {
-                $sql = 'INSERT INTO '. $ecs->table('reg_extend_info') . " (`user_id`, `reg_field_id`, `content`) VALUES ('$user_id', '$val[id]', '$temp_field_content')";
-            }
-            $db->query($sql);
-        }
-    }
-
 
     /* 更新会员的其它信息 */
     $other =  array();
     $other['credit_line'] = $credit_line;
     $other['user_rank'] = $rank;
-
-    $other['msn'] = isset($_POST['extend_field1']) ? htmlspecialchars(trim($_POST['extend_field1'])) : '';
-    $other['qq'] = isset($_POST['extend_field2']) ? htmlspecialchars(trim($_POST['extend_field2'])) : '';
-    $other['office_phone'] = isset($_POST['extend_field3']) ? htmlspecialchars(trim($_POST['extend_field3'])) : '';
-    $other['home_phone'] = isset($_POST['extend_field4']) ? htmlspecialchars(trim($_POST['extend_field4'])) : '';
-    $other['mobile_phone'] = isset($_POST['extend_field5']) ? htmlspecialchars(trim($_POST['extend_field5'])) : '';
-
+    foreach ($_POST['other'] as $key=>$val)
+    {
+        if (!empty($val))
+        {
+            $other[$key] = htmlspecialchars(trim($val));
+        }
+    }
     $db->autoExecute($ecs->table('users'), $other, 'UPDATE', "user_name = '$username'");
 
     /* 记录管理员操作 */
@@ -437,13 +291,12 @@ elseif ($_REQUEST['act'] == 'batch_remove')
     {
         $sql = "SELECT user_name FROM " . $ecs->table('users') . " WHERE user_id " . db_create_in($_POST['checkboxes']);
         $col = $db->getCol($sql);
-        $usernames = implode(',',addslashes_deep($col));
         $count = count($col);
         /* 通过插件来删除用户 */
         $users =& init_users();
         $users->remove_user($col);
 
-        admin_log($usernames, 'batch_remove', 'users');
+        admin_log('', 'batch_remove', 'users');
 
         $lnk[] = array('text' => $_LANG['go_back'], 'href'=>'users.php?act=list');
         sys_msg(sprintf($_LANG['batch_remove_success'], $count), 0, $lnk);
@@ -461,7 +314,7 @@ elseif ($_REQUEST['act'] == 'edit_username')
     /* 检查权限 */
     check_authz_json('users_manage');
 
-    $username = empty($_REQUEST['val']) ? '' : json_str_iconv(trim($_REQUEST['val']));
+    $username = empty($_REQUEST['val']) ? '' : trim($_REQUEST['val']);
     $id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
 
     if ($id == 0)
@@ -505,7 +358,7 @@ elseif ($_REQUEST['act'] == 'edit_email')
     check_authz_json('users_manage');
 
     $id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
-    $email = empty($_REQUEST['val']) ? '' : json_str_iconv(trim($_REQUEST['val']));
+    $email = empty($_REQUEST['val']) ? '' : trim($_REQUEST['val']);
 
     $users =& init_users();
 
@@ -599,68 +452,6 @@ elseif ($_REQUEST['act'] == 'remove_parent')
     sys_msg(sprintf($_LANG['update_success'], $username), 0, $link);
 }
 
-/*------------------------------------------------------ */
-//-- 查看用户推荐会员列表
-/*------------------------------------------------------ */
-
-elseif ($_REQUEST['act'] == 'aff_list')
-{
-    /* 检查权限 */
-    admin_priv('users_manage');
-    $smarty->assign('ur_here',      $_LANG['03_users_list']);
-
-    $auid = $_GET['auid'];
-    $user_list['user_list'] = array();
-
-    $affiliate = unserialize($GLOBALS['_CFG']['affiliate']);
-    $smarty->assign('affiliate', $affiliate);
-
-    empty($affiliate) && $affiliate = array();
-
-    $num = count($affiliate['item']);
-    $up_uid = "'$auid'";
-    $all_count = 0;
-    for ($i = 1; $i<=$num; $i++)
-    {
-        $count = 0;
-        if ($up_uid)
-        {
-            $sql = "SELECT user_id FROM " . $ecs->table('users') . " WHERE parent_id IN($up_uid)";
-            $query = $db->query($sql);
-            $up_uid = '';
-            while ($rt = $db->fetch_array($query))
-            {
-                $up_uid .= $up_uid ? ",'$rt[user_id]'" : "'$rt[user_id]'";
-                $count++;
-            }
-        }
-        $all_count += $count;
-
-        if ($count)
-        {
-            $sql = "SELECT user_id, user_name, '$i' AS level, email, is_validated, user_money, frozen_money, rank_points, pay_points, reg_time ".
-                    " FROM " . $GLOBALS['ecs']->table('users') . " WHERE user_id IN($up_uid)" .
-                    " ORDER by level, user_id";
-            $user_list['user_list'] = array_merge($user_list['user_list'], $db->getAll($sql));
-        }
-    }
-
-    $temp_count = count($user_list['user_list']);
-    for ($i=0; $i<$temp_count; $i++)
-    {
-        $user_list['user_list'][$i]['reg_time'] = local_date($_CFG['date_format'], $user_list['user_list'][$i]['reg_time']);
-    }
-
-    $user_list['record_count'] = $all_count;
-
-    $smarty->assign('user_list',    $user_list['user_list']);
-    $smarty->assign('record_count', $user_list['record_count']);
-    $smarty->assign('full_page',    1);
-    $smarty->assign('action_link',  array('text' => $_LANG['back_note'], 'href'=>"users.php?act=edit&id=$auid"));
-
-    assign_query_info();
-    $smarty->display('affiliate_list.htm');
-}
 
 /**
  *  返回用户列表数据
@@ -677,10 +468,6 @@ function user_list()
     {
         /* 过滤条件 */
         $filter['keywords'] = empty($_REQUEST['keywords']) ? '' : trim($_REQUEST['keywords']);
-        if (isset($_REQUEST['is_ajax']) && $_REQUEST['is_ajax'] == 1)
-        {
-            $filter['keywords'] = json_str_iconv($filter['keywords']);
-        }
         $filter['rank'] = empty($_REQUEST['rank']) ? 0 : intval($_REQUEST['rank']);
         $filter['pay_points_gt'] = empty($_REQUEST['pay_points_gt']) ? 0 : intval($_REQUEST['pay_points_gt']);
         $filter['pay_points_lt'] = empty($_REQUEST['pay_points_lt']) ? 0 : intval($_REQUEST['pay_points_lt']);
@@ -720,7 +507,7 @@ function user_list()
 
         /* 分页大小 */
         $filter = page_and_size($filter);
-        $sql = "SELECT user_id, user_name, email, is_validated, user_money, frozen_money, rank_points, pay_points, reg_time ".
+        $sql = "SELECT user_id, user_name, email, reg_time ".
                 " FROM " . $GLOBALS['ecs']->table('users') . $ex_where .
                 " ORDER by " . $filter['sort_by'] . ' ' . $filter['sort_order'] .
                 " LIMIT " . $filter['start'] . ',' . $filter['page_size'];

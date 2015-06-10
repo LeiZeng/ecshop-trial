@@ -3,14 +3,15 @@
 /**
  * shopex4.6转换程序插件
  * ============================================================================
- * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com；
+ * 版权所有 (C) 2005-2007 康盛创想（北京）科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com
  * ----------------------------------------------------------------------------
- * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
- * 使用；不允许对程序代码以任何形式任何目的的再发布。
+ * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
+ * 进行修改、使用和再发布。
  * ============================================================================
- * $Author: liubo $
- * $Id: shopex46.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: scottye $
+ * $Date: 2007-11-19 13:39:39 +0800 (星期一, 19 十一月 2007) $
+ * $Id: shopex46.php 13680 2007-11-19 05:39:39Z scottye $
  */
 
 if (!defined('IN_ECS'))
@@ -86,17 +87,9 @@ class shopex46
         $this->sprefix = $sprefix;
         $this->sroot = $sroot;
         $this->troot = str_replace('/includes/modules/convert', '', str_replace('\\', '/', dirname(__FILE__)));
-        $this->tdocroot = str_replace('/' . ADMIN_PATH, '', dirname(PHP_SELF));
+        $this->tdocroot = str_replace('/admin', '', dirname(PHP_SELF));
         $this->scharset = $scharset;
-        if (EC_CHARSET == 'utf-8')
-        {
-            $tcharset = 'UTF8';
-        }
-        elseif (EC_CHARSET == 'gbk')
-        {
-            $tcharset = 'GB2312';
-        }
-        $this->tcharset = $tcharset;
+        $this->tcharset = 'UTF8';
     }
 
     /**
@@ -362,7 +355,6 @@ class shopex46
             $goods['is_hot']        = $row['hot2'];
             $goods['is_promote']    = $row['tejia2'];
             $goods['goods_type']    = $row['catid'];
-            $goods['last_update'] = gmtime();
 
             /* 图片：如果没有本地文件，取远程图片 */
             $file = $this->troot . '/images/' . date('Ym') . '/small_' . $row['gid'];
@@ -614,7 +606,6 @@ class shopex46
             {
                 //return $db->error();
             }
-            uc_call('uc_user_register', array($user['user_name'], $user['password'], $user['email']));
         }
 
         /* 收货人地址 */

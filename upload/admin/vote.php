@@ -3,14 +3,15 @@
 /**
  * ECSHOP  调查管理程序
  * ============================================================================
- * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com；
+ * 版权所有 (C) 2005-2007 康盛创想（北京）科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com
  * ----------------------------------------------------------------------------
- * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
- * 使用；不允许对程序代码以任何形式任何目的的再发布。
+ * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
+ * 进行修改、使用和再发布。
  * ============================================================================
- * $Author: liubo $
- * $Id: vote.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: testyang $
+ * $Date: 2008-02-01 23:40:15 +0800 (星期五, 01 二月 2008) $
+ * $Id: vote.php 14122 2008-02-01 15:40:15Z testyang $
 */
 
 define('IN_ECS', true);
@@ -222,7 +223,7 @@ elseif ($_REQUEST['act'] == 'new_option')
 {
     check_authz_json('vote_priv');
 
-    $option_name = json_str_iconv(trim($_POST['option_name']));
+    $option_name = trim($_POST['option_name']);
     $vote_id = intval($_POST['id']);
 
     if (!empty($option_name))
@@ -263,7 +264,7 @@ elseif ($_REQUEST['act'] == 'edit_vote_name')
     check_authz_json('vote_priv');
 
     $id        = intval($_POST['id']);
-    $vote_name = json_str_iconv(trim($_POST['val']));
+    $vote_name = trim($_POST['val']);
 
     /* 检查名称是否重复 */
     if ($exc->num("vote_name", $vote_name, $id) != 0)
@@ -288,7 +289,7 @@ elseif ($_REQUEST['act'] == 'edit_option_name')
     check_authz_json('vote_priv');
 
     $id        = intval($_POST['id']);
-    $option_name = json_str_iconv(trim($_POST['val']));
+    $option_name = trim($_POST['val']);
 
     /* 检查名称是否重复 */
     $vote_id = $db->getOne('SELECT vote_id FROM ' .$ecs->table('vote_option'). " WHERE option_id='$id'");
@@ -308,26 +309,6 @@ elseif ($_REQUEST['act'] == 'edit_option_name')
         }
     }
 }
-
-
-/*------------------------------------------------------ */
-//-- 编辑调查选项排序值
-/*------------------------------------------------------ */
-elseif ($_REQUEST['act'] == 'edit_option_order')
-{
-    check_authz_json('vote_priv');
-
-    $id        = intval($_POST['id']);
-    $option_order = json_str_iconv(trim($_POST['val']));
-
-    if ($exc_opn->edit("option_order = '$option_order'", $id))
-    {
-        admin_log($_LANG['edit_option_order'], 'edit', 'vote');
-        make_json_result(stripslashes($option_order));
-    }
-
-}
-
 
 /*------------------------------------------------------ */
 //-- 删除在线调查主题
@@ -404,9 +385,9 @@ function get_votelist()
 function get_optionlist($id)
 {
     $list = array();
-    $sql  = 'SELECT option_id, vote_id, option_name, option_count, option_order'.
+    $sql  = 'SELECT option_id, vote_id, option_name, option_count'.
             ' FROM ' .$GLOBALS['ecs']->table('vote_option').
-            " WHERE vote_id = '$id' ORDER BY option_order ASC, option_id DESC";
+            " WHERE vote_id = '$id' ORDER BY option_id DESC";
     $res  = $GLOBALS['db']->query($sql);
     while ($rows = $GLOBALS['db']->fetchRow($res))
     {

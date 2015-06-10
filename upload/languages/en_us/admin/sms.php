@@ -2,7 +2,7 @@
 /**
  * ECSHOP Short message module language file
  * ============================================================================
- * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -10,8 +10,9 @@
  * republish the program code, on the premise of that your behavior is not for
  * commercial purposes.
  * ============================================================================
- * $Author: liubo $
- * $Id: sms.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: xcq $
+ * $Date: 2006-11-23 17:39:02 +0800 (Thursday , 23 November 2006) $
+ * $Id: sms.php 2904 2006-11-23 09:39:02Z xcq $
 */
 
 /* Navigation */
@@ -21,7 +22,6 @@ $_LANG['register_sms'] = 'Register Or Enable Sms Account.';
 $_LANG['email'] = 'Email';
 $_LANG['password'] = 'Password';
 $_LANG['domain'] = 'Domain';
-$_LANG['error_tips'] = 'Set in the shop - "SMS settings, first register and properly configure the SMS messaging service!';
 $_LANG['register_new'] = 'Register';
 $_LANG['enable_old'] = 'Enable account';
 
@@ -38,10 +38,9 @@ $_LANG['disable'] = 'Disable sms service';
 
 /* Send sms */
 $_LANG['phone'] = 'Mobile phone';
-$_LANG['user_rand'] = 'Send short message by the user level';
 $_LANG['phone_notice'] = 'More than one phone number divided by DBC case comma.';
 $_LANG['msg'] = 'Message';
-$_LANG['msg_notice'] = '70 character at most';
+$_LANG['msg_notice'] = '250 character at most';
 $_LANG['send_date'] = 'Send at certain times';
 $_LANG['send_date_notice'] = 'Format is YYYY-MM-DD HH:II. If it is blank then send immediately.';
 $_LANG['back_send_history'] = 'Return to send history';
@@ -84,8 +83,6 @@ $_LANG['sent_date'] = 'Sent date';
 $_LANG['send_status'] = 'Send status';
 $_LANG['status'][0] = 'Fail';
 $_LANG['status'][1] = 'Succeed';
-$_LANG['user_list'] = 'All user';
-$_LANG['please_select'] = 'Please choose the membership grade';
 
 /* Prompting message */
 $_LANG['test_now'] = '<span style="color:red;"></span>';
@@ -127,7 +124,6 @@ $_LANG['server_errors'][7] = 'error empty response.';//ERROR_EMPTY_RESPONSE
 $_LANG['server_errors'][8] = 'error invalid xml file.';//ERROR_INVALID_XML_FILE
 $_LANG['server_errors'][9] = 'error invalid node name.';//ERROR_INVALID_NODE_NAME
 $_LANG['server_errors'][10] = 'error cant store.';//ERROR_CANT_STORE
-$_LANG['server_errors'][11] = 'SMS feature is not yet activated.';//ERROR_INVALID_PASSPORT
 
 /* Client JS language item */
 //--Register or  invocation
@@ -136,8 +132,6 @@ $_LANG['js_languages']['username_empty_error'] = 'Please enter username.';
 $_LANG['js_languages']['username_format_error'] = 'Username format is invalid.';
 $_LANG['js_languages']['domain_empty_error'] = 'Domain can\'t be blank.';
 $_LANG['js_languages']['domain_format_error'] = 'Domain format is invalid.';
-$_LANG['js_languages']['send_empty_error'] = 'Send phone number and send at least fill out a rating！';
-
 //--Send
 $_LANG['js_languages']['phone_empty_error'] = 'Please enter phone number.';
 $_LANG['js_languages']['phone_format_error'] = 'Phone member format is invalid.';
@@ -149,22 +143,4 @@ $_LANG['js_languages']['end_date_format_error'] = 'Deadline format is invalid.';
 //--Recharge
 $_LANG['js_languages']['money_empty_error'] = 'Please enter charge what you want to recharge.';
 $_LANG['js_languages']['money_format_error'] = 'Money format is invalid.';
-
-
-
-
-$_LANG['insert_sign'] = 'Please enter the message signature';
-$_LANG['insert_succ'] = 'Added successfully';
-$_LANG['error_smg'] = 'Wrong information';
-$_LANG['edit_succ'] = 'Successful modification';
-$_LANG['default_succ'] = 'The successful signature';
-$_LANG['no_default'] = 'No default value';
-$_LANG['add_sign'] = 'New message signature';
-$_LANG['new_default_sign'] = 'The current default signature';
-$_LANG['default_sign'] = 'The original signature';
-$_LANG['add'] = 'Add to';
-$_LANG['edited'] = 'Amended as';
-$_LANG['edit'] = 'edit';
-$_LANG['set_default_sign'] = 'Set the default signature';
-
 ?>

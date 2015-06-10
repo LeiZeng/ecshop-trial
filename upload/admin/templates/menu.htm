@@ -118,12 +118,12 @@ body {
 <body>
 <div id="tabbar-div">
 <p><span style="float:right; padding: 3px 5px;" ><a href="javascript:toggleCollapse();"><img id="toggleImg" src="images/menu_minus.gif" width="9" height="9" border="0" alt="{$lang.collapse_all}" /></a></span>
-  <span class="tab-front" id="menu-tab">{$lang.menu}</span>
+  <span class="tab-front" id="menu-tab">{$lang.menu}</span><span class="tab-back" id="help-tab">{$lang.help}</span>
 </p>
 </div>
 <div id="main-div">
 <div id="menu-list">
-<ul id="menu-ul">
+<ul>
 {foreach from=$menus item=menu key=k}
 {if $menu.action}
   <li class="explode"><a href="{$menu.action}" target="main-frame">{$menu.label}</a></li>
@@ -140,7 +140,6 @@ body {
   </li>
 {/if}
 {/foreach}
-  <script language="JavaScript" src="http://api.ecshop.com/menu_ext.php?charset={$charset}&lang={$help_lang}"></script>
 </ul>
 </div>
 <div id="help-div" style="display:none">
@@ -149,7 +148,6 @@ body {
 </div>
 </div>
 {insert_scripts files="../js/global.js,../js/utils.js,../js/transport.js"}
-{insert_scripts files="./js/menu.js"}
 <script language="JavaScript">
 <!--
 var collapse_all = "{$lang.collapse_all}";
@@ -255,18 +253,18 @@ document.getElementById('tabbar-div').onclick=function(e)
 {
   var obj = Utils.srcElement(e);
 
- // var mnuTab = document.getElementById('menu-tab');
+  var mnuTab = document.getElementById('menu-tab');
   var hlpTab = document.getElementById('help-tab');
   var mnuDiv = document.getElementById('menu-list');
   var hlpDiv = document.getElementById('help-div');
 
-  //if (obj.id == 'menu-tab')
-//  {
-//    mnuTab.className = 'tab-front';
-//    hlpTab.className = 'tab-back';
-//    mnuDiv.style.display = "block";
-//    hlpDiv.style.display = "none";
-//  }
+  if (obj.id == 'menu-tab')
+  {
+    mnuTab.className = 'tab-front';
+    hlpTab.className = 'tab-back';
+    mnuDiv.style.display = "block";
+    hlpDiv.style.display = "none";
+  }
 
   if (obj.id == 'help-tab')
   {
@@ -284,6 +282,42 @@ document.getElementById('tabbar-div').onclick=function(e)
     filename = loc.substring(pos1 + 1, pos2 - 4);
     act = pos4 < 0 ? loc.substring(pos3 + 4) : loc.substring(pos3 + 4, pos4);
     loadHelp(filename, act);
+  }
+}
+
+/**
+ * 载入帮助内容
+ */
+function loadHelp(filename, act)
+{
+  var doc = createDocument();
+  var path = 'help/' + helpLang + '/' + filename + ".xml";
+
+  document.getElementById("help-title").innerHTML = '';
+  document.getElementById("help-content").innerHTML = noHelp;
+  try
+  {
+    doc.load(path);
+
+    var items = doc.getElementsByTagName('section');
+
+    for (i = 0; i < items.length; i++)
+    {
+      if (items[i].getAttribute("id") == act)
+      {
+        var title = items[i].getElementsByTagName("title");
+        document.getElementById("help-title").innerHTML = (Browser.isIE) ? title[0].text : title[0].textContent;
+
+        var content = items[i].getElementsByTagName("content");
+        document.getElementById("help-content").innerHTML = (Browser.isIE) ? content[0].text : content[0].textContent;
+
+        break;
+      };
+    }
+  }
+  catch (e)
+  {
+    alert(e.message);
   }
 }
 
@@ -378,11 +412,11 @@ Object.extend(ToggleHanlder ,{
   {
     if (document.getCookie(this.CookieName) != null)
     {
-      this.SourceObject = t_eval ();
+      this.SourceObject = eval("("+ document.getCookie(this.CookieName) +")");
       var items = document.getElementsByTagName('LI');
       for (var i = 0; i < items.length; i++)
       {
-        if ( items[0].getAttribute("name") == "menu" && items[0].getAttribute("id") != '20_yun')
+        if ( items[0].getAttribute("name") == "menu")
         {
           for (var k in this.SourceObject)
           {
@@ -406,17 +440,7 @@ Object.extend(ToggleHanlder ,{
 ToggleHanlder.CookieName += "_{$admin_id}";
 //初始化菜单状态
 ToggleHanlder.Load();
-Ajax.call('cloud.php?is_ajax=1&act=menu_api','', start_menu_api, 'GET', 'JSON');
-function start_menu_api(result)
-{
-      if(result.content==0)
-      {
-      }
-      else
-      {
-          document.getElementById("menu-ul").innerHTML = document.getElementById("menu-ul").innerHTML + result.content;
-      }   
-}
+
 //-->
 </script>
 

@@ -3,7 +3,7 @@
 /**
  * ECSHOP
  * ============================================================================
- * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -11,8 +11,9 @@
  * republish the program code, on the premise of that your behavior is not for
  * commercial purposes.
  * ============================================================================
- * $Author: liubo $
- * $Id: database.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: wj $
+ * $Date: 2006-12-28 17:43:15 +0800 (Thursday, 28 December 2006) $
+ * $Id: database.php 3848 2006-12-28 09:43:15Z wj $
 */
 
 $_LANG['db_manage'] ='Database management';
@@ -60,7 +61,7 @@ $_LANG['old_table_pre'] ='At first table prefixion';
 $_LANG['new_table_pre'] ='New table prefixion';
 $_LANG['use_new_pre'] ='Use the new table prefixion.';
 $_LANG['notice_use_new_pre'] ='Only just can choose while recover all backups "Yes", otherwise it will can\'t be used that the table without backup  .<Br/>you can also modify data/config.php in the $prefix to decide to use prefixion.';
-$_LANG['upload_and_exe'] = 'Upload the sql file and execute.';
+$_LANG['upload_and_exe'] ='Upload and carry out the sql file.';
 
 /* Prompting message */
 $_LANG['fail_get_tables'] ='Obtain the backup datasheet failure.';
@@ -107,7 +108,7 @@ $_LANG['fail_write_file'] = 'The file %s can not writting';
 $_LANG['vol'] = 'VOL';
 $_LANG['import'] = 'Import';
 $_LANG['server_sql'] = 'Server Backup';
-$_LANG['submit_remove'] = 'Delete';
+$_LANG['submit'] = 'Delete';
 $_LANG['remove_success'] = 'Delete Success';
 $_LANG['confirm_import'] = 'Do you want to import other backup';
 $_LANG['also_continue'] = 'Yes, I want do it';

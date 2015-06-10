@@ -2,9 +2,6 @@
 {include file="pageheader.htm"}
 {insert_scripts files="../js/utils.js,listtable.js"}
 <div class="form-div">
-{if $smarty.get.auid}
-{$lang.show_affiliate_orders}
-{else}
 <form action="affiliate_ck.php?act=list">
   {$lang.sch_stats.info}
   <a href="affiliate_ck.php?act=list">{$lang.sch_stats.all}</a>
@@ -16,7 +13,6 @@
 <input type="hidden" name="act" value="list" />
 <input name="order_sn" type="text" id="order_sn" size="15"><input type="submit" value="{$lang.button_search}" class="button" />
 </form>
-{/if}
 </div>
 <form method="post" action="" name="listForm">
 <div class="list-div" id="listDiv">
@@ -60,13 +56,6 @@
 </div>
 </form>
 <script type="Text/Javascript" language="JavaScript">
-listTable.recordCount = {$record_count};
-listTable.pageCount = {$page_count};
-
-{foreach from=$filter item=item key=key}
-listTable.filter.{$key} = '{$item}';
-{/foreach}
-
 <!-- {literal} -->
 onload = function()
 {

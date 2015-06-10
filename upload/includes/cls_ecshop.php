@@ -3,14 +3,15 @@
 /**
  * ECSHOP 基础类
  * ============================================================================
- * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com；
+ * 版权所有 (C) 2005-2007 康盛创想（北京）科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com
  * ----------------------------------------------------------------------------
- * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
- * 使用；不允许对程序代码以任何形式任何目的的再发布。
+ * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
+ * 进行修改、使用和再发布。
  * ============================================================================
- * $Author: liubo $
- * $Id: cls_ecshop.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: testyang $
+ * $Date: 2008-02-29 13:58:27 +0800 (星期五, 29 二月 2008) $
+ * $Id: cls_ecshop.php 14195 2008-02-29 05:58:27Z testyang $
 */
 
 if (!defined('IN_ECS'))
@@ -19,8 +20,8 @@ if (!defined('IN_ECS'))
 }
 
 define('APPNAME', 'ECSHOP');
-define('VERSION', 'v2.7.3');
-define('RELEASE', '20121106');
+define('VERSION', 'v2.5.1');
+define('RELEASE', '20080229');
 
 class ECS
 {
@@ -127,8 +128,8 @@ class ECS
      */
     function url()
     {
-        $curr = strpos(PHP_SELF, ADMIN_PATH . '/') !== false ?
-                preg_replace('/(.*)(' . ADMIN_PATH . ')(\/?)(.)*/i', '\1', dirname(PHP_SELF)) :
+        $curr = strpos(PHP_SELF, 'admin/') !== false ?
+                preg_replace('/(.*)(admin)(\/?)(.)*/i', '\1', dirname(PHP_SELF)) :
                 dirname(PHP_SELF);
 
         $root = str_replace('\\', '/', $curr);
@@ -152,52 +153,6 @@ class ECS
     {
         return (isset($_SERVER['HTTPS']) && (strtolower($_SERVER['HTTPS']) != 'off')) ? 'https://' : 'http://';
     }
-
-    /**
-     * 获得数据目录的路径
-     *
-     * @param int $sid
-     *
-     * @return string 路径
-     */
-    function data_dir($sid = 0)
-    {
-        if (empty($sid))
-        {
-            $s = 'data';
-        }
-        else
-        {
-            $s = 'user_files/';
-            $s .= ceil($sid / 3000) . '/';
-            $s .= $sid % 3000;
-        }
-        return $s;
-    }
-
-    /**
-     * 获得图片的目录路径
-     *
-     * @param int $sid
-     *
-     * @return string 路径
-     */
-    function image_dir($sid = 0)
-    {
-        if (empty($sid))
-        {
-            $s = 'images';
-        }
-        else
-        {
-            $s = 'user_files/';
-            $s .= ceil($sid / 3000) . '/';
-            $s .= ($sid % 3000) . '/';
-            $s .= 'images';
-        }
-        return $s;
-    }
-
 }
 
 ?>

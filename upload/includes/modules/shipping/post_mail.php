@@ -3,14 +3,15 @@
 /**
  * ECSHOP 邮局平邮插件
  * ============================================================================
- * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com；
+ * 版权所有 (C) 2005-2007 康盛创想（北京）科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com
  * ----------------------------------------------------------------------------
- * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
- * 使用；不允许对程序代码以任何形式任何目的的再发布。
+ * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
+ * 进行修改、使用和再发布。
  * ============================================================================
- * $Author: liubo $
- * $Id: post_mail.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: weberliu $
+ * $Date: 2006-09-01 11:50:48 +0800 (星期五, 01 九月 2006) $
+ * $Id: post_express.php 1179 2006-09-01 03:50:48Z weberliu $
  */
 
 if (!defined('IN_ECS'))
@@ -49,21 +50,11 @@ if (isset($set_modules) && $set_modules == TRUE)
 
     /* 配送接口需要的参数 */
     $modules[$i]['configure'] = array(
-                                    array('name' => 'item_fee',          'value'=>4),
-                                    array('name' => 'base_fee',          'value'=>3.5),
-                                    array('name' => 'step_fee',          'value'=>2),
-                                    array('name' => 'step_fee1',          'value'=>2.5),
+                                    array('name' => 'basic_fee',          'value'=>3.5),
+                                    array('name' => 'step_fee1',          'value'=>2),
+                                    array('name' => 'step_fee2',          'value'=>2.5),
                                     array('name' => 'pack_fee',           'value'=>0),
                                 );
-
-    /* 模式编辑器 */
-    $modules[$i]['print_model'] = 2;
-
-    /* 打印单背景 */
-    $modules[$i]['print_bg'] = '';
-
-   /* 打印快递单标签位置信息 */
-    $modules[$i]['config_lable'] = '';
 
     return;
 }
@@ -109,10 +100,9 @@ class post_mail
      *
      * @param   float   $goods_weight   商品重量
      * @param   float   $goods_amount   商品金额
-     * @param   float   $goods_number   商品件数
      * @return  decimal
      */
-    function calculate($goods_weight, $goods_amount, $goods_number)
+    function calculate($goods_weight, $goods_amount)
     {
         if ($this->configure['free_money'] > 0 && $goods_amount >= $this->configure['free_money'])
         {
@@ -121,29 +111,19 @@ class post_mail
         else
         {
             /* 基本费用 */
-            $fee = $this->configure['base_fee'] + $this->configure['pack_fee'];
-            $this->configure['fee_compute_mode'] = !empty($this->configure['fee_compute_mode']) ? $this->configure['fee_compute_mode'] : 'by_weight';
+            $fee = $this->configure['basic_fee'] + $this->configure['pack_fee'];
 
-            if ($this->configure['fee_compute_mode'] == 'by_number')
+            if ($goods_weight > 5)
             {
-                $fee = $goods_number * ($this->configure['item_fee'] + $this->configure['pack_fee']);
+                $fee += (ceil(($goods_weight - 1))) * $this->configure['step_fee2'];
             }
             else
             {
-                if ($goods_weight > 5)
+                if ($goods_weight > 1)
                 {
-                    $fee += 4 * $this->configure['step_fee'];
-                    $fee += (ceil(($goods_weight - 5))) * $this->configure['step_fee1'];
-                }
-                else
-                {
-                    if ($goods_weight > 1)
-                    {
-                        $fee += (ceil(($goods_weight - 1))) * $this->configure['step_fee'];
-                    }
+                    $fee += (ceil(($goods_weight - 1))) * $this->configure['step_fee1'];
                 }
             }
-
 
             return $fee;
         }

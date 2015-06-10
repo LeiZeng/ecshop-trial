@@ -3,14 +3,15 @@
 /**
  * ECSHOP 用户帐号相关函数库
  * ============================================================================
- * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com；
+ * 版权所有 (C) 2005-2007 康盛创想（北京）科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com
  * ----------------------------------------------------------------------------
- * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
- * 使用；不允许对程序代码以任何形式任何目的的再发布。
+ * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
+ * 进行修改、使用和再发布。
  * ============================================================================
- * $Author: liubo $
- * $Id: lib_passport.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: testyang $
+ * $Date: 2008-02-01 23:40:15 +0800 (星期五, 01 二月 2008) $
+ * $Id: lib_passport.php 14122 2008-02-01 15:40:15Z testyang $
 */
 
 if (!defined('IN_ECS'))
@@ -31,11 +32,6 @@ if (!defined('IN_ECS'))
  */
 function register($username, $password, $email, $other = array())
 {
-    /* 检查注册是否关闭 */
-    if (!empty($GLOBALS['_CFG']['shop_reg_closed']))
-    {
-        $GLOBALS['err']->add($GLOBALS['_LANG']['shop_register_closed']);
-    }
     /* 检查username */
     if (empty($username))
     {
@@ -76,25 +72,9 @@ function register($username, $password, $email, $other = array())
 
     if (!$GLOBALS['user']->add_user($username, $password, $email))
     {
-        if ($GLOBALS['user']->error == ERR_INVALID_USERNAME)
-        {
-            $GLOBALS['err']->add(sprintf($GLOBALS['_LANG']['username_invalid'], $username));
-        }
-        elseif ($GLOBALS['user']->error == ERR_USERNAME_NOT_ALLOW)
-        {
-            $GLOBALS['err']->add(sprintf($GLOBALS['_LANG']['username_not_allow'], $username));
-        }
-        elseif ($GLOBALS['user']->error == ERR_USERNAME_EXISTS)
+        if ($GLOBALS['user']->error == ERR_USERNAME_EXISTS)
         {
             $GLOBALS['err']->add(sprintf($GLOBALS['_LANG']['username_exist'], $username));
-        }
-        elseif ($GLOBALS['user']->error == ERR_INVALID_EMAIL)
-        {
-            $GLOBALS['err']->add(sprintf($GLOBALS['_LANG']['email_invalid'], $email));
-        }
-        elseif ($GLOBALS['user']->error == ERR_EMAIL_NOT_ALLOW)
-        {
-            $GLOBALS['err']->add(sprintf($GLOBALS['_LANG']['email_not_allow'], $email));
         }
         elseif ($GLOBALS['user']->error == ERR_EMAIL_EXISTS)
         {
@@ -131,22 +111,19 @@ function register($username, $password, $email, $other = array())
             empty($affiliate) && $affiliate = array();
             $affiliate['config']['level_register_all'] = intval($affiliate['config']['level_register_all']);
             $affiliate['config']['level_register_up'] = intval($affiliate['config']['level_register_up']);
-            if ($up_uid)
+            if ($up_uid && !empty($affiliate['config']['level_register_all']))
             {
-                if (!empty($affiliate['config']['level_register_all']))
+                if (!empty($affiliate['config']['level_register_up']))
                 {
-                    if (!empty($affiliate['config']['level_register_up']))
+                    $rank_points = $GLOBALS['db']->getOne("SELECT rank_points FROM " . $GLOBALS['ecs']->table('users') . " WHERE user_id = '$up_uid'");
+                    if ($rank_points + $affiliate['config']['level_register_all'] <= $affiliate['config']['level_register_up'])
                     {
-                        $rank_points = $GLOBALS['db']->getOne("SELECT rank_points FROM " . $GLOBALS['ecs']->table('users') . " WHERE user_id = '$up_uid'");
-                        if ($rank_points + $affiliate['config']['level_register_all'] <= $affiliate['config']['level_register_up'])
-                        {
-                            log_account_change($up_uid, 0, 0, $affiliate['config']['level_register_all'], 0, sprintf($GLOBALS['_LANG']['register_affiliate'], $_SESSION['user_id'], $username));
-                        }
+                        log_account_change($up_uid, 0, 0, $affiliate['config']['level_register_all'], 0, sprintf($GLOBALS['_LANG']['register_affiliate'], $_SESSION['user_id'], $username));
                     }
-                    else
-                    {
-                        log_account_change($up_uid, 0, 0, $affiliate['config']['level_register_all'], 0, $GLOBALS['_LANG']['register_affiliate']);
-                    }
+                }
+                else
+                {
+                    log_account_change($up_uid, 0, 0, $affiliate['config']['level_register_all'], 0, $GLOBALS['_LANG']['register_affiliate']);
                 }
 
                 //设置推荐人
@@ -170,7 +147,7 @@ function register($username, $password, $email, $other = array())
                 }
                 else
                 {
-                    $other[$key] =  htmlspecialchars(trim($val)); //防止用户输入javascript代码
+                    $other[$key] =  htmlentities($val); //防止用户输入javascript代码
                 }
             }
             $update_data = array_merge($update_data, $other);
@@ -322,7 +299,7 @@ function send_regiter_hash ($user_id)
 
     $content = $GLOBALS['smarty']->fetch('str:' . $template['template_content']);
 
-    /* 发送激活验证邮件 */
+    /* 发送确认重置密码的确认邮件 */
     if (send_mail($row['user_name'], $row['email'], $template['template_subject'], $content, $template['is_html']))
     {
         return true;

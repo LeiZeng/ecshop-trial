@@ -3,7 +3,7 @@
 /**
  * ECSHOP Commodity category management language file
  * ============================================================================
- * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -11,8 +11,9 @@
  * republish the program code, on the premise of that your behavior is not for
  * commercial purposes.
  * ============================================================================
- * $Author: liubo $
- * $Id: category.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: paulgao $
+ * $Date: 2007-01-30 16:02:08 +0800 (Tuesday, 30 Jan. 2007) $
+ * $Id: category.php 4752 2007-01-30 08:02:08Z paulgao $
 */
 
 /* Commodity category field information */
@@ -30,24 +31,19 @@ $_LANG['category_edit'] = 'Edit category';
 $_LANG['move_goods'] = 'Move product';
 $_LANG['cat_top'] = 'Root';
 $_LANG['show_in_nav'] = 'Display in navigation';
-$_LANG['cat_style'] = 'Style sheet document classification';
-$_LANG['is_show'] = 'Does it show that the';
-$_LANG['show_in_index'] = 'Is set to recommend home';
-$_LANG['notice_show_in_index'] = 'This setting can be the latest in the home, hot, Department recommend that the classification of merchandise under Recommend';
-$_LANG['goods_number'] = 'Quantity of goods';
-$_LANG['grade'] = 'Price range of the number of';
-$_LANG['notice_grade'] = 'This option indicates that the classification of merchandise under the lowest and the highest price level of the division between the number of express no grading fill 0';
-$_LANG['short_grade'] = 'Price classification';
+$_LANG['cat_style'] = '分类的样式表文件';
+$_LANG['is_show'] = '是否显示';
+$_LANG['goods_number'] = '商品数量';
+$_LANG['grade'] = '价格区间个数';
+$_LANG['notice_grade'] = '该选项表示该分类下商品最低价与最高价之间的划分的等级个数，填0表示不做分级';
+$_LANG['short_grade'] = '价格分级';
 
 $_LANG['nav'] = 'Navigation';
-$_LANG['index_new'] = 'Latest';
-$_LANG['index_best'] = 'Boutique';
-$_LANG['index_hot'] = 'Top';
 
 $_LANG['back_list'] = 'Return to category list.';
 $_LANG['continue_add'] = 'Continue add category.';
 
-$_LANG['notice_style'] = 'You can for each classification of merchandise to specify a style sheet document. For example, documents stored in the themes directory then enter:themes/style.css';
+$_LANG['notice_style'] = '您可以为每一个商品分类指定一个样式表文件。例如文件存放在 themes 目录下则输入：themes/style.css';
 
 /* Prompting message */
 $_LANG['catname_empty'] = 'Please enter a category name!';
@@ -56,7 +52,6 @@ $_LANG["parent_isleaf"] = 'The category can\'t be the bottom class category!';
 $_LANG["cat_isleaf"] = 'The category can\'t be deleted, because it isn\'t the bottom class category or some product already exists.';
 $_LANG["cat_noleaf"] ='There are still subcategories, so you can\'t modify category for the bottom class!';
 $_LANG["is_leaf_error"] ='The selected higher category can\'t be lower category of current category!';
-$_LANG['grade_error'] = 'Quantity price classification can only be an integer within 0-10';
 
 $_LANG['catadd_succed'] = 'Add new category successfully!';
 $_LANG['catedit_succed'] = 'Edit category successfully!';
@@ -74,18 +69,15 @@ $_LANG['cat_move_notic'] = 'In add product or pruduct management, if you want to
 
 $_LANG['cat_move_empty'] = 'Please select category rightly!';
 
-$_LANG['sel_goods_type'] = 'Please choose the type of merchandise';
-$_LANG['sel_filter_attr'] = 'Please select filter property';
-$_LANG['filter_attr'] = 'Filter property';
-$_LANG['filter_attr_notic'] = 'Filter property page to the previous classification of merchandise selection';
-$_LANG['filter_attr_not_repeated'] = 'Filter property can`t be repeated';
+$_LANG['sel_goods_type'] = '请选择商品类型';
+$_LANG['sel_filter_attr'] = '请选择筛选属性';
+$_LANG['filter_attr'] = '筛选属性';
+$_LANG['filter_attr_notic'] = '筛选属性可在前分类页面筛选商品';
 
 /*JS language item*/
 $_LANG['js_languages']['catname_empty'] = 'Category name can\'t be blank!';
 $_LANG['js_languages']['unit_empyt'] = 'Unit of quantity can\'t be blank!';
 $_LANG['js_languages']['is_leafcat'] ="You selected category is a bottom class category. \\nThe higher category of new category can\'t be a bottom class category.";
 $_LANG['js_languages']['not_leafcat'] =" You selected category isn\'t a bottom class category. \\nThe category of product transfer can just be operated between the bottom class categories.";
-$_LANG['js_languages']['filter_attr_not_repeated'] = 'Filter property can`t be repeated';
-$_LANG['js_languages']['filter_attr_not_selected'] = 'Please select a filter property';
 
 ?>

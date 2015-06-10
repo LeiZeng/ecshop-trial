@@ -1,4 +1,4 @@
-<!-- $Id: setting_first.htm 16339 2009-06-24 08:01:25Z liuhui $ -->
+<!-- $Id: repay_info.htm 5294 2007-02-07 03:13:12Z paulgao $ -->
 {include file="pageheader.htm"}
 {insert_scripts files="../js/utils.js,../js/region.js"}
 <div class="main-div">
@@ -114,18 +114,12 @@
     <tr>
       <td class="micro-label">{$lang.shop_pay}:</td>
       <td>
-			  <table border="0" cellpadding="0" cellspacing="0" style="margin-top:-10px"><tr><td width="50"><select name="payment" id="payment_type" onchange="loadConfig()" >
+        <select name="payment" id="payment_type" onchange="loadConfig()" >
           <option value=''>{$lang.select_please}</option>
-			    
             {foreach from=$modules_payment item=module}
-              
-			    <option value="{$module.code}" >{$module.name}</option>
-			    
+              <option value="{$module.code}" >{$module.name}</option>
             {/foreach}
-        
-			    </select></td>
-			  <td>	<div align="left"><span id="paynon">{$lang.alipay_login}</span>
-            </div></td></tr></table>
+        </select>
       </td>
     </tr>
     <tr>
@@ -151,11 +145,6 @@
 <!--
 {literal}
 region.isAdmin = true;
-
-onload = function()
-{
-   document.getElementById('paynon').style.display = 'none';
-}
 
 function validator()
 {
@@ -204,16 +193,8 @@ function loadConfig()
   {
     paymentConfig.style.display = 'block';
   }
-	if(payment.value == 'alipay')
-  {
-	  document.getElementById('paynon').style.display = 'block';
-	}
-	else
-	{
-	  document.getElementById('paynon').style.display = 'none';
-	}
-  var params = 'code=' + payment.value;
 
+  var params = 'code=' + payment.value;
   Ajax.call('payment.php?is_ajax=1&act=get_config', params, showConfig, 'GET', 'JSON');
 }
 

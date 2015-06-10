@@ -3,14 +3,15 @@
 /**
  * ECSHOP 地区列表管理文件
  * ============================================================================
- * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com；
+ * 版权所有 (C) 2005-2007 康盛创想（北京）科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com
  * ----------------------------------------------------------------------------
- * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
- * 使用；不允许对程序代码以任何形式任何目的的再发布。
+ * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
+ * 进行修改、使用和再发布。
  * ============================================================================
- * $Author: liubo $
- * $Id: area_manage.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: testyang $
+ * $Date: 2008-01-28 18:33:06 +0800 (星期一, 28 一月 2008) $
+ * $Id: area_manage.php 14079 2008-01-28 10:33:06Z testyang $
 */
 
 define('IN_ECS', true);
@@ -99,7 +100,7 @@ elseif ($_REQUEST['act'] == 'add_area')
     check_authz_json('area_manage');
 
     $parent_id      = intval($_POST['parent_id']);
-    $region_name    = json_str_iconv(trim($_POST['region_name']));
+    $region_name    = trim($_POST['region_name']);
     $region_type    = intval($_POST['region_type']);
 
     if (empty($region_name))
@@ -142,7 +143,7 @@ elseif ($_REQUEST['act'] == 'edit_area_name')
     check_authz_json('area_manage');
 
     $id = intval($_POST['id']);
-    $region_name = json_str_iconv(trim($_POST['val']));
+    $region_name = trim($_POST['val']);
 
     if (empty($region_name))
     {
@@ -181,32 +182,13 @@ elseif ($_REQUEST['act'] == 'drop_area')
     $sql = "SELECT * FROM " . $ecs->table('region') . " WHERE region_id = '$id'";
     $region = $db->getRow($sql);
 
-//    /* 如果底下有下级区域,不能删除 */
-//    $sql = "SELECT COUNT(*) FROM " . $ecs->table('region') . " WHERE parent_id = '$id'";
-//    if ($db->getOne($sql) > 0)
-//    {
-//        make_json_error($_LANG['parent_id_exist']);
-//    }
-    $region_type=$region['region_type'];
-    $delete_region[]=$id;
-    $new_region_id  =$id;
-    if($region_type<6)
+    /* 如果底下有下级区域,不能删除 */
+    $sql = "SELECT COUNT(*) FROM " . $ecs->table('region') . " WHERE parent_id = '$id'";
+    if ($db->getOne($sql) > 0)
     {
-        for($i=1;$i<6-$region_type;$i++)
-        {
-             $new_region_id=new_region_id($new_region_id);
-             if(count($new_region_id))
-             {
-                  $delete_region=array_merge($delete_region,$new_region_id);
-             }
-             else
-             {
-                 continue;
-             }
-        }
+        make_json_error($_LANG['parent_id_exist']);
     }
-    $sql="DELETE FROM ". $ecs->table("region")."WHERE region_id".db_create_in($delete_region);
-     $db->query($sql);
+
     if ($exc->drop($id))
     {
         admin_log(addslashes($region['region_name']), 'remove', 'area');
@@ -224,20 +206,4 @@ elseif ($_REQUEST['act'] == 'drop_area')
     }
 }
 
-
-function new_region_id($region_id)
-{
-    $regions_id=array();
-    if(empty($region_id))
-    {
-        return $regions_id;
-    }
-    $sql="SELECT region_id FROM ". $GLOBALS['ecs']->table("region")."WHERE parent_id ".db_create_in($region_id);
-    $result=$GLOBALS['db']->getAll($sql);
-    foreach($result as $val)
-    {
-        $regions_id[]=$val['region_id'];
-    }
-    return $regions_id;
-}
 ?>

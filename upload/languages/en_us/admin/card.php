@@ -3,7 +3,7 @@
 /**
  * ECSHOP Greetings card management language item
  * ============================================================================
- * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -11,8 +11,9 @@
  * republish the program code, on the premise of that your behavior is not for
  * commercial purposes.
  * ============================================================================
- * $Author: liubo $
- * $Id: card.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: paulgao $
+ * $Date: 2007-02-13 10:51:45 +0800$(Tuesday,13 February 2007)
+ * $Id: card.php 5814 2007-02-13 02:51:45Z paulgao $
 */
 
 $_LANG['card_name'] = 'Card name';

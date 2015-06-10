@@ -3,7 +3,7 @@
 /**
  * ECSHOP Statistics information language item
  * ============================================================================
- * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -11,17 +11,16 @@
  * republish the program code, on the premise of that your behavior is not for
  * commercial purposes.
  * ============================================================================
- * $Author: liubo $
- * $Id: statistic.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: paulgao $
+ * $Date: 2007-01-30 16:02:08 +0800 (Tuesday, 30 January 2007) $
+ * $Id: statistic.php 4752 2007-01-30 08:02:08Z paulgao $
 */
 
 /* Count of visitor statistics */
-$_LANG['stats_off'] = 'Web site traffic statistics have been closed. <BR>If necessary go to: System Setup -> Configuration -> Basic to open the site traffic statistics service.';
 $_LANG['last_update'] = 'Latest update';
 $_LANG['now_update'] = 'Update log';
 $_LANG['update_success'] = 'Update successfully!';
 $_LANG['view_log'] = 'View log';
-$_LANG['select_year_month'] = 'Year/month';
 
 $_LANG['pv_stats'] = 'General visit data';
 $_LANG['integration_visit'] = 'Integration visit';
@@ -33,8 +32,6 @@ $_LANG['key_analyse'] = 'Key word analyse';
 $_LANG['start_date'] = 'Start date';
 $_LANG['end_date'] = 'Deadline';
 $_LANG['query'] = 'Query';
-$_LANG['result_filter'] = '
-Filter results';
 $_LANG['compare_query'] = 'Compare query';
 $_LANG['year_status'] = 'Year status';
 $_LANG['month_status'] = 'Mouth status';
@@ -108,8 +105,8 @@ $_LANG['member_sum'] = 'Total shopping quantum of members';
 $_LANG['order_all_amount'] = 'Oreders quantity';
 $_LANG['order_all_turnover'] = 'Total turnover';
 
-$_LANG['down_guest_stats']= 'Customers download statistics';
-$_LANG['guest_statistics']= 'Client statistics';
+$_LANG['down_guest_stats']= '客户统计报表下载';
+$_LANG['guest_statistics']= '客户统计报表';
 
 /* Member ranking */
 $_LANG['show_num'] = 'Display';
@@ -119,7 +116,7 @@ $_LANG['buy_sum'] = 'Money of shopping';
 
 $_LANG['order_amount_sort'] = 'Sort by quantity';
 $_LANG['buy_sum_sort'] = 'Sort by money';
-$_LANG['download_amount_sort'] = 'Download to rate statements';
+$_LANG['download_amount_sort'] = '下载购物金额报表';
 
 /* Sales details */
 $_LANG['goods_name'] = 'Name';
@@ -136,16 +133,16 @@ $_LANG['sales_list'] = 'Sales list';
 $_LANG['fav_exponential'] = 'Favorite exponential';
 $_LANG['buy_times'] = 'Time';
 $_LANG['visit_buy'] ='Purchase rate';
-$_LANG['download_visit_buy'] = 'Download visit purchase rate statements';
+$_LANG['download_visit_buy'] = '下载访问购买率报表';
 
 $_LANG['goods_cat'] = 'Category';
 $_LANG['goods_brand'] = 'Brand';
 
 /* 搜索引擎 */
-$_LANG['down_search_stats'] = 'Download search keyword statements';
-$_LANG['tab_keywords'] = 'Keyword Statistics';
-$_LANG['keywords'] = 'Keyword';
-$_LANG['date'] = 'Date';
-$_LANG['hits'] = 'Search Views';
+$_LANG['down_search_stats'] = '下载搜索关键字报表';
+$_LANG['tab_keywords'] = '关键字统计';
+$_LANG['keywords'] = '关键字';
+$_LANG['date'] = '日期';
+$_LANG['hits'] = '搜索次数';
 
 ?>

@@ -3,14 +3,15 @@
 /**
  * ECSHOP 管理中心公用函数库
  * ============================================================================
- * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com；
+ * 版权所有 (C) 2005-2007 康盛创想（北京）科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com
  * ----------------------------------------------------------------------------
- * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
- * 使用；不允许对程序代码以任何形式任何目的的再发布。
+ * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
+ * 进行修改、使用和再发布。
  * ============================================================================
- * $Author: liubo $
- * $Id: lib_main.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: testyang $
+ * $Date: 2008-01-29 11:03:31 +0800 (星期二, 29 一月 2008) $
+ * $Id: lib_main.php 14081 2008-01-29 03:03:31Z testyang $
 */
 
 if (!defined('IN_ECS'))
@@ -297,7 +298,7 @@ function get_position_list()
 
     while ($row = $GLOBALS['db']->fetchRow($res))
     {
-        $position_list[$row['position_id']] = addslashes($row['position_name']). ' [' .$row['ad_width']. 'x' .$row['ad_height']. ']';
+        $position_list[$row['position_id']] = $row['position_name']. ' [' .$row['ad_width']. 'x' .$row['ad_height']. ']';
     }
 
     return $position_list;
@@ -328,7 +329,6 @@ function create_html_editor($input_name, $input_value = '')
  */
 function get_goods_list($filter)
 {
-    $filter->keyword = json_str_iconv($filter->keyword);
     $where = get_where_sql($filter); // 取得过滤条件
 
     /* 取得数据 */
@@ -395,8 +395,6 @@ function get_where_sql($filter)
         " AND promote_start_date <= '$time' AND promote_end_date >= '$time' " : '';
     $where .= isset($filter->keyword) && trim($filter->keyword) != '' ?
         " AND (goods_name LIKE '%" . mysql_like_quote($filter->keyword) . "%' OR goods_sn LIKE '%" . mysql_like_quote($filter->keyword) . "%' OR goods_id LIKE '%" . mysql_like_quote($filter->keyword) . "%') " : '';
-    $where .= isset($filter->suppliers_id) && trim($filter->suppliers_id) != '' ?
-        " AND (suppliers_id = '" . $filter->suppliers_id . "') " : '';
 
     $where .= isset($filter->in_ids) ? ' AND goods_id ' . db_create_in($filter->in_ids) : '';
     $where .= isset($filter->exclude) ? ' AND goods_id NOT ' . db_create_in($filter->exclude) : '';
@@ -707,7 +705,7 @@ function set_filter($filter, $sql, $param_str = '')
     }
     setcookie('ECSCP[lastfilterfile]', sprintf('%X', crc32($filterfile)), time() + 600);
     setcookie('ECSCP[lastfilter]',     urlencode(serialize($filter)), time() + 600);
-    setcookie('ECSCP[lastfiltersql]',  base64_encode($sql), time() + 600);
+    setcookie('ECSCP[lastfiltersql]',  urlencode($sql), time() + 600);
 }
 
 /**
@@ -727,7 +725,7 @@ function get_filter($param_str = '')
     {
         return array(
             'filter' => unserialize(urldecode($_COOKIE['ECSCP']['lastfilter'])),
-            'sql'    => base64_decode($_COOKIE['ECSCP']['lastfiltersql'])
+            'sql'    => urldecode($_COOKIE['ECSCP']['lastfiltersql'])
         );
     }
     else
@@ -773,72 +771,4 @@ function brand_exists($brand_name)
     return ($GLOBALS['db']->getOne($sql) > 0) ? true : false;
 }
 
-/**
- * 获取当前管理员信息
- *
- * @access  public
- * @param
- *
- * @return  Array
- */
-function admin_info()
-{
-    $sql = "SELECT * FROM ". $GLOBALS['ecs']->table('admin_user')."
-            WHERE user_id = '$_SESSION[admin_id]'
-            LIMIT 0, 1";
-    $admin_info = $GLOBALS['db']->getRow($sql);
-
-    if (empty($admin_info))
-    {
-        return $admin_info = array();
-    }
-
-    return $admin_info;
-}
-
-/**
- * 供货商列表信息
- *
- * @param       string      $conditions
- * @return      array
- */
-function suppliers_list_info($conditions = '')
-{
-    $where = '';
-    if (!empty($conditions))
-    {
-        $where .= 'WHERE ';
-        $where .= $conditions;
-    }
-
-    /* 查询 */
-    $sql = "SELECT suppliers_id, suppliers_name, suppliers_desc
-            FROM " . $GLOBALS['ecs']->table("suppliers") . "
-            $where";
-
-    return $GLOBALS['db']->getAll($sql);
-}
-
-/**
- * 供货商名
- *
- * @return  array
- */
-function suppliers_list_name()
-{
-    /* 查询 */
-    $suppliers_list = suppliers_list_info(' is_check = 1 ');
-
-    /* 供货商名字 */
-    $suppliers_name = array();
-    if (count($suppliers_list) > 0)
-    {
-        foreach ($suppliers_list as $suppliers)
-        {
-            $suppliers_name[$suppliers['suppliers_id']] = $suppliers['suppliers_name'];
-        }
-    }
-
-    return $suppliers_name;
-}
 ?>

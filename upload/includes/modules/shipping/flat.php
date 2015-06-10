@@ -1,16 +1,17 @@
 <?php
 
 /**
- * ECSHOP 市内快递插件
+ * ECSHOP 邮政包裹插件
  * ============================================================================
- * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com；
+ * 版权所有 (C) 2005-2007 康盛创想（北京）科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com
  * ----------------------------------------------------------------------------
- * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
- * 使用；不允许对程序代码以任何形式任何目的的再发布。
+ * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
+ * 进行修改、使用和再发布。
  * ============================================================================
- * $Author: liubo $
- * $Id: flat.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: weberliu $
+ * $Date: 2007-09-13 16:15:00 +0800 (星期四, 13 九月 2007) $
+ * $Id: flat.php 12056 2007-09-13 08:15:00Z weberliu $
  */
 
 if (!defined('IN_ECS'))
@@ -31,7 +32,7 @@ if (isset($set_modules) && $set_modules == TRUE)
     $i = (isset($modules)) ? count($modules) : 0;
 
     /* 配送方式插件的代码必须和文件名保持一致 */
-    $modules[$i]['code']    = basename(__FILE__, '.php');
+    $modules[$i]['code']    = 'flat';
 
     $modules[$i]['version'] = '1.0.0';
 
@@ -49,17 +50,8 @@ if (isset($set_modules) && $set_modules == TRUE)
 
     /* 配送接口需要的参数 */
     $modules[$i]['configure'] = array(
-                                    array('name' => 'base_fee', 'value' => 10),
+                                    array('name' => 'base_fee', 'value' => '10'),
                                 );
-
-    /* 模式编辑器 */
-    $modules[$i]['print_model'] = 2;
-
-    /* 打印单背景 */
-    $modules[$i]['print_bg'] = '';
-
-   /* 打印快递单标签位置信息 */
-    $modules[$i]['config_lable'] = '';
 
     return;
 }

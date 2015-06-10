@@ -3,7 +3,7 @@
 /**
  * ECSHOP
  * ============================================================================
- * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -11,8 +11,9 @@
  * republish the program code, on the premise of that your behavior is not for
  * commercial purposes.
  * ============================================================================
- * $Author: liubo $
- * $Id: message.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: paulgao $
+ * $Date: 2007-01-30 16:02:08 +0800 (Tuesday, 30 January 2007) $
+ * $Id: message.php 4752 2007-01-30 08:02:08Z paulgao $
 */
 /* Information */
 $_LANG['sender_id'] = 'Sender ID';
@@ -51,7 +52,6 @@ $_LANG['message_type'][3] = 'New message';
 $_LANG['message_type'][4] = 'All readed messages';
 
 $_LANG['drop_msg'] = 'Delete selected';
-
 $_LANG['batch_drop_success'] = 'Delete %d records successfully!';
 $_LANG['no_select_msg'] = 'You have no message now.';
 

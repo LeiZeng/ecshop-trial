@@ -1,26 +1,22 @@
 <?php
 
 /**
- * ECSHOP JSON 绫
+ * ECSHOP JSON 类
  * ===========================================================
- * * 鐗堟潈鎵€鏈 2005-2012 涓婃捣鍟嗘淳缃戠粶绉戞妧鏈夐檺鍏?徃锛屽苟淇濈暀鎵€鏈夋潈鍒┿€
- * 缃戠珯鍦板潃: http://www.ecshop.com锛
+ * 版权所有 (C) 2005-2006 康盛创想（北京）科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com
  * ----------------------------------------------------------
- * 杩欎笉鏄?竴涓?嚜鐢辫蒋浠讹紒鎮ㄥ彧鑳藉湪涓嶇敤浜庡晢涓氱洰鐨勭殑鍓嶆彁涓嬪?绋嬪簭浠ｇ爜杩涜?淇?敼鍜
- * 浣跨敤锛涗笉鍏佽?瀵圭▼搴忎唬鐮佷互浠讳綍褰㈠紡浠讳綍鐩?殑鐨勫啀鍙戝竷銆
+ * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
+ * 进行修改、使用和再发布。
  * ==========================================================
- * $Author: liubo $
- * $Id: cls_json.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author$
+ * $Date$
+ * $Id$
  */
 
 if (!defined('IN_ECS'))
 {
     die('Hacking attempt');
-}
-
-if (!defined('EC_CHARSET'))
-{
-    define('EC_CHARSET', 'utf-8');
 }
 
 class JSON
@@ -29,15 +25,9 @@ class JSON
     var $ch   = '';
     var $text = '';
 
-    function encode($arg, $force = true)
+    function encode($arg)
     {
-        static $_force;
-        if (is_null($_force))
-        {
-            $_force = $force;
-        }
-
-        if ($_force && EC_CHARSET == 'utf-8' && function_exists('json_encode'))
+        if (function_exists('json_encode'))
         {
             return json_encode($arg);
         }
@@ -126,7 +116,7 @@ class JSON
                 break;
 
             case 'boolean':
-                $returnValue = $arg?'true':'false';
+                $returnValue = (string) $arg;
                 break;
 
             default:
@@ -136,7 +126,7 @@ class JSON
         return $returnValue;
     }
 
-    function decode($text,$type=0) // 榛樿?type=0杩斿洖obj,type=1杩斿洖array
+    function decode($text,$type=0) // 默认type=0返回obj,type=1返回array
     {
         if (empty($text))
         {
@@ -147,7 +137,7 @@ class JSON
             return false;
         }
 
-        if (EC_CHARSET === 'utf-8' && function_exists('json_decode'))
+        if (function_exists('json_decode'))
         {
             return addslashes_deep_obj(json_decode(stripslashes($text),$type));
         }
@@ -169,7 +159,7 @@ class JSON
         $this->next();
         $return = $this->val();
 
-        $result = empty($type) ? $return : $this->object_to_array($return);
+        $result = empty($type) ? $return : get_object_vars($return);
 
         return addslashes_deep_obj($result);
     }
@@ -184,7 +174,7 @@ class JSON
      */
     function error($m)
     {
-        echo($m . ' at offset ' . $this->at . ': ' . $this->text);
+        trigger_error($m . ' at offset ' . $this->at . ': ' . $this->text, E_USER_ERROR);
     }
 
     /**
@@ -571,24 +561,6 @@ class JSON
             default:
                 return ($this->ch >= '0' && $this->ch <= '9') ? $this->num() : $this->word();
         }
-    }
-
-    /**
-     * Gets the properties of the given object recursion
-     *
-     * @access private
-     *
-     * @return array
-     */
-    function object_to_array($obj)
-    {
-        $_arr = is_object($obj) ? get_object_vars($obj) : $obj;
-        foreach ($_arr as $key => $val)
-        {
-            $val = (is_array($val) || is_object($val)) ? $this->object_to_array($val) : $val;
-            $arr[$key] = $val;
-        }
-        return $arr;
     }
 }
 

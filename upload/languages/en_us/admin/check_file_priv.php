@@ -3,7 +3,7 @@
 /**
  * ECSHOP
  * ============================================================================
- * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -11,8 +11,9 @@
  * republish the program code, on the premise of that your behavior is not for
  * commercial purposes.
  * ============================================================================
- * $Author: liubo $
- * $Id: check_file_priv.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: wj $
+ * $Date: 2006-12-31 14:16:08 +0800 (Sunday, 31 December 2006) $
+ * $Id: check_file_priv.php 3959 2006-12-31 06:16:08Z wj $
 */
 
 $_LANG['item'] = 'Item';

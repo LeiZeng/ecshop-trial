@@ -3,7 +3,7 @@
 /**
  * ECSHOP cncard language file
  * ============================================================================
- * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -12,85 +12,84 @@
  * commercial purposes.
  * ============================================================================
  * $Author $
+ * $Date $
  * $Id $
  */
 
 global $_LANG;
-$_LANG['cncard']          = 'CNCARD';
-$_LANG['cncard_desc']     = 'B2C e-commerce site as a domestic in the earliest, the most professional, one of the largest companies, cloud network currently has domestic bank cards extremely well in real-time online payment platform and 5 years experience in digital goods e-commerce operations.' ;
+$_LANG['cncard']          = '云网支付';
+$_LANG['cncard_desc']     = '作为国内B2C电子商务网站中最早、最专业、最具规模的公司之一，云网目前拥有国内极其完善的银行卡在线实时支付平台和5年的数字商品电子商务运营经验。' ;
 
-$_LANG['c_mid'] = 'Merchant Code';
-$_LANG['c_pass'] = 'Payment key';
-$_LANG['c_memo1'] = 'Businesses custom parameters';
-$_LANG['c_moneytype'] = 'Payment currency';
-$_LANG['c_language'] = 'Order Language';
-$_LANG['c_paygate'] = 'Payment';
-$_LANG['cncard_button'] = 'CNCARD';
+$_LANG['c_mid'] = '商户编号';
+$_LANG['c_pass'] = '支付密钥';
+$_LANG['c_memo1'] = '商户自定义参数';
+$_LANG['c_moneytype'] = '支付币种';
+$_LANG['c_language'] = '订单语种';
+$_LANG['c_paygate'] = '支付方式';
+$_LANG['cncard_button'] = '点击 -> 云网支付@网';
 
 
-$_LANG['c_moneytype_range'][0] = 'RMB';
-$_LANG['c_language_range'][0] = 'Chinese';
-$_LANG['c_language_range'][1] = 'English';
-$_LANG['c_paygate_range'][0] = 'CNCARD';
-$_LANG['c_paygate_range'][1] = 'China Merchants Bank';
-$_LANG['c_paygate_range'][3] = 'Industrial and Commercial Bank of China Internet Banking';
-$_LANG['c_paygate_range'][31] = 'Industrial and Commercial Bank of China Bank of China Mobile (message)';
-$_LANG['c_paygate_range'][2000] = 'China Construction Bank signed clients (National)';
-$_LANG['c_paygate_range'][2]='Beijing China Construction Bank';
-$_LANG['c_paygate_range'][2021]='Shanghai Construction';
-$_LANG['c_paygate_range'][2022]='Tianjin, China Construction Bank';
-$_LANG['c_paygate_range'][2023]='Chongqing Construction Bank';
-$_LANG['c_paygate_range'][2024]='Liaoning Construction';
-$_LANG['c_paygate_range'][2025]='Jiangsu Construction';
-$_LANG['c_paygate_range'][2027]='Hubei Construction';
-$_LANG['c_paygate_range'][2028]='Sichuan Construction';
-$_LANG['c_paygate_range'][2029]='Shaanxi Construction';
-$_LANG['c_paygate_range'][20371]='Henan Construction Bank (only signed users)';
-$_LANG['c_paygate_range'][20411]='Dalian China Construction Bank';
-$_LANG['c_paygate_range'][20431]='Jilin Construction Bank';
-$_LANG['c_paygate_range'][20451]='Heilongjiang, China Construction Bank';
-$_LANG['c_paygate_range'][20512]='Xuzhou Construction';
-$_LANG['c_paygate_range'][20532]='Qingdao Construction Bank';
-$_LANG['c_paygate_range'][20571]='Zhejiang Construction';
-$_LANG['c_paygate_range'][20574]='Ningbo, China Construction Bank (only signed users)';
-$_LANG['c_paygate_range'][20591]='Fujian Construction Bank (only signed users)';
-$_LANG['c_paygate_range'][20592]='Xiamen Construction Bank';
-$_LANG['c_paygate_range'][20731]='Hunan, China Construction Bank (only signed users)';
-$_LANG['c_paygate_range'][20755]='Shenzhen Construction Bank';
-$_LANG['c_paygate_range'][20771]='Guangxi Construction';
-$_LANG['c_paygate_range'][20791]='Jiangxi, China Construction Bank';
-$_LANG['c_paygate_range'][20991]='Xinjiang Construction Bank';
-$_LANG['c_paygate_range'][20314]='Hebei Construction Bank (only signed users)';
-$_LANG['c_paygate_range'][20351]='Shanxi, China Construction Bank (only signed users)';
-$_LANG['c_paygate_range'][20471]='Inner Mongolia, China Construction Bank (only signed users)';
-$_LANG['c_paygate_range'][20851]='Guizhou, China Construction Bank (only signed users)';
-$_LANG['c_paygate_range'][20871]='Yunnan, China Construction Bank (only signed users)';
-$_LANG['c_paygate_range'][20898]='Hainan, China Construction Bank (only signed users)';
-$_LANG['c_paygate_range'][20931]='Gansu, China Construction Bank (only signed users)';
-$_LANG['c_paygate_range'][20951]='Ningxia, China Construction Bank (only signed users)';
-$_LANG['c_paygate_range'][20531]='Shandong Construction';
-$_LANG['c_paygate_range'][86]='Agricultural Bank of China';
-$_LANG['c_paygate_range'][901]='China Minsheng Banking Corporation (ordinary users)';
-$_LANG['c_paygate_range'][902]='China Minsheng Bank (signed users)';
-$_LANG['c_paygate_range'][5]='China Everbright Bank';
-$_LANG['c_paygate_range'][5]='Guangdong Development Bank';
-$_LANG['c_paygate_range'][5]='CITIC Industrial Bank';
-$_LANG['c_paygate_range'][94]='Shenzhen Development Bank';
-$_LANG['c_paygate_range'][42]='Fujian Industrial Bank';
-$_LANG['c_paygate_range'][47]='China Bank of Communications';
-$_LANG['c_paygate_range'][87]='International Card';
-$_LANG['c_paygate_range'][100]='Cloud Network Member karaoke';
-$_LANG['c_paygate_range'][5]='Guangdong Bank online secure payment platform';
-$_LANG['c_paygate_range'][5]='Other banks in Guangdong Province';
-$_LANG['c_paygate_range'][7]='Xiamen Gold payment gateway center';
-$_LANG['c_paygate_range'][5]='Bank of China (Guangdong, Shenzhen, except)';
-$_LANG['c_paygate_range'][7]='Bank of China (Xiamen debit card)';
-$_LANG['c_paygate_range'][5]='Huaxia Bank (Guangdong)';
-$_LANG['c_paygate_range'][5]='Fujian Industrial Bank (Canton)';
-$_LANG['c_paygate_range'][5]='Canton City Commercial Bank (Canton)';
-$_LANG['c_paygate_range'][5]='Guangzhou Rural Credit Cooperatives (Canton)';
-$_LANG['c_paygate_range'][5]='Shanghai Pudong Development Bank (Canton)';
-$_LANG['account_voucher']   = 'Member Account recharge';
-$_LANG['shop_order_sn']     = 'Mall order number';
+$_LANG['c_moneytype_range'][0] = '人民币';
+$_LANG['c_language_range'][0] = '中文';
+$_LANG['c_language_range'][1] = '英文';
+$_LANG['c_paygate_range'][0] = '云网支付';
+$_LANG['c_paygate_range'][1] = '中国招商银行';
+$_LANG['c_paygate_range'][3] = '中国工商银行网上银行';
+$_LANG['c_paygate_range'][31] = '中国工商银行手机银行(短信)';
+$_LANG['c_paygate_range'][2000] = '中国建行签约客户(全国)';
+$_LANG['c_paygate_range'][2]='北京建设银行';
+$_LANG['c_paygate_range'][2021]='上海建设银行';
+$_LANG['c_paygate_range'][2022]='天津建设银行';
+$_LANG['c_paygate_range'][2023]='重庆建设银行';
+$_LANG['c_paygate_range'][2024]='辽宁建设银行';
+$_LANG['c_paygate_range'][2025]='江苏建设银行';
+$_LANG['c_paygate_range'][2027]='湖北建设银行';
+$_LANG['c_paygate_range'][2028]='四川建设银行';
+$_LANG['c_paygate_range'][2029]='陕西建设银行';
+$_LANG['c_paygate_range'][20371]='河南建设银行(只限签约用户)';
+$_LANG['c_paygate_range'][20411]='大连建设银行';
+$_LANG['c_paygate_range'][20431]='吉林建设银行';
+$_LANG['c_paygate_range'][20451]='黑龙江建设银行';
+$_LANG['c_paygate_range'][20512]='苏州建设银行';
+$_LANG['c_paygate_range'][20532]='青岛建设银行';
+$_LANG['c_paygate_range'][20571]='浙江建设银行';
+$_LANG['c_paygate_range'][20574]='宁波建设银行(只限签约用户)';
+$_LANG['c_paygate_range'][20591]='福建建设银行(只限签约用户)';
+$_LANG['c_paygate_range'][20592]='厦门建设银行';
+$_LANG['c_paygate_range'][20731]='湖南建设银行(只限签约用户)';
+$_LANG['c_paygate_range'][20755]='深圳建设银行';
+$_LANG['c_paygate_range'][20771]='广西建设银行';
+$_LANG['c_paygate_range'][20791]='江西建设银行';
+$_LANG['c_paygate_range'][20991]='新疆建设银行';
+$_LANG['c_paygate_range'][20314]='河北建设银行(只限签约用户)';
+$_LANG['c_paygate_range'][20351]='山西建设银行(只限签约用户)';
+$_LANG['c_paygate_range'][20471]='内蒙古建设银行(只限签约用户)';
+$_LANG['c_paygate_range'][20851]='贵州建设银行(只限签约用户)';
+$_LANG['c_paygate_range'][20871]='云南建设银行(只限签约用户)';
+$_LANG['c_paygate_range'][20898]='海南建设银行(只限签约用户)';
+$_LANG['c_paygate_range'][20931]='甘肃建设银行(只限签约用户)';
+$_LANG['c_paygate_range'][20951]='宁夏建设银行(只限签约用户)';
+$_LANG['c_paygate_range'][20531]='山东建设银行';
+$_LANG['c_paygate_range'][86]='中国农业银行';
+$_LANG['c_paygate_range'][901]='中国民生银行(普通用户)';
+$_LANG['c_paygate_range'][902]='中国民生银行(签约用户)';
+$_LANG['c_paygate_range'][5]='中国光大银行';
+$_LANG['c_paygate_range'][5]='广东发展银行';
+$_LANG['c_paygate_range'][5]='中信实业银行';
+$_LANG['c_paygate_range'][94]='深圳发展银行';
+$_LANG['c_paygate_range'][42]='福建兴业银行';
+$_LANG['c_paygate_range'][47]='中国交通银行';
+$_LANG['c_paygate_range'][87]='国际卡';
+$_LANG['c_paygate_range'][100]='云网会员卡拉';
+$_LANG['c_paygate_range'][5]='广东银联网上安全支付平台';
+$_LANG['c_paygate_range'][5]='广东地区其它银行';
+$_LANG['c_paygate_range'][7]='厦门金卡中心支付网关';
+$_LANG['c_paygate_range'][5]='中国银行(广东，深圳除外)';
+$_LANG['c_paygate_range'][7]='中国银行(厦门借记卡)';
+$_LANG['c_paygate_range'][5]='华夏银行(广东)';
+$_LANG['c_paygate_range'][5]='福建兴业银行(广州)';
+$_LANG['c_paygate_range'][5]='广州市商业银行(广州)';
+$_LANG['c_paygate_range'][5]='广州农村信用合作社(广州)';
+$_LANG['c_paygate_range'][5]='上海浦东发展银行(广州)';
 
 ?>

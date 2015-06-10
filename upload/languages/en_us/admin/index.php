@@ -3,7 +3,7 @@
 /**
  * ECSHOP Control panel start page language file
  * ============================================================================
- * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -11,8 +11,9 @@
  * republish the program code, on the premise of that your behavior is not for
  * commercial purposes.
  * ============================================================================
- * $Author: liubo $
- * $Id: index.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: weberliu $
+ * $Date: 2006-12-2610:30:06+0800$(Tuesday,26 Decembers 2006)
+ * $Id: index.php 3712 2006-12-26 02:30:06Z weberliu $
 */
 
 $_LANG['shop_guide'] = 'Shop guide';
@@ -29,21 +30,6 @@ $_LANG['toggle_calculator'] ='Calculator';
 $_LANG['expand_all'] ='Spread';
 $_LANG['collapse_all'] ='Shut';
 $_LANG['no_help'] ='Temporarily still have no those part of contents.';
-$_LANG['license_free'] = 'Non-authorized users';
-$_LANG['license_commercial'] = 'Green card users';
-$_LANG['license_invalid'] = 'Unauthorized users';
-$_LANG['license_failed'] = 'Unauthorized users';
-$_LANG['license_oem'] = 'Authorized business users';
-$_LANG['license_oemtest'] = 'User experience';
-//
-$_LANG['license_Q'] = 'Business';
-$_LANG['license_G'] = 'Business';
-$_LANG['license_L'] = 'Provisional';
-$_LANG['license_S'] = 'Business';
-$_LANG['license_O'] = 'Enterprise';
-$_LANG['license_T'] = 'Experience';
-$_LANG['license_no'] = 'Free';
-$_LANG['license_test'] = 'Free';
 $_LANG['js_languages']['expand_all'] ='Spread';
 $_LANG['js_languages']['collapse_all'] ='Shut';
 
@@ -61,7 +47,6 @@ $_LANG['backspace']='Back a space';
 $_LANG['pm_title'] ='Title';
 $_LANG['pm_username'] ='Username';
 $_LANG['pm_time'] ='Time';
-
 $_LANG['order_stat'] ='Orders Statistics Information';
 $_LANG['unconfirmed'] ='Unconfirmed orders:';
 $_LANG['await_ship'] ='Not shipping orders:';
@@ -69,8 +54,6 @@ $_LANG['await_pay'] ='Unpaid orders:';
 $_LANG['finished'] ='Finished orders:';
 $_LANG['new_booking'] ='Booking [New]:';
 $_LANG['new_reimburse'] ='Refund application:';
-$_LANG['shipped_part'] = 'Parts delivery order:';
-
 $_LANG['goods_stat'] ='Products Statistics Information';
 $_LANG['virtual_card_stat'] = 'Virtual Card Statistics Information';
 $_LANG['goods_count'] ='Products quantity:';
@@ -80,8 +63,6 @@ $_LANG['recommed_goods'] ='Best products:';
 $_LANG['hot_goods'] ='Hot products:';
 $_LANG['warn_goods'] ='Stock warning quantity:';
 $_LANG['clear_cache'] ='Clear cache';
-$_LANG['ebao_commend'] = 'Epro Recommend';
-
 $_LANG['acess_stat'] ='Visit Statistics';
 $_LANG['acess_today'] ='Visit today:';
 $_LANG['online_users'] ='Online:';
@@ -89,7 +70,6 @@ $_LANG['user_count'] ='Member amount:';
 $_LANG['today_register'] ='Register today:';
 $_LANG['new_feedback'] ='Latest message:';
 $_LANG['new_comments'] ='Latest comments:';
-
 $_LANG['system_info'] ='System Information';
 $_LANG['os'] ='Server operate system:';
 $_LANG['web_server'] ='Web server:';
@@ -106,11 +86,9 @@ $_LANG['safe_mode_gid'] ='Safe mode GID:';
 $_LANG['timezone'] = 'Timezone:';
 $_LANG['no_timezone'] = 'n/a';
 $_LANG['socket'] = 'Socket enabled:';
-$_LANG['ec_charset'] = 'Coding:';
 
 $_LANG['remove_install'] ='You haven\'t yet delete the install directory, we suggest you delete the install file for the system safety.';
 $_LANG['remove_upgrade'] ='You haven\'t yet delete the upgrade directory, we suggest you delete the upgrade file for the system safety.';
-$_LANG['remove_demo'] ='You haven\'t yet delete the demo directory, we suggest you delete the demo file for the system safety.';
 $_LANG['temp_dir_cannt_read'] = 'Your server has set open_base_dir without %s, the file will can\'t be uploaded.';
 $_LANG['not_writable'] = '%s directory can\'t be wrote in，%s';
 $_LANG['data_cannt_write'] = 'You will not update packing, card, brand picture and so on.';
@@ -133,8 +111,6 @@ $_LANG['caches_cleared'] = 'The page cache has be cleared successfully.';
 //-- About us
 /*------------------------------------------------------ */
 $_LANG['team_member'] ='ECSHOP team member';
-$_LANG['before_team_member'] = 'ECSHOP Contributor';
-
 $_LANG['director'] ='Director';
 $_LANG['programmer'] ='Programmer';
 $_LANG['ui_designer'] ='Designer';
@@ -144,16 +120,6 @@ $_LANG['official_site'] ='Official website';
 $_LANG['site_url'] ='Website:';
 $_LANG['support_center'] ='Support center:';
 $_LANG['support_forum'] ='Technical support:';
-// 邮件群发
-$_LANG['mailsend_fail'] = 'Send e-mail %s failed!';
-$_LANG['mailsend_ok'] = 'Send e-mail %s success! There are %s message was not sent!';
-$_LANG['mailsend_finished'] = 'Send e-mail %s success! All e-mail to complete!';
-$_LANG['mailsend_null'] = 'E-mail list empty!';
-$_LANG['mailsend_skip'] = 'Continue to send the next...';
-$_LANG['email_sending'] = 'Are dealing with e-mail queue...';
-$_LANG['pause'] = 'Suspended';
-$_LANG['conti'] = 'Continue';
-$_LANG['str'] = 'Has been sent% d messages.';
 
 //开店向导
 $_LANG['shop_name'] = 'Shop name';
@@ -206,6 +172,4 @@ $_LANG['js_languages']['good_category_not_null'] = 'Goods category can not null'
 $_LANG['js_languages']['good_number_not_number'] = 'Goods number is not number';
 $_LANG['js_languages']['good_price_not_number'] = 'Goods price is not number';
 
-/*后台语言项*/
-$_LANG['send_mail_off'] = 'Turn off automatically send e-mail';
 ?>

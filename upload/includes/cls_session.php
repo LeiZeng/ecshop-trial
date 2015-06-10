@@ -1,16 +1,17 @@
 <?php
 
 /**
- * ECSHOP SESSION 鍏?敤绫诲簱
+ * ECSHOP SESSION 公用类库
  * ============================================================================
- * * 鐗堟潈鎵€鏈 2005-2012 涓婃捣鍟嗘淳缃戠粶绉戞妧鏈夐檺鍏?徃锛屽苟淇濈暀鎵€鏈夋潈鍒┿€
- * 缃戠珯鍦板潃: http://www.ecshop.com锛
+ * 版权所有 (C) 2005-2007 康盛创想（北京）科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com
  * ----------------------------------------------------------------------------
- * 杩欎笉鏄?竴涓?嚜鐢辫蒋浠讹紒鎮ㄥ彧鑳藉湪涓嶇敤浜庡晢涓氱洰鐨勭殑鍓嶆彁涓嬪?绋嬪簭浠ｇ爜杩涜?淇?敼鍜
- * 浣跨敤锛涗笉鍏佽?瀵圭▼搴忎唬鐮佷互浠讳綍褰㈠紡浠讳綍鐩?殑鐨勫啀鍙戝竷銆
+ * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
+ * 进行修改、使用和再发布。
  * ============================================================================
- * $Author: liubo $
- * $Id: cls_session.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: paulgao $
+ * $Date: 2007-10-13 12:27:29 +0800 (星期六, 13 十月 2007) $
+ * $Id: cls_session.php 12871 2007-10-13 04:27:29Z paulgao $
 */
 
 if (!defined('IN_ECS'))
@@ -23,7 +24,7 @@ class cls_session
     var $db             = NULL;
     var $session_table  = '';
 
-    var $max_life_time  = 1800; // SESSION 杩囨湡鏃堕棿
+    var $max_life_time  = 1440; // SESSION 过期时间
 
     var $session_name   = '';
     var $session_id     = '';
@@ -135,7 +136,7 @@ class cls_session
             $ip = substr($this->_ip, 0, strrpos($this->_ip, '.'));
         }
 
-        return sprintf('%08x', crc32(ROOT_PATH . $ip . $session_id));
+        return sprintf('%08x', crc32(!empty($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] . ROOT_PATH . $ip . $session_id : ROOT_PATH . $ip . $session_id));
     }
 
     function insert_session()
@@ -145,7 +146,7 @@ class cls_session
 
     function load_session()
     {
-        $session = $this->db->getRow('SELECT userid, adminid, user_name, user_rank, discount, email, data, expiry FROM ' . $this->session_table . " WHERE sesskey = '" . $this->session_id . "'");
+        $session = $this->db->getRow('SELECT data, expiry FROM ' . $this->session_table . " WHERE sesskey = '" . $this->session_id . "'");
         if (empty($session))
         {
             $this->insert_session();
@@ -161,27 +162,15 @@ class cls_session
                 $this->session_expiry = $session['expiry'];
                 $this->session_md5    = md5($session['data']);
                 $GLOBALS['_SESSION']  = unserialize($session['data']);
-                $GLOBALS['_SESSION']['user_id'] = $session['userid'];
-                $GLOBALS['_SESSION']['admin_id'] = $session['adminid'];
-                $GLOBALS['_SESSION']['user_name'] = $session['user_name'];
-                $GLOBALS['_SESSION']['user_rank'] = $session['user_rank'];
-                $GLOBALS['_SESSION']['discount'] = $session['discount'];
-                $GLOBALS['_SESSION']['email'] = $session['email'];
             }
             else
             {
-                $session_data = $this->db->getRow('SELECT data, expiry FROM ' . $this->session_data_table . " WHERE sesskey = '" . $this->session_id . "'");
-                if (!empty($session_data['data']) && $this->_time - $session_data['expiry'] <= $this->max_life_time)
+                $session = $this->db->getRow('SELECT data, expiry FROM ' . $this->session_data_table . " WHERE sesskey = '" . $this->session_id . "'");
+                if (!empty($session['data']) && $this->_time - $session['expiry'] <= $this->max_life_time)
                 {
-                    $this->session_expiry = $session_data['expiry'];
-                    $this->session_md5    = md5($session_data['data']);
-                    $GLOBALS['_SESSION']  = unserialize($session_data['data']);
-                    $GLOBALS['_SESSION']['user_id'] = $session['userid'];
-                    $GLOBALS['_SESSION']['admin_id'] = $session['adminid'];
-                    $GLOBALS['_SESSION']['user_name'] = $session['user_name'];
-                    $GLOBALS['_SESSION']['user_rank'] = $session['user_rank'];
-                    $GLOBALS['_SESSION']['discount'] = $session['discount'];
-                    $GLOBALS['_SESSION']['email'] = $session['email'];
+                    $this->session_expiry = $session['expiry'];
+                    $this->session_md5    = md5($session['data']);
+                    $GLOBALS['_SESSION']  = unserialize($session['data']);
                 }
                 else
                 {
@@ -197,16 +186,6 @@ class cls_session
     {
         $adminid = !empty($GLOBALS['_SESSION']['admin_id']) ? intval($GLOBALS['_SESSION']['admin_id']) : 0;
         $userid  = !empty($GLOBALS['_SESSION']['user_id'])  ? intval($GLOBALS['_SESSION']['user_id'])  : 0;
-        $user_name  = !empty($GLOBALS['_SESSION']['user_name'])  ? trim($GLOBALS['_SESSION']['user_name'])  : 0;
-        $user_rank  = !empty($GLOBALS['_SESSION']['user_rank'])  ? intval($GLOBALS['_SESSION']['user_rank'])  : 0;
-        $discount  = !empty($GLOBALS['_SESSION']['discount'])  ? round($GLOBALS['_SESSION']['discount'], 2)  : 0;
-        $email  = !empty($GLOBALS['_SESSION']['email'])  ? trim($GLOBALS['_SESSION']['email'])  : 0;
-        unset($GLOBALS['_SESSION']['admin_id']);
-        unset($GLOBALS['_SESSION']['user_id']);
-        unset($GLOBALS['_SESSION']['user_name']);
-        unset($GLOBALS['_SESSION']['user_rank']);
-        unset($GLOBALS['_SESSION']['discount']);
-        unset($GLOBALS['_SESSION']['email']);
 
         $data        = serialize($GLOBALS['_SESSION']);
         $this->_time = time();
@@ -220,19 +199,19 @@ class cls_session
 
         if (isset($data{255}))
         {
-            $this->db->autoReplace($this->session_data_table, array('sesskey' => $this->session_id, 'expiry' => $this->_time, 'data' => $data), array('expiry' => $this->_time,'data' => $data));
+            $this->db->autoReplace($this->session_data_table, array('sesskey' => $this->session_id, 'expiry' => $this->_time, 'data' => $data), array('data' => $data));
 
             $data = '';
         }
 
-        return $this->db->query('UPDATE ' . $this->session_table . " SET expiry = '" . $this->_time . "', ip = '" . $this->_ip . "', userid = '" . $userid . "', adminid = '" . $adminid . "', user_name='" . $user_name . "', user_rank='" . $user_rank . "', discount='" . $discount . "', email='" . $email . "', data = '$data' WHERE sesskey = '" . $this->session_id . "' LIMIT 1");
+        return $this->db->query('UPDATE ' . $this->session_table . " SET expiry = '" . $this->_time . "', ip = '" . $this->_ip . "', userid = '" . $userid . "', adminid = '" . $adminid . "', data = '$data' WHERE sesskey = '" . $this->session_id . "' LIMIT 1");
     }
 
     function close_session()
     {
         $this->update_session();
 
-        /* 闅忔満瀵 sessions_data 鐨勫簱杩涜?鍒犻櫎鎿嶄綔 */
+        /* 随机对 sessions_data 的库进行删除操作 */
         if (mt_rand(0, 2) == 2)
         {
             $this->db->query('DELETE FROM ' . $this->session_data_table . ' WHERE expiry < ' . ($this->_time - $this->max_life_time));
@@ -264,12 +243,12 @@ class cls_session
 
         setcookie($this->session_name, $this->session_id, 1, $this->session_cookie_path, $this->session_cookie_domain, $this->session_cookie_secure);
 
-        /* ECSHOP 鑷?畾涔夋墽琛岄儴鍒 */
+        /* ECSHOP 自定义执行部分 */
         if (!empty($GLOBALS['ecs']))
         {
             $this->db->query('DELETE FROM ' . $GLOBALS['ecs']->table('cart') . " WHERE session_id = '$this->session_id'");
         }
-        /* ECSHOP 鑷?畾涔夋墽琛岄儴鍒 */
+        /* ECSHOP 自定义执行部分 */
 
         $this->db->query('DELETE FROM ' . $this->session_data_table . " WHERE sesskey = '" . $this->session_id . "' LIMIT 1");
 

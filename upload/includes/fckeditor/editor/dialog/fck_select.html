@@ -1,7 +1,7 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
 <!--
  * FCKeditor - The text editor for Internet - http://www.fckeditor.net
- * Copyright (C) 2003-2008 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2007 Frederico Caldeira Knabben
  *
  * == BEGIN LICENSE ==
  *
@@ -30,13 +30,12 @@
 		<script type="text/javascript" src="fck_select/fck_select.js"></script>
 		<script type="text/javascript">
 
-var dialog	= window.parent ;
-var oEditor = dialog.InnerDialogLoaded() ;
+var oEditor = window.parent.InnerDialogLoaded() ;
 
 // Gets the document DOM
 var oDOM = oEditor.FCK.EditorDocument ;
 
-var oActiveEl = dialog.Selection.GetSelectedElement() ;
+var oActiveEl = oEditor.FCKSelection.GetSelectedElement() ;
 
 var oListText ;
 var oListValue ;
@@ -49,10 +48,6 @@ window.onload = function()
 	oListText	= document.getElementById( 'cmbText' ) ;
 	oListValue	= document.getElementById( 'cmbValue' ) ;
 
-	// Fix the lists widths. (Bug #970)
-	oListText.style.width = oListText.offsetWidth ;
-	oListValue.style.width = oListValue.offsetWidth ;
-
 	if ( oActiveEl && oActiveEl.tagName == 'SELECT' )
 	{
 		GetE('txtName').value		= oActiveEl.name ;
@@ -63,7 +58,7 @@ window.onload = function()
 		// Load the actual options
 		for ( var i = 0 ; i < oActiveEl.options.length ; i++ )
 		{
-			var sText	= HTMLDecode( oActiveEl.options[i].innerHTML ) ;
+			var sText	= oActiveEl.options[i].innerHTML ;
 			var sValue	= oActiveEl.options[i].value ;
 
 			AddComboOption( oListText, sText, sText ) ;
@@ -73,21 +68,22 @@ window.onload = function()
 	else
 		oActiveEl = null ;
 
-	dialog.SetOkButton( true ) ;
-	dialog.SetAutoSize( true ) ;
-	SelectField( 'txtName' ) ;
+	window.parent.SetOkButton( true ) ;
 }
 
 function Ok()
 {
-	oEditor.FCKUndo.SaveUndoStep() ;
-
 	var sSize = GetE('txtLines').value ;
 	if ( sSize == null || isNaN( sSize ) || sSize <= 1 )
 		sSize = '' ;
 
-	oActiveEl = CreateNamedElement( oEditor, oActiveEl, 'SELECT', {name: GetE('txtName').value} ) ;
+	if ( !oActiveEl )
+	{
+		oActiveEl = oEditor.FCK.EditorDocument.createElement( 'SELECT' ) ;
+		oActiveEl = oEditor.FCK.InsertElementAndGetIt( oActiveEl ) ;
+	}
 
+	SetAttribute( oActiveEl, 'name'	, GetE('txtName').value ) ;
 	SetAttribute( oActiveEl, 'size'	, sSize ) ;
 	oActiveEl.multiple = ( sSize.length > 0 && GetE('chkMultiple').checked ) ;
 
@@ -116,7 +112,7 @@ function Ok()
 
 		</script>
 	</head>
-	<body style="overflow: hidden">
+	<body style='OVERFLOW: hidden' scroll='no'>
 		<table width="100%" height="100%">
 			<tr>
 				<td>

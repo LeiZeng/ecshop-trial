@@ -3,7 +3,7 @@
 /**
  * ECSHOP Advertisement management language file
  * ============================================================================
- * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -11,8 +11,9 @@
  * republish the program code, on the premise of that your behavior is not for
  * commercial purposes.
  * ============================================================================
- * $Author: liubo $
- * $Id: ads.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: liry $
+ * $Date: 2007-02-03 19:41:07 +0800 (Saturday, 03 Feb. 2007) $
+ * $Id: ads.php 5062 2007-02-03 11:41:07Z liry $
 */
 /* AD-position field information */
 $_LANG['position_name'] = 'Name';
@@ -29,7 +30,8 @@ $_LANG['adsense_code'] = 'External AD JS code';
 $_LANG['label_charset'] = 'Select charset:';
 
 $_LANG['no_position'] = 'No position';
-$_LANG['no_ads'] = 'You do not have to add ads';
+$_LANG['no_ads'] = '您还没有添加广告';
+$_LANG['posit_desc_empty'] = 'No description...';
 $_LANG['unit_px'] = 'Pixel';
 $_LANG['ad_content'] = 'AD contents';
 $_LANG['width_and_height'] = '(width*height)';
@@ -44,7 +46,7 @@ $_LANG['add_js_code'] = 'Produce and copy the JS code.';
 $_LANG['position_add'] = 'Add AD-position';
 $_LANG['position_edit'] = 'Edit';
 $_LANG['posit_name_exist'] = 'The AD-position has existed!';
-$_LANG['download_ad_statistics'] = 'Download Advertisement statistics';
+$_LANG['download_ad_statistics'] = '下载广告统计报表';
 
 /* JS language item */
 $_LANG['js_languages']['posit_name_empty'] = 'Wrong, the name of AD-position is blank!';
@@ -100,7 +102,7 @@ $_LANG['back_ads_list'] = 'Return to ADs list.';
 $_LANG['back_position_list'] = 'Return to AD position list.';
 $_LANG['continue_add_ad'] = 'Continue add AD.';
 $_LANG['continue_add_position'] = 'Continue add AD position.';
-$_LANG['show_ads_template'] = 'Show AD in template';
+
 $_LANG['ads_add'] = 'Add new advertisement';
 $_LANG['ads_edit'] = 'Edit advertisement';
 
@@ -119,10 +121,7 @@ $_LANG['enter_code'] = 'Please enter AD code.';
 /* JS language item */
 $_LANG['js_languages']['ad_name_empty'] = 'Please enter AD name!';
 $_LANG['js_languages']['ad_link_empty'] = 'Please enter AD link URL!';
-$_LANG['js_languages']['ad_text_empty'] = 'AD content can\'t be blank!';
-$_LANG['js_languages']['ad_photo_empty'] = 'Advertising images can not be empty!';
-$_LANG['js_languages']['ad_flash_empty'] = 'Flash ads can not be empty!';
-$_LANG['js_languages']['ad_code_empty'] = 'Ad code can not be empty!';
+$_LANG['js_languages']['ad_code_empty'] = 'AD content can\'t be blank!';
 $_LANG['js_languages']['empty_position_style'] = 'AD-position\'s template can\'t be blank!';
 
 /* Prompting message */

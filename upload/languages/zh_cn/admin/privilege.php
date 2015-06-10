@@ -3,14 +3,15 @@
 /**
  * ECSHOP 管理中心权限管理模块语言文件
  * ============================================================================
- * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com；
+ * 版权所有 (C) 2005-2006 康盛创想（北京）科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com
  * ----------------------------------------------------------------------------
- * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
- * 使用；不允许对程序代码以任何形式任何目的的再发布。
+ * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
+ * 进行修改、使用和再发布。
  * ============================================================================
- * $Author: liubo $
- * $Id: privilege.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: dolphin $
+ * $Date: 2007-12-26 13:22:51 +0800 (星期三, 26 十二月 2007) $
+ * $Id: privilege.php 13897 2007-12-26 05:22:51Z dolphin $
 */
 
 /* 字段信息 */
@@ -46,8 +47,6 @@ $_LANG['move_up'] = '上移';
 $_LANG['move_down'] = '下移';
 $_LANG['continue_add'] = '继续添加管理员';
 $_LANG['back_list'] = '返回管理员列表';
-$_LANG['select_role'] = '角色选择';
-$_LANG['select_please'] = '请选择...';
 
 $_LANG['admin_edit'] = '编辑管理员';
 $_LANG['edit_pwd'] = '修改密码';
@@ -56,7 +55,7 @@ $_LANG['back_admin_list'] = '返回管理员列表';
 
 /* 提示信息 */
 $_LANG['js_languages']['user_name_empty'] = '管理员用户名不能为空!';
-$_LANG['js_languages']['password_invaild'] = '密码必须同时包含字母及数字且长度不能小于6!';
+$_LANG['js_languages']['password_invaild'] = '密码必须同时包含字母及数字且长度不能小于于6!';
 $_LANG['js_languages']['email_empty'] = 'Email地址不能为空!';
 $_LANG['js_languages']['email_error'] = 'Email地址格式不正确!';
 $_LANG['js_languages']['password_error'] = '两次输入的密码不一致!';
@@ -68,7 +67,6 @@ $_LANG['user_name_exist'] = '该管理员已经存在!';
 $_LANG['email_exist'] = 'Email地址已经存在!';
 $_LANG['captcha_error'] = '您输入的验证码不正确。';
 $_LANG['login_faild'] = '您输入的帐号信息不正确。';
-$_LANG['login_disable'] = '您输入的帐号暂时不可用。';
 $_LANG['user_name_drop'] = '已被成功删除!';
 $_LANG['pwd_error'] = '输入的旧密码错误!';
 $_LANG['old_password_empty'] = '如果要修改密码,必须先输入你的旧密码!';

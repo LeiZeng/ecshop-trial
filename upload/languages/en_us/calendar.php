@@ -1,18 +1,17 @@
 <?php
 
 /**
- * ECSHOP Time JS language file
+ * ECSHOP 时间JS语言文件
  * ============================================================================
- * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
- * Development Ltd.
- * Web site: http://www.ecshop.com
+ * 版权所有 (C) 2005-2007 康盛创想（北京）科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com
  * ----------------------------------------------------------------------------
- * This is a free/open source software；it means that you can modify, use and
- * republish the program code, on the premise of that your behavior is not for
- * commercial purposes.
+ * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
+ * 进行修改、使用和再发布。
  * ============================================================================
- * $Author: liubo $
- * $Id: calendar.php 14481 2008-07-20 11:23:01Z apachen$
+ * $Author: weberliu $
+ * $Date: 2007-09-13 16:15:00 +0800 (星期四, 13 九月 2007) $
+ * $Id: calendar.php 12056 2007-09-13 08:15:00Z weberliu $
 */
 
 /* 时间JS语言项 */
@@ -49,29 +48,29 @@ $_LANG['calendar_lang']['Apr'] = 'Apr';
 $_LANG['calendar_lang']['May'] = 'May';
 $_LANG['calendar_lang']['Jun'] = 'Jun';
 $_LANG['calendar_lang']['Jul'] = 'Jul';
-$_LANG['calendar_lang']['Agu'] = 'Aug';
+$_LANG['calendar_lang']['Agu'] = 'Agu';
 $_LANG['calendar_lang']['Sep'] = 'Sep';
 $_LANG['calendar_lang']['Oct'] = 'Oct';
 $_LANG['calendar_lang']['Nov'] = 'Nov';
 $_LANG['calendar_lang']['Dec'] = 'Dec';
-$_LANG['calendar_lang']['calendar_help'] = 'Help';
-$_LANG['calendar_lang']['calendar_about1'] = 'Select date:\\r\\n- click \\xab, \\xbb to select year \\r\\n- click ';
-$_LANG['calendar_lang']['calendar_about2'] = ' click to select month \\r\\n- press the above button for long can rapidly select year or month';
-$_LANG['calendar_lang']['calendar_about_time'] = '\\r\\n\\r\\n select time:\\r\\n- click Hour or Minute to add one\\r\\n- press Shift and click Hour or Minute to minus one \\r\\n- click and drag the mouse for rapid selection';
-$_LANG['calendar_lang']['prev_year'] = 'Previous year(press for menu)';
-$_LANG['calendar_lang']['prev_month'] ='Previous month(press for menu)';
-$_LANG['calendar_lang']['go_today'] = 'Go to today';
-$_LANG['calendar_lang']['next_month'] = 'Next month(press for menu)';
-$_LANG['calendar_lang']['next_year'] ='Next year(press for menu)';
-$_LANG['calendar_lang']['sel_date'] = 'Select date';
-$_LANG['calendar_lang']['drag_to_move'] = 'Drag to move';
-$_LANG['calendar_lang']['part_today'] = '(Today)';
-$_LANG['calendar_lang']['day_first'] = 'Show on the left';
-$_LANG['calendar_lang']['calendar_close'] = 'Close';
-$_LANG['calendar_lang']['calendar_today'] = 'Today';
-$_LANG['calendar_lang']['time_part'] = '(Shift-)click or drag the mouse to change';
-$_LANG['calendar_lang']['calendar_wk'] = 'W';
-$_LANG['calendar_lang']['calendar_day'] ='D';
-$_LANG['calendar_lang']['calendar_time'] = 'T';
+$_LANG['calendar_lang']['calendar_help'] = 'About the calendar';
+$_LANG['calendar_lang']['calendar_about1'] = "Date Selector:\\r\\n- Use the \\xab, \\xbb buttons to select year\\r\\n- Use ";
+$_LANG['calendar_lang']['calendar_about2'] = " buttons to select month\\r\\n- Hold mouse button on any of the above buttons for faster selection.";
+$_LANG['calendar_lang']['calendar_about_time'] = "\\r\\n\\r\\nTime selection:\\r\\n- Click on any of the time parts to increase it\\r\\n- or Shift-click to decrease it\\r\\n- or click and drag for faster selection";
+$_LANG['calendar_lang']['prev_year'] = "Prev. year (hold for menu)";
+$_LANG['calendar_lang']['prev_month'] = "Prev. month (hold for menu)";
+$_LANG['calendar_lang']['go_today'] = "Go Today";
+$_LANG['calendar_lang']['next_month'] = "Next month (hold for menu)";
+$_LANG['calendar_lang']['next_year'] = "Next year (hold for menu)";
+$_LANG['calendar_lang']['sel_date'] = "Select date";
+$_LANG['calendar_lang']['drag_to_move'] = "Drag to move";
+$_LANG['calendar_lang']['part_today'] = " (today)";
+$_LANG['calendar_lang']['day_first'] = "Display first";
+$_LANG['calendar_lang']['calendar_close'] = "Close";
+$_LANG['calendar_lang']['calendar_today'] = "Today";
+$_LANG['calendar_lang']['time_part'] = "(Shift-)Click or drag to change value";
+$_LANG['calendar_lang']['calendar_wk'] = "wk";
+$_LANG['calendar_lang']['calendar_day'] = "day";
+$_LANG['calendar_lang']['calendar_time'] = "Time";
 
 ?>

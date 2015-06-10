@@ -6,8 +6,7 @@ if (!defined('IN_ECS'))
 }
 
 $checking_dirs = array(
-                    /* 取消检测uc_client */
-                    //'uc_client/data',
+                    'admin',
                     'cert',
                     'images',
                     'images/upload',
@@ -22,12 +21,11 @@ $checking_dirs = array(
                     'data/feedbackimg',
                     'data/packimg',
                     'data/sqldata',
-                    'temp',
-                    'temp/backup',
-                    'temp/caches',
-                    'temp/compiled',
-                    'temp/query_caches',
-                    'temp/static_caches'
+                    'templates',
+                    'templates/backup',
+                    'templates/caches',
+                    'templates/compiled',
+                    'templates/compiled/admin'
                     );
 
 ?>

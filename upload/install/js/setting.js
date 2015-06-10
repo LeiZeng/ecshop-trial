@@ -8,6 +8,60 @@ var oriDisabledInputs = [];
 Ajax.onRunning = null;
 Ajax.onComplete = null;
 
+/* 页面加载完毕，执行一些操作 */
+window.onload = function () {
+    setInputCheckedStatus();
+
+    var f = $("js-setting");
+
+    f.setAttribute("action", "javascript:install();void 0;");
+
+    f["js-db-name"].onblur = function () {
+        var list = getDbList();
+        for (var i = 0; i < list.length; i++) {
+            if (f["js-db-name"].value === list[i]) {
+                var answer = confirm($_LANG["db_exists"]);
+                if (answer === false) {
+                    f["js-db-name"].value = "";
+                }
+            }
+        }
+    }
+
+    f["js-go"].onclick = displayDbList;
+
+    f["js-monitor-close"].onclick = function () {
+        $("js-monitor").style.display = "none";
+        unlockSpecInputs();
+    };
+
+    var detail = $("js-monitor-view-detail")
+    detail.innerHTML = $_LANG["display_detail"];
+    detail.onclick = function () {
+        var mn = $("js-monitor-notice");
+        if (mn.style.display === "block") {
+            mn.style.display = "none"
+            this.innerHTML = $_LANG["display_detail"];
+        } else {
+            mn.style.display = "block"
+            this.innerHTML = $_LANG["hide_detail"];
+        }
+    };
+
+    iframe = frames[0];
+    notice = $("js-notice", iframe);
+    var d = new Draggable();
+    d.bindDragNode("js-monitor", "js-monitor-title");
+
+    $("js-system-lang-" + getAddressLang()).setAttribute("checked", "checked");
+
+    $("js-pre-step").onclick = function () {
+        location.href = "./index.php?lang=" + getAddressLang() + "&step=check";
+    };
+
+    f["js-install-demo"].onclick = switchInputsStatus;
+};
+
 /**
  * 显示数据库列表
  */
@@ -174,7 +228,7 @@ function createAdminPassport() {
             + "admin_password=" + encodeURIComponent(f["js-admin-password"].value) + "&"
             + "admin_password2=" + encodeURIComponent(f["js-admin-password2"].value) + "&"
             + "admin_email=" + f["js-admin-email"].value + "&"
-            + "lang=" + getCheckedRadio("js-system-lang").value;
+            + "lang=" + getAddressLang();
 
     notice.innerHTML += $_LANG["create_admin_passport"];
 
@@ -199,7 +253,6 @@ function doOthers() {
             + "system_lang=" + getCheckedRadio("js-system-lang").value + "&"
             + getCheckedGoodsTypesString() + "&"
             + "install_demo=" + installDemo + "&"
-            + "userinterface=" + f["userinterface"].value + "&"
             + "lang=" + getAddressLang();
 
     notice.innerHTML += $_LANG["do_others"];

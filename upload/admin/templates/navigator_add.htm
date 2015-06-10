@@ -95,14 +95,9 @@ function add_main(key)
 }
 function checkForm()
 {
-    if(document.getElementById('item_name').value == '')
+    if(document.getElementById('item_name').value == '' || document.getElementById('item_url').value == '')
     {
-        alert('{$lang.namecannotnull}');
-        return false;
-    }
-    if(document.getElementById('item_url').value == '')
-    {
-        alert('{$lang.linkcannotnull}');
+        alert('{$lang.cannotnull}');
         return false;
     }
     return true;

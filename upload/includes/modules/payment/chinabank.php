@@ -3,14 +3,15 @@
 /**
  * ECSHOP 网银在线插件
  * ============================================================================
- * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com；
+ * 版权所有 (C) 2005-2007 康盛创想（北京）科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com
  * ----------------------------------------------------------------------------
- * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
- * 使用；不允许对程序代码以任何形式任何目的的再发布。
+ * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
+ * 进行修改、使用和再发布。
  * ============================================================================
- * $Author: liubo $
- * $Id: chinabank.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: weberliu $
+ * $Date: 2007-09-28 11:35:00 +0800 (星期五, 28 九月 2007) $
+ * $Id: chinabank.php 12561 2007-09-28 03:35:00Z weberliu $
  */
 
 if (!defined('IN_ECS'))
@@ -45,7 +46,7 @@ if (isset($set_modules) && $set_modules == TRUE)
     $modules[$i]['is_online']  = '1';
 
     /* 支付费用 */
-    $modules[$i]['pay_fee'] = '1%';
+    $modules[$i]['pay_fee'] = '2.5%';
 
     /* 作者 */
     $modules[$i]['author']  = 'ECSHOP TEAM';
@@ -95,19 +96,11 @@ class chinabank
     function get_code($order, $payment)
     {
         $data_vid           = trim($payment['chinabank_account']);
-        $data_orderid       = $order['order_sn'];
+        $data_orderid       = $order['log_id'];
         $data_vamount       = $order['order_amount'];
         $data_vmoneytype    = 'CNY';
         $data_vpaykey       = trim($payment['chinabank_key']);
         $data_vreturnurl    = return_url(basename(__FILE__, '.php'));
-        if (empty($order['order_id']))
-        {
-            $remark1    = "voucher";                      //商户需要在支付结果通知中转发的商户参数二
-        }
-        else
-        {
-            $remark1    = '';
-        }
 
         $MD5KEY =$data_vamount.$data_vmoneytype.$data_orderid.$data_vid.$data_vreturnurl.$data_vpaykey;
         $MD5KEY = strtoupper(md5($MD5KEY));
@@ -119,7 +112,6 @@ class chinabank
         $def_url .= "<input type=HIDDEN name='v_moneytype'  value='".$data_vmoneytype."'>";
         $def_url .= "<input type=HIDDEN name='v_url'  value='".$data_vreturnurl."'>";
         $def_url .= "<input type=HIDDEN name='v_md5info' value='".$MD5KEY."'>";
-        $def_url .= "<input type=HIDDEN name='remark1' value='".$remark1."'>";
         $def_url .= "<input type=submit value='" .$GLOBALS['_LANG']['pay_button']. "'>";
         $def_url .= "</form>";
 
@@ -153,16 +145,6 @@ class chinabank
         /* 检查秘钥是否正确 */
         if ($v_md5str==$md5string)
         {
-            //验证通过后,将订单sn转换为ID 来操作ec订单表
-            if ($remark1 == 'voucher')
-            {
-                $v_oid = get_order_id_by_sn($v_oid, "true");
-            }
-            else
-            {
-                $v_oid = get_order_id_by_sn($v_oid);
-            }
-
             if ($v_pstatus == '20')
             {
                 /* 改变订单状态 */

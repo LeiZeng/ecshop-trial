@@ -3,14 +3,15 @@
 /**
  * ECSHOP 管理中心办事处管理
  * ============================================================================
- * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com；
+ * 版权所有 (C) 2005-2007 康盛创想（北京）科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com
  * ----------------------------------------------------------------------------
- * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
- * 使用；不允许对程序代码以任何形式任何目的的再发布。
+ * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
+ * 进行修改、使用和再发布。
  * ============================================================================
- * $Author: liubo $
- * $Id: agency.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: testyang $
+ * $Date: 2008-02-01 23:40:15 +0800 (星期五, 01 二月 2008) $
+ * $Id: agency.php 14122 2008-02-01 15:40:15Z testyang $
  */
 
 define('IN_ECS', true);
@@ -69,7 +70,7 @@ elseif ($_REQUEST['act'] == 'edit_agency_name')
     check_authz_json('agency_manage');
 
     $id     = intval($_POST['id']);
-    $name   = json_str_iconv(trim($_POST['val']));
+    $name   = trim($_POST['val']);
 
     /* 检查名称是否重复 */
     if ($exc->num("agency_name", $name, $id) != 0)
@@ -102,13 +103,15 @@ elseif ($_REQUEST['act'] == 'remove')
     $name = $exc->get_name($id);
     $exc->drop($id);
 
-    /* 更新管理员、配送地区、发货单、退货单和订单关联的办事处 */
-    $table_array = array('admin_user', 'region', 'order_info', 'delivery_order', 'back_order');
-    foreach ($table_array as $value)
-    {
-        $sql = "UPDATE " . $ecs->table($value) . " SET agency_id = 0 WHERE agency_id = '$id'";
-        $db->query($sql);
-    }
+    /* 更新管理员、配送地区和订单关联的办事处 */
+    $sql = "UPDATE " . $ecs->table('admin_user') . " SET agency_id = 0 WHERE agency_id = '$id'";
+    $db->query($sql);
+
+    $sql = "UPDATE " . $ecs->table('region') . " SET agency_id = 0 WHERE agency_id = '$id'";
+    $db->query($sql);
+
+    $sql = "UPDATE " . $ecs->table('order_info') . " SET agency_id = 0 WHERE agency_id = '$id'";
+    $db->query($sql);
 
     /* 记日志 */
     admin_log($name, 'remove', 'agency');
@@ -146,13 +149,15 @@ elseif ($_REQUEST['act'] == 'batch')
                     " WHERE agency_id " . db_create_in($ids);
             $db->query($sql);
 
-            /* 更新管理员、配送地区、发货单、退货单和订单关联的办事处 */
-            $table_array = array('admin_user', 'region', 'order_info', 'delivery_order', 'back_order');
-            foreach ($table_array as $value)
-            {
-                $sql = "UPDATE " . $ecs->table($value) . " SET agency_id = 0 WHERE agency_id " . db_create_in($ids) . " ";
-                $db->query($sql);
-            }
+            /* 更新管理员、配送地区和订单关联的办事处 */
+            $sql = "UPDATE " . $ecs->table('admin_user') . " SET agency_id = 0 WHERE agency_id " . db_create_in($ids);
+            $db->query($sql);
+
+            $sql = "UPDATE " . $ecs->table('region') . " SET agency_id = 0 WHERE agency_id " . db_create_in($ids);
+            $db->query($sql);
+
+            $sql = "UPDATE " . $ecs->table('order_info') . " SET agency_id = 0 WHERE agency_id " . db_create_in($ids);
+            $db->query($sql);
 
             /* 记日志 */
             admin_log('', 'batch_remove', 'agency');

@@ -3,7 +3,7 @@
 /**
  * ECSHOP Creat site map language file
  * ============================================================================
- * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -11,8 +11,9 @@
  * republish the program code, on the premise of that your behavior is not for
  * commercial purposes.
  * ============================================================================
- * $Author: liubo $
- * $Id: sitemap.php 17217 2011-01-19 06:29:08Z liubo $
+ * $Author: weberliu $
+ * $Date: 2006-11-27 15:32:22 +0800 (Monday, 27 November 2006) $
+ * $Id: sitemap.php 2942 2006-11-27 07:32:22Z weberliu $
 */
 
 $_LANG['homepage_changefreq'] = 'Home page update frequency';
