@@ -3,7 +3,7 @@
 /**
  * ECSHOP wholesale language file
  * ============================================================================
- * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -11,43 +11,44 @@
  * republish the program code, on the premise of that your behavior is not for
  * commercial purposes.
  * ============================================================================
- * $Author: scottye $
- * $Date: 2007-09-14 16:30:39 +0800 (星期五, 14 九月 2007) $
- * $Id: wholesale.php 12077 2007-09-14 08:30:39Z scottye $
+ * $Author: liubo $
+ * $Id: wholesale.php 17217 2011-01-19 06:29:08Z liubo $
 */
 
 /* menu */
-$_LANG['wholesale_list'] = '批发方案列表';
-$_LANG['add_wholesale'] = '添加批发方案';
-$_LANG['edit_wholesale'] = '编辑批发方案';
-$_LANG['continue_add_wholesale'] = '继续添加批发方案';
-$_LANG['back_wholesale_list'] = '返回批发方案列表';
-$_LANG['add_wholesale_ok'] = '添加批发方案成功';
-$_LANG['edit_wholesale_ok'] = '编辑批发方案成功';
+$_LANG['wholesale_list'] = 'Wholesale program list';
+$_LANG['add_wholesale'] = 'Add a wholesale program';
+$_LANG['edit_wholesale'] = 'Editor wholesale program';
+$_LANG['continue_add_wholesale'] = 'Continue to add wholesale program';
+$_LANG['back_wholesale_list'] = 'Return a list of wholesale program';
+$_LANG['add_wholesale_ok'] = 'Add a wholesale program successfully';
+$_LANG['edit_wholesale_ok'] = 'Editor wholesale program successfully';
 
 /* list */
-$_LANG['goods_name'] = '商品名称';
-$_LANG['rank_name'] = '适用会员等级';
-$_LANG['wholesale_not_exist'] = '您要操作的批发方案不存在';
-$_LANG['js_languages']['batch_drop_confirm'] = '您确实要删除选中的批发方案吗？';
-$_LANG['batch_drop_ok'] = '批量删除成功';
-$_LANG['no_record_selected'] = '没有选择记录';
+$_LANG['goods_name'] = 'Trade names';
+$_LANG['rank_name'] = 'Applicable to the Member grade';
+$_LANG['wholesale_not_exist'] = 'You want to operate the wholesale program does not exist';
+$_LANG['js_languages']['batch_drop_confirm'] = 'Are you sure you want to delete the selected wholesale program it?';
+$_LANG['batch_drop_ok'] = 'Bulk delete successful';
+$_LANG['no_record_selected'] = 'Record no choice';
 
 /* info */
-$_LANG['label_search_goods'] = '根据商品编号、名称或货号搜索商品';
-$_LANG['label_goods_name'] = '批发商品名称：';
-$_LANG['label_rank_name'] = '适用会员等级：';
-$_LANG['label_enabled'] = '是否启用：';
-$_LANG['js_languages']['pls_search_goods'] = '请搜索并选择批发商品';
-$_LANG['pls_search_goods'] = '请先搜索商品';
-$_LANG['search_result_empty'] = '没有找到商品，请重新搜索';
-$_LANG['quantity'] = '数量';
-$_LANG['price'] = '价格';
+$_LANG['label_search_goods'] = 'According to the merchandise code, merchandise name, or Item Search';
+$_LANG['label_goods_name'] = 'Wholesale trade names:';
+$_LANG['label_rank_name'] = 'Applicable Member Level:';
+$_LANG['label_enabled'] = 'Is enabled:';
+$_LANG['js_languages']['pls_search_goods'] = 'Please search and select wholesale merchandise';
+$_LANG['pls_search_goods'] = 'Please search for merchandise';
+$_LANG['search_result_empty'] = 'Did not find merchandise, please re-english';
+$_LANG['quantity'] = 'quantity';
+$_LANG['price'] = 'price';
+$_LANG['custom_goods_cat'] = 'All Categories';
+$_LANG['custom_goods_brand'] = 'All brands';
 
-$_LANG['js_languages']['act_name_not_null'] = '请输入批发方案名称';
+$_LANG['js_languages']['act_name_not_null'] = 'Please enter the name of the wholesale program';
 
 /* post */
-$_LANG['pls_set_user_rank'] = '请设置会员等级';
-$_LANG['user_rank_exist'] = '已经存在该商品针对您选择的会员等级的批发方案了';
+$_LANG['pls_set_user_rank'] = 'Please set up the Member Level';
+$_LANG['user_rank_exist'] = 'Already exists in the merchandise for you to choose the level of the wholesale membership package';
 
 ?>

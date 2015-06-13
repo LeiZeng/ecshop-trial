@@ -3,15 +3,14 @@
 /**
  * ECSHOP 安裝程序商品類型
  * ============================================================================
- * 版權所有 (C) 2005-2007 北京億商互動科技發展有限公司，並保留所有權利。
- * 網站地址: http://www.ecshop.com
+ * 版權所有 2005-2011 上海商派網絡科技有限公司，並保留所有權利。
+ * 網站地址: http://www.ecshop.com；
  * ----------------------------------------------------------------------------
- * 這是一個免費開源的軟件；這意味著您可以在不用於商業目的的前提下對程序代碼
- * 進行修改、使用和再發佈。
+ * 這不是壹個自由軟件！您只能在不用於商業目的的前提下對程序代碼進行修改和
+ * 使用；不允許對程序代碼以任何形式任何目的的再發布。
  * ============================================================================
- * $Author: weberliu $
- * $Date: 2006-08-30 10:18:12 +0800 (星期三, 30 八月 2006) $
- * $Id: inc_goods_type.php 1065 2006-08-30 02:18:12Z weberliu $
+ * $Author: liubo $
+ * $Id: inc_goods_type_zh_tw.php 17217 2011-01-19 06:29:08Z liubo $
 */
 
 $attributes['book'] = array("attr"=>"INSERT INTO `".$prefix."attribute` (`attr_id`, `cat_id`, `attr_name`, `attr_input_type`, `attr_type`, `attr_values`, `sort_order`) VALUES
@@ -65,7 +64,7 @@ $attributes['movie'] = array("attr"=>"INSERT INTO `".$prefix."attribute` (`attr_
                                 (NULL, {cat_id}, '中文字幕', 1, 0, '有\r\n無', 0),
                                 (NULL, {cat_id}, '導演', 0, 0, '', 0),
                                 (NULL, {cat_id}, '表演者', 0, 0, '', 0),
-                                (NULL, {cat_id}, '所屬類別', 1, 0, '愛情\r\n偶像\r\n生活\r\n社會\r\n科幻\r\n神話\r\n武俠\r\n動作\r\n驚險\r\n恐怖\r\n傳奇\r\n人物\r\n偵探\r\n警匪\r\n歷史\r\n軍事\r\n戲劇\r\n舞台\r\n經典\r\n名著\r\n喜劇\r\n情景\r\n動漫\r\n卡通\r\n兒童\r\n倫理激情', 0),
+                                (NULL, {cat_id}, '所屬類別', 1, 0, '愛情\r\n偶像\r\n生活\r\n社會\r\n科幻\r\n神話\r\n武俠\r\n動作\r\n驚險\r\n恐怖\r\n傳奇\r\n人物\r\n偵探\r\n警匪\r\n歷史\r\n軍事\r\n戲劇\r\n舞臺\r\n經典\r\n名著\r\n喜劇\r\n情景\r\n動漫\r\n卡通\r\n兒童\r\n倫理激情', 0),
                                 (NULL, {cat_id}, '年份', 0, 0, '', 0),
                                 (NULL, {cat_id}, '音頻格式', 0, 0, '', 0),
                                 (NULL, {cat_id}, '區碼', 0, 0, '', 0),
@@ -205,8 +204,50 @@ $attributes['cosmetics'] = array("attr"=>"INSERT INTO `".$prefix."attribute` (`a
                                 (NULL, {cat_id}, '主要原料', 0, 0, '', 0),
                                 (NULL, {cat_id}, '所屬類別', 1, 0, '彩妝\r\n化妝工具\r\n護膚品\r\n香水', 0),
                                 (NULL, {cat_id}, '使用部位', 0, 0, '', 0),
-                                (NULL, {cat_id}, '適合膚質', 1, 0, '油性\r\n中性\r\n干性', 0),
+                                (NULL, {cat_id}, '適合膚質', 1, 0, '油性\r\n中性\r\n幹性', 0),
                                 (NULL, {cat_id}, '適用人群', 1, 0, '女性\r\n男性', 0);",
                         "cat"=>"INSERT INTO `".$prefix."goods_type` (`cat_id`, `cat_name`, `enabled`) VALUES (NULL, '化妝品', 1);");
+
+$attributes['mobile2'] = array("attr"=>"INSERT INTO `".$prefix."attribute` (`attr_id`, `cat_id`, `attr_name`, `attr_input_type`, `attr_type`, `attr_values`, `attr_index`, `sort_order`, `is_linked`, `attr_group`) VALUES
+                                (NULL, {cat_id}, '上市日期', 1, 0, '2008年01月\r\n2008年02月\r\n2008年03月\r\n2008年04月\r\n2008年05月\r\n2008年06月\r\n2008年07月\r\n2008年08月\r\n2008年09月\r\n2008年10月\r\n2008年11月\r\n2008年12月\r\n2007年01月\r\n2007年02月\r\n2007年03月\r\n2007年04月\r\n2007年05月\r\n2007年06月\r\n2007年07月\r\n2007年08月\r\n2007年09月\r\n2007年10月\r\n2007年11月\r\n2007年12月', 1, 0, 0, 0),
+                                (NULL, {cat_id}, '手機制式', 1, 0, 'GSM,850,900,1800,1900\r\nGSM,900,1800,1900,2100\r\nCDMA\r\n雙模（GSM,900,1800,CDMA 1X）\r\n3G(GSM,900,1800,1900,TD-SCDMA )', 1, 1, 1, 0),
+                                (NULL, {cat_id}, '理論通話時間', 0, 0, '', 0, 2, 0, 0),
+                                (NULL, {cat_id}, '理論待機時間', 0, 0, '', 0, 3, 0, 0),
+                                (NULL, {cat_id}, '鈴聲', 0, 0, '', 0, 4, 0, 0),
+                                (NULL, {cat_id}, '鈴聲格式', 0, 0, '', 0, 5, 0, 0),
+                                (NULL, {cat_id}, '外觀樣式', 1, 0, '翻蓋\r\n滑蓋\r\n直板\r\n折疊', 1, 6, 1, 0),
+                                (NULL, {cat_id}, '中文短消息', 0, 0, '', 0, 7, 0, 0),
+                                (NULL, {cat_id}, '存儲卡格式', 0, 0, '', 0, 0, 0, 0),
+                                (NULL, {cat_id}, '內存容量', 0, 0, '', 2, 0, 0, 0),
+                                (NULL, {cat_id}, '操作系統', 0, 0, '', 0, 0, 0, 0),
+                                (NULL, {cat_id}, 'K-JAVA', 0, 0, '', 0, 0, 0, 0),
+                                (NULL, {cat_id}, '尺寸體積', 0, 0, '', 0, 0, 0, 0),
+                                (NULL, {cat_id}, '顏色', 1, 1, '黑色\r\n白色\r\n藍色\r\n金色\r\n粉色\r\n銀色\r\n灰色\r\n深李色\r\n黑紅色\r\n黑藍色\r\n白紫色', 1, 0, 0, 0),
+                                (NULL, {cat_id}, '屏幕顏色', 1, 0, '1600萬\r\n262144萬', 1, 0, 1, 1),
+                                (NULL, {cat_id}, '屏幕材質', 1, 0, 'TFT', 0, 0, 0, 1),
+                                (NULL, {cat_id}, '屏幕分辨率', 1, 0, '320×240 像素\r\n240×400 像素\r\n240×320 像素\r\n176x220 像素', 1, 0, 0, 1),
+                                (NULL, {cat_id}, '屏幕大小', 0, 0, '', 0, 0, 0, 1),
+                                (NULL, {cat_id}, '中文輸入法', 0, 0, '', 0, 0, 0, 2),
+                                (NULL, {cat_id}, '情景模式', 0, 0, '', 0, 0, 0, 2),
+                                (NULL, {cat_id}, '網絡鏈接', 0, 0, '', 0, 0, 0, 2),
+                                (NULL, {cat_id}, '藍牙接口', 0, 0, '', 0, 0, 0, 0),
+                                (NULL, {cat_id}, '數據線接口', 0, 0, '', 0, 0, 0, 2),
+                                (NULL, {cat_id}, '電子郵件', 0, 0, '', 0, 0, 0, 2),
+                                (NULL, {cat_id}, '鬧鐘', 0, 0, '', 0, 35, 0, 4),
+                                (NULL, {cat_id}, '辦公功能', 0, 0, '', 0, 0, 0, 4),
+                                (NULL, {cat_id}, '數碼相機', 0, 0, '', 1, 0, 0, 3),
+                                (NULL, {cat_id}, '像素', 0, 0, '', 0, 0, 0, 3),
+                                (NULL, {cat_id}, '傳感器', 0, 0, '', 0, 0, 0, 0),
+                                (NULL, {cat_id}, '變焦模式', 0, 0, '', 0, 0, 0, 3),
+                                (NULL, {cat_id}, '視頻拍攝', 0, 0, '', 0, 0, 0, 3),
+                                (NULL, {cat_id}, 'MP3播放器', 0, 0, '', 0, 0, 0, 3),
+                                (NULL, {cat_id}, '視頻播放', 0, 0, '', 0, 0, 0, 3),
+                                (NULL, {cat_id}, 'CPU頻率', 0, 0, '', 0, 0, 0, 0),
+                                (NULL, {cat_id}, '收音機', 0, 0, '', 0, 0, 0, 3),
+                                (NULL, {cat_id}, '耳機接口', 0, 0, '', 0, 0, 0, 3),
+                                (NULL, {cat_id}, '閃光燈', 0, 0, '', 0, 0, 0, 3),
+                                (NULL, {cat_id}, '瀏覽器', 0, 0, '', 0, 0, 0, 2),
+                                (NULL, {cat_id}, '配件', 1, 2, '線控耳機\r\n藍牙耳機\r\n數據線', 0, 0, 0, 0);",
+                        "cat"=>"INSERT INTO `".$prefix."goods_type` (`cat_id`, `cat_name`, `enabled`) VALUES (NULL, '精品手機', 1);");
 
 ?>

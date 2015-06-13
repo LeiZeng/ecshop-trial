@@ -3,26 +3,29 @@
 /**
  * ECSHOP 管理中心模版管理程序
  * ============================================================================
- * 版权所有 (C) 2005-2007 康盛创想（北京）科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com
+ * 版权所有 2005-2010 上海商派网络科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com；
  * ----------------------------------------------------------------------------
- * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
- * 进行修改、使用和再发布。
+ * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
+ * 使用；不允许对程序代码以任何形式任何目的的再发布。
  * ============================================================================
- * $Author: testyang $
- * $Date: 2008-01-28 18:33:06 +0800 (星期一, 28 一月 2008) $
- * $Id: mail_template.php 14079 2008-01-28 10:33:06Z testyang $
+ * $Author: liuhui $
+ * $Id: mail_template.php 17063 2010-03-25 06:35:46Z liuhui $
 */
 
 define('IN_ECS', true);
 
 require(dirname(__FILE__) . '/includes/init.php');
 
+admin_priv('mail_template');
+
 /*------------------------------------------------------ */
 //-- 模版列表
 /*------------------------------------------------------ */
 if ($_REQUEST['act'] == 'list')
 {
+    include_once(ROOT_PATH . 'includes/fckeditor/fckeditor.php'); // 包含 html editor 类文件
+
     /* 包含插件语言项 */
     $sql = "SELECT code FROM ".$ecs->table('plugins');
     $rs = $db->query($sql);
@@ -56,9 +59,23 @@ if ($_REQUEST['act'] == 'list')
 
     assign_query_info();
 
+    $content = load_template($cur);
+
+    /* 创建 html editor */
+    $editor = new FCKeditor('content');
+    $editor->BasePath   = '../includes/fckeditor/';
+    $editor->ToolbarSet = 'Normal';
+    $editor->Width      = '100%';
+    $editor->Height     = '320';
+    $editor->Value      = $content['template_content'];
+    $FCKeditor = $editor->CreateHtml();
+    $smarty->assign('FCKeditor', $FCKeditor);
+    $smarty->assign('tpl', $cur);
+    $smarty->assign('cur',          $cur);
     $smarty->assign('ur_here',      $_LANG['mail_template_manage']);
     $smarty->assign('templates',    $templates);
-    $smarty->assign('template',     load_template($cur));
+    $smarty->assign('template',     $content);
+    $smarty->assign('full_page',    1);
     $smarty->display('mail_template.htm');
 }
 
@@ -67,9 +84,63 @@ if ($_REQUEST['act'] == 'list')
 /*------------------------------------------------------ */
 elseif ($_REQUEST['act'] == 'loat_template')
 {
-    $tpl = intval($_GET['tpl']);
+    include_once(ROOT_PATH . 'includes/fckeditor/fckeditor.php'); // 包含 html editor 类文件
 
-    make_json_result(load_template($tpl));
+    $tpl = intval($_GET['tpl']);
+    $mail_type = isset($_GET['mail_type']) ? $_GET['mail_type'] : -1;
+
+    /* 包含插件语言项 */
+    $sql = "SELECT code FROM ".$ecs->table('plugins');
+    $rs = $db->query($sql);
+    while ($row = $db->FetchRow($rs))
+    {
+        /* 取得语言项 */
+        if (file_exists('../plugins/'.$row['code'].'/languages/common_'.$_CFG['lang'].'.php'))
+        {
+            include_once(ROOT_PATH.'plugins/'.$row['code'].'/languages/common_'.$_CFG['lang'].'.php');
+        }
+
+    }
+
+    /* 获得所有邮件模板 */
+    $sql = "SELECT template_id, template_code FROM " .$ecs->table('mail_templates') . " WHERE  type = 'template'";
+    $res = $db->query($sql);
+
+    while ($row = $db->FetchRow($res))
+    {
+        $len = strlen($_LANG[$row['template_code']]);
+        $templates[$row['template_id']] = $len < 18 ?
+            $_LANG[$row['template_code']].str_repeat('&nbsp;', (18-$len)/2) ." [$row[template_code]]" :
+            $_LANG[$row['template_code']] . " [$row[template_code]]";
+    }
+
+    $content = load_template($tpl);
+
+    if (($mail_type == -1 && $content['is_html'] == 1) || $mail_type == 1)
+    {
+        /* 创建 html editor */
+        $editor = new FCKeditor('content');
+        $editor->BasePath   = '../includes/fckeditor/';
+        $editor->ToolbarSet = 'Normal';
+        $editor->Width      = '100%';
+        $editor->Height     = '320';
+        $editor->Value      = $content['template_content'];
+        $FCKeditor = $editor->CreateHtml();
+        $smarty->assign('FCKeditor', $FCKeditor);
+
+        $content['is_html'] = 1;
+    }
+    elseif ($mail_type == 0)
+    {
+        $content['is_html'] = 0;
+    }
+
+    $smarty->assign('tpl', $tpl);
+    $smarty->assign('cur',          $tpl);
+    $smarty->assign('templates',    $templates);
+    $smarty->assign('template',     $content);
+
+    make_json_result($smarty->fetch('mail_template.htm'));
 }
 
 /*------------------------------------------------------ */
@@ -78,9 +149,10 @@ elseif ($_REQUEST['act'] == 'loat_template')
 
 elseif ($_REQUEST['act'] == 'save_template')
 {
+
     if (empty($_POST['subject']))
     {
-        make_json_error($_LANG['subject_empty']);
+       sys_msg($_LANG['subject_empty'], 1, array(), false);
     }
     else
     {
@@ -89,7 +161,7 @@ elseif ($_REQUEST['act'] == 'save_template')
 
     if (empty($_POST['content']))
     {
-        make_json_result($_LANG['content_empty']);
+       sys_msg($_LANG['content_empty'], 1, array(), false);
     }
     else
     {
@@ -98,28 +170,23 @@ elseif ($_REQUEST['act'] == 'save_template')
 
     $type   = intval($_POST['is_html']);
     $tpl_id = intval($_POST['tpl']);
-    if ($type)
-    {
-        $content = str_replace(array("\r\n", "\n"), array('<br />', '<br />'), $content);
-    }
-    else
-    {
-        $content = str_replace('<br />', '\n', $content);
-    }
+
+
     $sql = "UPDATE " .$ecs->table('mail_templates'). " SET ".
                 "template_subject = '" .str_replace('\\\'\\\'', '\\\'', $subject). "', ".
-                "template_content = '" .str_replace('\\\'\\\'', '\\\'', $content). "', ".
+                "template_content = '" .str_replace('\\\'\\\'', '\\\'', $content).  "', ".
                 "is_html = '$type', ".
                 "last_modify = '" .gmtime(). "' ".
             "WHERE template_id='$tpl_id'";
 
     if ($db->query($sql, "SILENT"))
     {
-        make_json_result('',  $_LANG['update_success']);
+        $link[0]=array('href' => 'mail_template.php?act=list', 'text' => $_LANG['update_success']);
+        sys_msg($_LANG['update_success'], 0, $link);
     }
     else
     {
-        make_json_error($_LANG['update_failed'] ."\n". $GLOBALS['db']->error());
+         sys_msg($_LANG['update_failed'], 1, array(), false);
     }
 }
 

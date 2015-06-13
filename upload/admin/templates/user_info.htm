@@ -1,4 +1,4 @@
-<!-- $Id: user_info.htm 13961 2008-01-07 06:54:44Z dolphin $ -->
+<!-- $Id: user_info.htm 16854 2009-12-07 06:20:09Z sxc_shop $ -->
 {include file="pageheader.htm"}
 <div class="main-div">
 <form method="post" action="users.php" name="theForm" onsubmit="return validate()">
@@ -39,6 +39,15 @@
     <td class="label">{$lang.confirm_password}:</td>
     <td><input type="password" name="confirm_password" maxlength="20" size="20" />{$lang.require_field}</td>
   </tr>
+  {elseif  $form_action eq "update"}
+  <tr>
+    <td class="label">{$lang.newpass}:</td>
+    <td><input type="password" name="password" maxlength="20" size="20" /></td>
+  </tr>
+  <tr>
+    <td class="label">{$lang.confirm_password}:</td>
+    <td><input type="password" name="confirm_password" maxlength="20" size="20" /></td>
+  </tr>
   {/if}
   <tr>
     <td class="label">{$lang.user_rank}:</td>
@@ -53,42 +62,51 @@
   </tr>
   <tr>
     <td class="label">{$lang.birthday}:</td>
-    <td>{html_select_date field_order="YMD" prefix="birthday" time=$user.birthday start_year="-100" end_year="+1" display_days=true month_format="%m"}</td>
+    <td>{html_select_date field_order="YMD" prefix="birthday" time=$user.birthday start_year="-60" end_year="+1" display_days=true month_format="%m"}</td>
   </tr>
   <tr>
     <td class="label">{$lang.credit_line}:</td>
     <td><input name="credit_line" type="text" id="credit_line" value="{$user.credit_line}" size="10" /></td>
   </tr>
+  {foreach from=$extend_info_list item=field}
+  <tr>
+    <td class="label">{$field.reg_field_name}:</td>
+    <td>
+    <input name="extend_field{$field.id}" type="text" size="40" class="inputBg" value="{$field.content}"/>
+    </td>
+  </tr>
+  {/foreach}
   {if $user.parent_id}
   <tr>
     <td class="label">{$lang.parent_user}:</td>
     <td><a href="users.php?act=edit&id={$user.parent_id}">{$user.parent_username}</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="users.php?act=remove_parent&id={$user.user_id}">{$lang.parent_remove}</a></td>
   </tr>
   {/if}
+  {if $affiliate.on eq 1 && $affdb}
   <tr>
-    <td class="label">{$lang.msn}:</td>
-    <td><input type="text" name="other[msn]" maxlength="60" size="40" value="{$user.msn}" /></td>
+    <td class="label">{$lang.affiliate_user}:</td>
+    <td>[<a href="users.php?act=aff_list&auid={$user.user_id}">{$lang.show_affiliate_users}</a>][<a href="affiliate_ck.php?act=list&auid={$user.user_id}">{$lang.show_affiliate_orders}</a>]</td>
   </tr>
+  <tr>
+    <td></td>
+    <td>   
+    <table border="0" cellspacing="1" style="background: #dddddd; width:30%;">
+    <tr>
+    <td bgcolor="#ffffff">{$lang.affiliate_lever}</td>
+    {foreach from=$affdb key=level item=val0}
+    <td bgcolor="#ffffff">{$level}</td>
+    {/foreach}
     </tr>
-  <tr>
-    <td class="label">{$lang.qq}:</td>
-    <td><input type="text" name="other[qq]" maxlength="60" size="40" value="{$user.qq}" /></td>
-  </tr>
+    <tr>
+    <td bgcolor="#ffffff">{$lang.affiliate_num}</td>
+    {foreach from=$affdb item=val}
+    <td bgcolor="#ffffff">{$val.num}</td>
+    {/foreach}
     </tr>
-  <tr>
-    <td class="label">{$lang.office_phone}:</td>
-    <td><input type="text" name="other[office_phone]" maxlength="60" size="40" value="{$user.office_phone}" /></td>
+    </table>
+    </td>
   </tr>
-    </tr>
-  <tr>
-    <td class="label">{$lang.home_phone}:</td>
-    <td><input type="text" name="other[home_phone]" maxlength="60" size="40" value="{$user.home_phone}" /></td>
-  </tr>
-    </tr>
-  <tr>
-    <td class="label">{$lang.mobile_phone}:</td>
-    <td><input type="text" name="other[mobile_phone]" maxlength="60" size="40" value="{$user.mobile_phone}" /></td>
-  </tr>
+  {/if}
   <tr>
     <td colspan="2" align="center">
       <input type="submit" value="{$lang.button_submit}" class="button" />
@@ -105,7 +123,7 @@
 <script language="JavaScript">
 <!--
 
-if (document.forms['theForm'].elements['act'] == "insert")
+if (document.forms['theForm'].elements['act'].value == "insert")
 {
   document.forms['theForm'].elements['username'].focus();
 }
@@ -127,13 +145,39 @@ function validate()
 {
     validator = new Validator("theForm");
     validator.isEmail("email", invalid_email, true);
- 
+
     if (document.forms['theForm'].elements['act'].value == "insert")
     {
         validator.required("username",  no_username);
         validator.required("password", no_password);
         validator.required("confirm_password", no_confirm_password);
         validator.eqaul("password", "confirm_password", password_not_same);
+
+        var password_value = document.forms['theForm'].elements['password'].value;
+        if (password_value.length < 6)
+        {
+          validator.addErrorMsg(less_password);
+        }
+        if (/ /.test(password_value) == true)
+        {
+          validator.addErrorMsg(passwd_balnk);
+        }
+    }
+    else if (document.forms['theForm'].elements['act'].value == "update")
+    {
+        var newpass = document.forms['theForm'].elements['password'];
+        var confirm_password = document.forms['theForm'].elements['confirm_password'];
+        if(newpass.value.length > 0 || confirm_password.value.length)
+        {
+          if(newpass.value.length >= 6 || confirm_password.value.length >= 6)
+          {
+            validator.eqaul("password", "confirm_password", password_not_same);
+          }
+          else
+          {
+            validator.addErrorMsg(password_len_err);
+          }
+        }
     }
 
     return validator.passed();

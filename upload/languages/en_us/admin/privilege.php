@@ -3,7 +3,7 @@
 /**
  * ECSHOP Control panel authorization manage module language file
  * ============================================================================
- * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -11,9 +11,8 @@
  * republish the program code, on the premise of that your behavior is not for
  * commercial purposes.
  * ============================================================================
- * $Author: weberliu $
- * $Date: 2007-02-06 13:51:26 +0800 (Tuesday, 06 February 2007) $
- * $Id: privilege.php 5233 2007-02-06 05:51:26Z weberliu $
+ * $Author: liubo $
+ * $Id: privilege.php 17217 2011-01-19 06:29:08Z liubo $
 */
 
 /* Field information */
@@ -49,6 +48,8 @@ $_LANG['move_up'] = 'Move up';
 $_LANG['move_down'] = 'Move down';
 $_LANG['continue_add'] = 'Continue add administrator.';
 $_LANG['back_list'] = 'Return to administrator list.';
+$_LANG['select_role'] = 'Choose role';
+$_LANG['select_please'] = 'Please select...';
 
 $_LANG['admin_edit'] = 'Edit administrator';
 $_LANG['edit_pwd'] = 'Edit password';
@@ -57,7 +58,7 @@ $_LANG['back_admin_list'] = 'Return to administrator list.';
 
 /* Prompting message */
 $_LANG['js_languages']['user_name_empty'] = 'Please enter username!';
-$_LANG['js_languages']['password_invaild'] = '密码必须同时包含字母及数字且长度不能小于于6!';
+$_LANG['js_languages']['password_invaild'] = 'Password must contain both letters and numbers and the length should not be smaller than in 6!';
 $_LANG['js_languages']['email_empty'] = 'Email address can\'t be blank!';
 $_LANG['js_languages']['email_error'] = 'Email address format is invalid!';
 $_LANG['js_languages']['password_error'] = 'The two passwords you entered did not match. Please type it again!';
@@ -74,8 +75,8 @@ $_LANG['pwd_error'] = 'Primary password is invalid.';
 $_LANG['old_password_empty'] = 'If you want edit password, you must enter the primary password!';
 $_LANG['edit_admininfo_error'] = 'You can only edit yourself profile!';
 $_LANG['edit_admininfo_cannot'] = 'You can\'t operate for the administrator authorization!';
-
-$_LANG['edit_remove_cannot'] = 'Administrator demo can\'t be deleted!';
+$_LANG['edit_remove_cannot'] = 'You can not delete the administrator demo!';
+$_LANG['remove_self_cannot'] = 'Administrator demo can\'t be deleted!';
 $_LANG['remove_cannot'] = 'You have no authorization to delete!';
 
 $_LANG['modif_info'] = 'Edit Profile';

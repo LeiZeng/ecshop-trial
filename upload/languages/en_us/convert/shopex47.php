@@ -2,7 +2,7 @@
 /**
  * shopex47 Convert program language file
  * ============================================================================
- * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -10,9 +10,8 @@
  * republish the program code, on the premise of that your behavior is not for
  * commercial purposes.
  * ============================================================================
- * $Author: scottye $
- * $Date: 2006-09-12 11:36:27 +0800 (Tues. 12 sep 2006) $
- * $Id: shopex47.php 1468 2006-09-12 03:36:27Z scottye $
+ * $Author: liubo $
+ * $Id: shopex47.php 17217 2011-01-19 06:29:08Z liubo $
  */
 
 $_LANG['shopex47_desc']     = 'Shopex Single V4.7';

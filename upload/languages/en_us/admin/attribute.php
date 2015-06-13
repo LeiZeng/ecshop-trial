@@ -2,7 +2,7 @@
 /**
  * ECSHOP
  * ============================================================================
- * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -10,9 +10,8 @@
  * republish the program code, on the premise of that your behavior is not for
  * commercial purposes.
  * ============================================================================
- * $Author: paulgao $
- * $Date: 2007-01-30 16:02:08 +0800 (Tuesday, 30 Jan. 2007) $
- * $Id: attribute.php 4752 2007-01-30 08:02:08Z paulgao $
+ * $Author: liubo $
+ * $Id: attribute.php 17217 2011-01-19 06:29:08Z liubo $
 */
 
 /* List */
@@ -46,9 +45,13 @@ $_LANG['text'] = 'Manual enter';
 $_LANG['select'] = 'Select from below (one line stand for one value)';
 $_LANG['text_area'] = 'Multirow textbox';
 $_LANG['label_attr_values'] = 'Choice value list:';
-$_LANG['label_attr_group'] = '屬性分組：';
-$_LANG['label_attr_type'] = '属性是否可选';
-$_LANG['note_attr_type'] = '选择“是”时，可以对商品该属性设置多个值，同时还能对不同属性值指定不同的价格加价，用户购买商品时需要选定具体的属性值。选择“否”时，商品的该属性值只能设置一个值，用户只能查看该值。';
+$_LANG['label_attr_group'] = 'Property division:';
+$_LANG['label_attr_type'] = 'Property is optional';
+$_LANG['note_attr_type'] = 'Select "Yes" when the merchandise can set up a number of property value, while property values specified for different different price increases, users need to purchase merchandise at selected specific property value. Choose "No" when the property value of the merchandise can only set a value, the user can only view the value.';
+$_LANG['attr_type_values'][0] = 'The only property';
+$_LANG['attr_type_values'][1] = 'Radio property';
+$_LANG['attr_type_values'][2] = 'Check property';
+
 
 $_LANG['add_next'] = 'Add next attribute';
 $_LANG['back_list'] = 'Return to attribute list';
@@ -59,7 +62,7 @@ $_LANG['edit_ok'] = 'Edit attribute [%s] successfully.';
 /* Prompting message */
 $_LANG['name_exist'] = 'The attribute name already exists, please change another one.';
 $_LANG['drop_confirm'] = 'Are you sure delete the attribute?';
-$_LANG['notice_drop_confirm'] = '已经有%s个商品使用该属性，您确实要删除该属性吗？';
+$_LANG['notice_drop_confirm'] = 'Already has %s the use of the property of merchandise, you sure you want to delete the right property?';
 $_LANG['name_not_null'] = 'Attribute name can\'t be blank.';
 
 $_LANG['no_select_arrt'] = 'You have no choice need to remove the attribute name.';

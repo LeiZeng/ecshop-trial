@@ -3,7 +3,7 @@
 /**
  * ECSHOP
  * ============================================================================
- * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -11,9 +11,8 @@
  * republish the program code, on the premise of that your behavior is not for
  * commercial purposes.
  * ============================================================================
- * $Author: paulgao $
- * $Date: 2007-01-30 16:11:25 +0800 (Tuesday, 30 January 2007) $
- * $Id: repay.php 4753 2007-01-30 08:11:25Z paulgao $
+ * $Author: liubo $
+ * $Id: repay.php 17217 2011-01-19 06:29:08Z liubo $
 */
 
 $_LANG['back_list'] = 'Return to list';

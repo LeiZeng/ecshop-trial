@@ -3,22 +3,20 @@
 /**
  * ECSHOP 首信易支付插件
  * ============================================================================
- * 版权所有 (C) 2005-2006 康盛创想（北京）科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com
+ * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com；
  * ----------------------------------------------------------------------------
- * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
- * 进行修改、使用和再发布。
+ * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
+ * 使用；不允许对程序代码以任何形式任何目的的再发布。
  * ============================================================================
- * $Author: haochangyu $
- * $Date: 2007-03-02 17:52:34 +0800 (星期四, 28 十二月 2006) $
- * $Id: nps.php 3819 2006-02-05 07:10:34Z paulgao $
+ * $Author: liubo $
+ * $Id: cappay.php 17217 2011-01-19 06:29:08Z liubo $
  */
 
 if (!defined('IN_ECS'))
 {
     die('Hacking attempt');
 }
-
 $payment_lang = ROOT_PATH . 'languages/' .$GLOBALS['_CFG']['lang']. '/payment/cappay.php';
 
 if (file_exists($payment_lang))
@@ -76,14 +74,15 @@ class cappay
      *
      * @return void
      */
-    function cappay()
-    {
-    }
-
     function __construct()
     {
         $this->cappay();
     }
+  
+    function cappay()
+    {
+    }
+
 
     /**
      * 生成支付代码
@@ -190,18 +189,17 @@ class cappay
     function respond()
     {
         $payment    = get_payment(basename(__FILE__, '.php'));
-        $v_tempdate = explode('-', $_GET['v_oid']);
+        $v_tempdate = explode('-', $_REQUEST['v_oid']);
 
         //接受返回数据验证开始
         //v_md5info验证
-        $md5info_paramet = $_GET['v_oid'].$_GET['v_pstatus'].$_GET['v_pstring'].$_GET['v_pmode'];
+        $md5info_paramet = $_REQUEST['v_oid'].$_REQUEST['v_pstatus'].$_REQUEST['v_pstring'].$_REQUEST['v_pmode'];
         $md5info_tem     = $this->hmac_md5($payment['cappay_key'],$md5info_paramet);
 
         //v_md5money验证
-        $md5money_paramet = $_GET['v_amount'].$_GET['v_moneytype'];
+        $md5money_paramet = $_REQUEST['v_amount'].$_REQUEST['v_moneytype'];
         $md5money_tem     = $this->hmac_md5($payment['cappay_key'],$md5money_paramet);
-
-        if ($md5info_tem == $_GET['v_md5info'] && $md5money_tem == $_GET['v_md5money'])
+        if ($md5info_tem == $_REQUEST['v_md5info'] && $md5money_tem == $_REQUEST['v_md5money'])
         {
             //改变订单状态
             order_paid($v_tempdate[2]);
@@ -236,6 +234,7 @@ class cappay
 
         return md5($k_opad . pack('H*', md5($k_ipad . $data)));
     }
+
 }
 
 ?>

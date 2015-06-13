@@ -3,15 +3,14 @@
 /**
  * ECSHOP 首页文件
  * ============================================================================
- * 版权所有 (C) 2005-2007 康盛创想（北京）科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com
+ * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com；
  * ----------------------------------------------------------------------------
- * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
- * 进行修改、使用和再发布。
+ * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
+ * 使用；不允许对程序代码以任何形式任何目的的再发布。
  * ============================================================================
- * $Author: fenghl $
- * $Date: 2008-02-20 10:12:57 +0800 (星期三, 20 二月 2008) $
- * $Id: index.php 14156 2008-02-20 02:12:57Z fenghl $
+ * $Author: liubo $
+ * $Id: index.php 17217 2011-01-19 06:29:08Z liubo $
 */
 
 define('IN_ECS', true);
@@ -22,7 +21,22 @@ if ((DEBUG_MODE & 2) != 2)
 {
     $smarty->caching = true;
 }
+$ua = strtolower($_SERVER['HTTP_USER_AGENT']);
 
+$uachar = "/(nokia|sony|ericsson|mot|samsung|sgh|lg|philips|panasonic|alcatel|lenovo|cldc|midp|mobile)/i";
+
+if(($ua == '' || preg_match($uachar, $ua))&& !strpos(strtolower($_SERVER['REQUEST_URI']),'wap'))
+{
+    $Loaction = 'mobile/';
+
+    if (!empty($Loaction))
+    {
+        ecs_header("Location: $Loaction\n");
+
+        exit;
+    }
+
+}
 /*------------------------------------------------------ */
 //-- Shopex系统地址转换
 /*------------------------------------------------------ */
@@ -57,6 +71,24 @@ if (!empty($_GET['gOo']))
     }
 }
 
+//判断是否有ajax请求
+$act = !empty($_GET['act']) ? $_GET['act'] : '';
+if ($act == 'cat_rec')
+{
+    $rec_array = array(1 => 'best', 2 => 'new', 3 => 'hot');
+    $rec_type = !empty($_REQUEST['rec_type']) ? intval($_REQUEST['rec_type']) : '1';
+    $cat_id = !empty($_REQUEST['cid']) ? intval($_REQUEST['cid']) : '0';
+    include_once('includes/cls_json.php');
+    $json = new JSON;
+    $result   = array('error' => 0, 'content' => '', 'type' => $rec_type, 'cat_id' => $cat_id);
+
+    $children = get_children($cat_id);
+    $smarty->assign($rec_array[$rec_type] . '_goods',      get_category_recommend_goods($rec_array[$rec_type], $children));    // 推荐商品
+    $smarty->assign('cat_rec_sign', 1);
+    $result['content'] = $smarty->fetch('library/recommend_' . $rec_array[$rec_type] . '.lbi');
+    die($json->encode($result));
+}
+
 /*------------------------------------------------------ */
 //-- 判断是否存在缓存，如果存在则调用缓存，反之读取相应内容
 /*------------------------------------------------------ */
@@ -74,6 +106,7 @@ if (!$smarty->is_cached('index.dwt', $cache_id))
     /* meta information */
     $smarty->assign('keywords',        htmlspecialchars($_CFG['shop_keywords']));
     $smarty->assign('description',     htmlspecialchars($_CFG['shop_desc']));
+    $smarty->assign('flash_theme',     $_CFG['flash_theme']);  // Flash轮播图片模板
 
     $smarty->assign('feed_url',        ($_CFG['rewrite'] == 1) ? 'feed.xml' : 'feed.php'); // RSS URL
 
@@ -84,12 +117,9 @@ if (!$smarty->is_cached('index.dwt', $cache_id))
     $smarty->assign('best_goods',      get_recommend_goods('best'));    // 推荐商品
     $smarty->assign('new_goods',       get_recommend_goods('new'));     // 最新商品
     $smarty->assign('hot_goods',       get_recommend_goods('hot'));     // 热点文章
-    $smarty->assign('promotion_goods', get_recommend_goods('promote')); // 特价商品
+    $smarty->assign('promotion_goods', get_promote_goods()); // 特价商品
     $smarty->assign('brand_list',      get_brands());
-    $smarty->assign('promotion_info', get_promotion_info()); // 增加一个动态显示所有促销信息的标签栏
-
-    $searchkeywords = !empty($_CFG['search_keywords']) ? explode(' ', trim($_CFG['search_keywords'])) : array();
-    $smarty->assign('searchkeywords', $searchkeywords);
+    $smarty->assign('promotion_info',  get_promotion_info()); // 增加一个动态显示所有促销信息的标签栏
 
     $smarty->assign('invoice_list',    index_get_invoice_query());  // 发货查询
     $smarty->assign('new_articles',    index_get_new_articles());   // 最新文章
@@ -97,10 +127,32 @@ if (!$smarty->is_cached('index.dwt', $cache_id))
     $smarty->assign('auction_list',    index_get_auction());        // 拍卖活动
     $smarty->assign('shop_notice',     $_CFG['shop_notice']);       // 商店公告
 
+    /* 首页主广告设置 */
+    $smarty->assign('index_ad',     $_CFG['index_ad']);
+    if ($_CFG['index_ad'] == 'cus')
+    {
+        $sql = 'SELECT ad_type, content, url FROM ' . $ecs->table("ad_custom") . ' WHERE ad_status = 1';
+        $ad = $db->getRow($sql, true);
+        $smarty->assign('ad', $ad);
+    }
+
     /* links */
     $links = index_get_links();
     $smarty->assign('img_links',       $links['img']);
     $smarty->assign('txt_links',       $links['txt']);
+    $smarty->assign('data_dir',        DATA_DIR);       // 数据目录
+
+    /* 首页推荐分类 */
+    $cat_recommend_res = $db->getAll("SELECT c.cat_id, c.cat_name, cr.recommend_type FROM " . $ecs->table("cat_recommend") . " AS cr INNER JOIN " . $ecs->table("category") . " AS c ON cr.cat_id=c.cat_id");
+    if (!empty($cat_recommend_res))
+    {
+        $cat_rec_array = array();
+        foreach($cat_recommend_res as $cat_recommend_data)
+        {
+            $cat_rec[$cat_recommend_data['recommend_type']][] = array('cat_id' => $cat_recommend_data['cat_id'], 'cat_name' => $cat_recommend_data['cat_name']);
+        }
+        $smarty->assign('cat_rec', $cat_rec);
+    }
 
     /* 页面中的动态内容 */
     assign_dynamic('index');
@@ -122,7 +174,7 @@ function index_get_invoice_query()
 {
     $sql = 'SELECT o.order_sn, o.invoice_no, s.shipping_code FROM ' . $GLOBALS['ecs']->table('order_info') . ' AS o' .
             ' LEFT JOIN ' . $GLOBALS['ecs']->table('shipping') . ' AS s ON s.shipping_id = o.shipping_id' .
-            " WHERE invoice_no > '' AND shipping_status = " . SS_SHIPPED.
+            " WHERE invoice_no > '' AND shipping_status = " . SS_SHIPPED .
             ' ORDER BY shipping_time DESC LIMIT 10';
     $all = $GLOBALS['db']->getAll($sql);
 
@@ -152,7 +204,7 @@ function index_get_invoice_query()
  */
 function index_get_new_articles()
 {
-    $sql = 'SELECT a.article_id, a.title, ac.cat_name, a.add_time, a.file_url, a.open_type, ac.cat_id ' .
+    $sql = 'SELECT a.article_id, a.title, ac.cat_name, a.add_time, a.file_url, a.open_type, ac.cat_id, ac.cat_name ' .
             ' FROM ' . $GLOBALS['ecs']->table('article') . ' AS a, ' .
                 $GLOBALS['ecs']->table('article_cat') . ' AS ac' .
             ' WHERE a.is_open = 1 AND a.cat_id = ac.cat_id AND ac.cat_type = 1' .
@@ -170,7 +222,7 @@ function index_get_new_articles()
         $arr[$idx]['add_time']    = local_date($GLOBALS['_CFG']['date_format'], $row['add_time']);
         $arr[$idx]['url']         = $row['open_type'] != 1 ?
                                         build_uri('article', array('aid' => $row['article_id']), $row['title']) : trim($row['file_url']);
-        $arr[$idx]['cat_url']     = build_uri('article_cat', array('acid' => $row['cat_id']));
+        $arr[$idx]['cat_url']     = build_uri('article_cat', array('acid' => $row['cat_id']), $row['cat_name']);
     }
 
     return $arr;
@@ -205,7 +257,8 @@ function index_get_group_buy()
         while ($row = $GLOBALS['db']->fetchRow($res))
         {
             /* 如果缩略图为空，使用默认图片 */
-            $row['thumb'] = empty($row['goods_thumb']) ? $GLOBALS['_CFG']['no_picture'] : $row['goods_thumb'];
+            $row['goods_img'] = get_image_path($row['goods_id'], $row['goods_img']);
+            $row['thumb'] = get_image_path($row['goods_id'], $row['goods_thumb'], true);
 
             /* 根据价格阶梯，计算最低价 */
             $ext_info = unserialize($row['ext_info']);
@@ -262,7 +315,7 @@ function index_get_auction()
         $arr = array_merge($row, $ext_info);
         $arr['formated_start_price'] = price_format($arr['start_price']);
         $arr['formated_end_price'] = price_format($arr['end_price']);
-        $arr['thumb'] = empty($arr['goods_thumb']) ? $GLOBALS['_CFG']['no_picture'] : $arr['goods_thumb'];
+        $arr['thumb'] = get_image_path($row['goods_id'], $row['goods_thumb'], true);
         $arr['url'] = build_uri('auction', array('auid' => $arr['act_id']));
         $arr['short_name']   = $GLOBALS['_CFG']['goods_name_length'] > 0 ?
                                            sub_str($arr['goods_name'], $GLOBALS['_CFG']['goods_name_length']) : $arr['goods_name'];

@@ -3,15 +3,14 @@
 /**
  * ECSHOP 转换程序
  * ============================================================================
- * 版权所有 (C) 2005-2007 康盛创想（北京）科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com
+ * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com；
  * ----------------------------------------------------------------------------
- * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
- * 进行修改、使用和再发布。
+ * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
+ * 使用；不允许对程序代码以任何形式任何目的的再发布。
  * ============================================================================
- * $Author: testyang $
- * $Date: 2008-01-28 19:27:47 +0800 (星期一, 28 一月 2008) $
- * $Id: convert.php 14080 2008-01-28 11:27:47Z testyang $
+ * $Author: liubo $
+ * $Id: convert.php 17217 2011-01-19 06:29:08Z liubo $
  */
 
 define('IN_ECS', true);
@@ -24,8 +23,7 @@ require(dirname(__FILE__) . '/includes/init.php');
 
 if ($_REQUEST['act'] == 'main')
 {
-    /* 检查权限：只有超级管理员（安装本系统的人）才可以执行此操作 */
-    admin_priv('all');
+    admin_priv('convert');
 
     /* 取得插件文件中的转换程序 */
     $modules = read_modules('../includes/modules/convert');
@@ -68,11 +66,12 @@ if ($_REQUEST['act'] == 'main')
 elseif ($_REQUEST['act'] == 'check')
 {
     /* 检查权限 */
-    check_authz_json('all');
+    check_authz_json('convert');
 
     /* 取得参数 */
     include_once(ROOT_PATH . 'includes/cls_json.php');
     $json = new JSON;
+//    $_POST['JSON'] = '{"host":"localhost","db":"shopex","user":"root","pass":"123456","prefix":"sdb_","code":"shopex48","path":"../shopex","charset":"UTF8"}';
     $config = $json->decode($_POST['JSON']);
 
     /* 测试连接数据库 */
@@ -117,7 +116,7 @@ elseif ($_REQUEST['act'] == 'check')
     }
 
     /* 创建图片目录 */
-    $img_dir = ROOT_PATH . 'images/' . date('Ym') . '/';
+    $img_dir = ROOT_PATH . IMAGE_DIR . '/' . date('Ym') . '/';
     if (!file_exists($img_dir))
     {
         make_dir($img_dir);
@@ -125,9 +124,9 @@ elseif ($_REQUEST['act'] == 'check')
 
     /* 需要检查可写的目录 */
     $to_dir_list = array(
-        ROOT_PATH . 'images/upload/',
+        ROOT_PATH . IMAGE_DIR . '/upload/',
         $img_dir,
-        ROOT_PATH . 'data/afficheimg/',
+        ROOT_PATH . DATA_DIR . '/afficheimg/',
         ROOT_PATH . 'cert/'
     );
 
@@ -168,10 +167,10 @@ elseif ($_REQUEST['act'] == 'process')
     set_time_limit(0);
 
     /* 检查权限 */
-    check_authz_json('all');
+    check_authz_json('convert');
 
     /* 取得参数 */
-    $step = $_POST['step'];
+    $step = json_str_iconv($_POST['step']);
 
     /* 连接原数据库 */
     $config = $_SESSION['convert_config'];
@@ -258,6 +257,54 @@ function copy_files($from_dir, $to_dir, $file_prefix = '')
 
     /* 全部复制成功，返回true */
     return true;
+}
+
+/**
+ * 把一个目录的文件复制到另一个目录（包括子目录）
+ * 前提：$from_dir 是目录且存在且可读，$to_dir 是目录且存在且可写
+ *
+ * @param   string  $from_dir   源目录
+ * @param   string  $to_dir     目标目录
+ * @param   string  $file_prefix 文件前缀
+ * @return  mix     成功返回true，否则返回第一个失败的文件名
+ */
+function copy_dirs($from_dir, $to_dir, $file_prefix = '')
+{
+    $result = true;
+    if(! is_dir($from_dir))
+    {
+        die("It's not a dir");
+    }
+    if(! is_dir($to_dir))
+    {
+        if(! mkdir($to_dir, 0700))
+        {
+            die("can't mkdir");
+        }
+    }
+    $handle = opendir($from_dir);
+    while(($file = readdir($handle)) !== false)
+    {
+        if($file != '.' && $file != '..')
+        {
+            $src = $from_dir . DIRECTORY_SEPARATOR . $file;
+            $dtn = $to_dir . DIRECTORY_SEPARATOR . $file_prefix . $file;
+            if(is_dir($src))
+            {
+                copy_dirs($src, $dtn);
+            }
+            else
+            {
+                if(! copy($src, $dtn))
+                {
+                    $result = false;
+                    break;
+                }
+            }
+        }
+    }
+    closedir($handle);
+    return $result;
 }
 
 ?>

@@ -3,7 +3,7 @@
 /**
  * ECSHOP Bonus type/Bonus management program
  * ============================================================================
- * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -11,17 +11,16 @@
  * republish the program code, on the premise of that your behavior is not for
  * commercial purposes.
  * ============================================================================
- * $Author: paulgao $
- * $Date: 2007-02-13 10:51:45 +0800$(Tuesday,13 February 2007)
- * $Id: bonus.php 5814 2007-02-13 02:51:45Z paulgao $
+ * $Author: liubo $
+ * $Id: bonus.php 17217 2011-01-19 06:29:08Z liubo $
 */
 /* Bonus type feild information */
 $_LANG['bonus_type'] = 'Bonus Type';
 $_LANG['bonus_list'] = 'Bonus List';
 $_LANG['type_name'] = 'Name';
 $_LANG['type_money'] = 'Bonus money';
-$_LANG['min_goods_amount'] = '最小订单金额';
-$_LANG['notice_min_goods_amount'] = '只有商品总金额达到这个数的订单才能使用这种红包';
+$_LANG['min_goods_amount'] = 'Minimum orders amount';
+$_LANG['notice_min_goods_amount'] = 'Only the total amount of merchandise to achieve this the number of orders to use such red packets';
 $_LANG['min_amount'] = 'Min limit';
 $_LANG['max_amount'] = 'Max limit';
 $_LANG['send_startdate'] = 'Start time';
@@ -72,6 +71,7 @@ $_LANG['continus_add'] = 'Continue add bonus type.';
 $_LANG['back_list'] = 'Return to bonus type list.';
 $_LANG['continue_add'] = 'Continue to add bonus.';
 $_LANG['back_bonus_list'] = 'Return to bonus list';
+$_LANG['validated_email'] = 'Only to authenticated users through the mail issuance of red packets';
 
 /* Prompting message */
 $_LANG['attradd_succed'] = 'Operation successfully!';
@@ -88,14 +88,14 @@ $_LANG['js_languages']['bonus_sum_number'] = 'Provide bonus quantity must be an 
 $_LANG['js_languages']['bonus_type_empty'] = 'Please select bonus type money!';
 $_LANG['js_languages']['user_rank_empty'] = 'Please appoint member rank!';
 $_LANG['js_languages']['user_name_empty'] = 'Please select a member at least!';
-$_LANG['js_languages']['invalid_min_amount'] = '请输入订单下限（大于0的数字）';
+$_LANG['js_languages']['invalid_min_amount'] = 'Please enter a minimum level of orders (the figure is greater than 0)';
 $_LANG['js_languages']['send_start_lt_end'] = 'bonus release date can not be greater than the beginning date of the end';
 $_LANG['js_languages']['use_start_lt_end'] = 'bonus use date can not be greater than the beginning date of the end';
 
-$_LANG['order_money_notic'] = '只要订单金额达到该数值，就会发放红包给用户';
+$_LANG['order_money_notic'] = 'As long as the amount of the value of orders will be issued red packets to the user';
 $_LANG['type_money_notic'] = 'The type bonus can offset money';
 $_LANG['send_startdate_notic'] = 'The type bonus can be provided only current time between start time and deadline.';
-$_LANG['use_startdate_notic'] = '只有当前时间介于起始日期和截止日期之间时，此类型的红包才可以使用';
+$_LANG['use_startdate_notic'] = 'Only the current time between the start date and the time between the closing date, this type of red packets can only be used';
 $_LANG['type_name_exist'] = 'The type name already exists.';
 $_LANG['type_money_error'] = 'The money must be a figure and can\'t less than 0!';
 $_LANG['bonus_sn_notic'] = 'TIP: Bonus NO. is composed of 6 bits serial number seed and 4 bits stochastic numbers.';
@@ -130,5 +130,5 @@ $_LANG['confirm_send_bonus'] ='Submit';
 $_LANG['bonus_not_exist'] = 'The bonus is nonexistent.';
 $_LANG['success_send_mail'] = 'Send %d mails successfully.';
 $_LANG['send_continue'] = 'Continue to send bonus.';
-
+$_LANG['send_to_user'] = 'Disseminate the red envelope to the following users.';
 ?>

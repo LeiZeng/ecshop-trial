@@ -386,12 +386,26 @@ function changeBonusResponse(obj)
  */
 function validateBonus(bonusSn)
 {
-  Ajax.call('flow.php?step=validate_bonus', 'bonus_sn=' + bonusSn, validateBonusResponse, 'GET');
+  Ajax.call('flow.php?step=validate_bonus', 'bonus_sn=' + bonusSn, validateBonusResponse, 'GET', 'JSON');
 }
 
-function validateBonusResponse(result)
+function validateBonusResponse(obj)
 {
-  alert(result);
+
+if (obj.error)
+  {
+    alert(obj.error);
+    orderSelectedResponse(obj.content);
+    try
+    {
+      document.getElementById('ECS_BONUSN').value = '0';
+    }
+    catch (ex) { }
+  }
+  else
+  {
+    orderSelectedResponse(obj.content);
+  }
 }
 
 /* *
@@ -413,7 +427,7 @@ function changeNeedInv()
     objType.disabled = ! obj.checked;
   }
 
-  Ajax.call('flow.php?step=change_needinv', 'need_inv=' + needInv + '&inv_type=' + invType + '&inv_payee=' + invPayee + '&inv_content=' + invContent, orderSelectedResponse, 'GET');
+  Ajax.call('flow.php?step=change_needinv', 'need_inv=' + needInv + '&inv_type=' + encodeURIComponent(invType) + '&inv_payee=' + encodeURIComponent(invPayee) + '&inv_content=' + encodeURIComponent(invContent), orderSelectedResponse, 'GET');
 }
 
 /* *
@@ -520,7 +534,7 @@ function checkOrderForm(frm)
       }
     }
   }
-
+  frm.action = frm.action + '?step=done';
   return true;
 }
 

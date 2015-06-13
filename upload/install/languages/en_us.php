@@ -3,7 +3,7 @@
 /**
  * ECSHOP Install program language file
  * ============================================================================
- * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -11,15 +11,14 @@
  * republish the program code, on the premise of that your behavior is not for
  * commercial purposes.
  * ============================================================================
- * $Author: luhengqi $
- * $Date: 2007-03-07 17:59:06 +0800 (Wednesday, 07 March 2007) $
- * $Id: zh_cn.php 6586 2007-03-07 09:59:06Z luhengqi $
+ * $Author: liubo $
+ * $Id: en_us.php 17217 2011-01-19 06:29:08Z liubo $
  */
 
 /* Common language item */
 $_LANG['prev_step'] = 'Previous:';
 $_LANG['next_step'] = 'Next:';
-$_LANG['copyright'] = '&copy; 2005-2007 <a href="http://www.ecshop.com" target="_blank">Beijing Yi Shang Interactive Technology Development Ltd. </a> <br> All right reserved.';
+$_LANG['copyright'] = '&copy; 2005-2012 <a href="http://www.ecshop.com" target="_blank">Shanghai ShopEx Network Technology Co,.Ltd. </a> <br> All right reserved.';
 
 
 /* Welcome page */
@@ -30,7 +29,8 @@ $_LANG['traditional_chinese'] = 'Traditional Chinese';
 $_LANG['americanese'] = 'English';
 $_LANG['agree_license'] = 'I have read carefully，I accept the terms of the License Agreement';
 $_LANG['check_system_environment'] = 'Checking system environment';
-
+$_LANG['setup_environment'] = 'Configuration installation environment';
+$_LANG['loading'] = 'Loading,please wait...';
 
 /* Check environment page */
 $_LANG['checking_title'] = 'ECShop install program, the 2 step / 3 steps, check enviroment';
@@ -77,6 +77,7 @@ $_LANG['db_pass'] = 'Password:';
 $_LANG['go'] = 'Search';
 $_LANG['db_list'] = 'Database list';
 $_LANG['db_prefix'] = 'Prefixion:';
+$_LANG['change_prefix'] = 'Propose to change your Prefixion';
 $_LANG['admin_account'] = 'Administrator accounts';
 $_LANG['admin_name'] = 'Administrator name:';
 $_LANG['admin_password'] = 'password:';
@@ -101,11 +102,17 @@ $_LANG['dv'] = 'Digital vidicon';
 $_LANG['cosmetics'] = 'Cosmetics';
 $_LANG['install_at_once'] = 'Install at once';
 $_LANG['default_friend_link'] = 'ECSHOP e-commerce management system';
+$_LANG['maifou_friend_link'] = 'maifou';
+$_LANG['wdwd_friend_link']='Free independent online store';
 $_LANG['monitor_title'] = 'Installer Monitor';
 $_LANG['admin_user'][] = 'Goods list|goods.php?act=list';
 $_LANG['admin_user'][] = 'Order list|order.php?act=list';
 $_LANG['admin_user'][] = 'User comments|comment_manage.php?act=list';
 $_LANG['admin_user'][] = 'User list|users.php?act=list';
+$_LANG['password_intensity'] = 'Password intensity';
+$_LANG['pwd_lower'] = 'Lower';
+$_LANG['pwd_middle'] = 'Middle';
+$_LANG['pwd_high'] = 'High';
 
 /* Prompting message */
 $_LANG['has_locked_installer'] = '<strong>Install program has locked.</strong><br /><br />If you confirm reinstall ECSHOP, please delete install.lock in data directory.';
@@ -146,5 +153,9 @@ $_LANG['js_languages']['do_others'] = 'Deal with others...................';
 $_LANG['js_languages']['display_detail'] = 'Show detail';
 $_LANG['js_languages']['hide_detail'] = 'Hide detail';
 $_LANG['js_languages']['has_been_stopped'] = 'The process has been stopped.';
+$_LANG['js_languages']['setup_ucenter'] = 'Register to UCenter............';
+$_LANG['js_languages']['password_invaild'] = 'Must contain numbers and letters!';
+$_LANG['js_languages']['password_short'] = 'Should not be less than 8!';
+$_LANG['js_languages']['password_not_eq'] = 'The two passwords did not match.';
 
 ?>

@@ -3,7 +3,7 @@
 /**
  * ECSHOP
  * ============================================================================
- * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -11,9 +11,8 @@
  * republish the program code, on the premise of that your behavior is not for
  * commercial purposes.
  * ============================================================================
- * $Author: liry $
- * $Date: 2007-02-03 19:41:07 +0800 (Saturday, 03 February 2007) $
- * $Id: shophelp.php 5062 2007-02-03 11:41:07Z liry $
+ * $Author: liubo $
+ * $Id: shophelp.php 17217 2011-01-19 06:29:08Z liubo $
 */
 $_LANG['shophelp_add'] = 'Add new help';
 $_LANG['cat_add'] = 'Add new category';

@@ -3,15 +3,14 @@
 /**
  * ECSHOP 用户交易相关函数库
  * ============================================================================
- * 版权所有 (C) 2005-2007 康盛创想（北京）科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com
+ * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com；
  * ----------------------------------------------------------------------------
- * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
- * 进行修改、使用和再发布。
+ * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
+ * 使用；不允许对程序代码以任何形式任何目的的再发布。
  * ============================================================================
- * $Author: wj $
- * $Date: 2007-01-19 15:31:01 +0800 (五, 19  1月 2007) $
- * $Id: lib_profile.php 4369 2007-01-19 07:31:01Z wj $
+ * $Author: liubo $
+ * $Id: lib_transaction.php 17217 2011-01-19 06:29:08Z liubo $
 */
 
 if (!defined('IN_ECS'))
@@ -83,7 +82,7 @@ function edit_profile($profile)
         }
         else
         {
-            $profile['other'][$key] =  htmlentities($val); //防止用户输入javascript代码
+            $profile['other'][$key] =  htmlspecialchars(trim($val)); //防止用户输入javascript代码
         }
     }
     /* 修改在其他资料 */
@@ -111,10 +110,11 @@ function get_profile($user_id)
     /* 会员帐号信息 */
     $info  = array();
     $infos = array();
-    $sql  = "SELECT user_name, birthday, sex, question, answer, rank_points, pay_points,user_money, user_rank,  ".
-             " msn, qq, office_phone, home_phone, mobile_phone ".
+    $sql  = "SELECT user_name, birthday, sex, question, answer, rank_points, pay_points,user_money, user_rank,".
+             " msn, qq, office_phone, home_phone, mobile_phone, passwd_question, passwd_answer ".
            "FROM " .$GLOBALS['ecs']->table('users') . " WHERE user_id = '$user_id'";
     $infos = $GLOBALS['db']->getRow($sql);
+    $infos['user_name'] = addslashes($infos['user_name']);
 
     $row = $user->get_profile_by_name($infos['user_name']); //获取用户帐号信息
     $_SESSION['email'] = $row['email'];    //注册SESSION
@@ -176,6 +176,8 @@ function get_profile($user_id)
     $info['office_phone']= $infos['office_phone'];
     $info['home_phone']   = $infos['home_phone'];
     $info['mobile_phone'] = $infos['mobile_phone'];
+    $info['passwd_question'] = $infos['passwd_question'];
+    $info['passwd_answer'] = $infos['passwd_answer'];
 
     return $info;
 }
@@ -285,7 +287,7 @@ function get_user_orders($user_id, $num = 10, $start = 0)
     $arr    = array();
 
     $sql = "SELECT order_id, order_sn, order_status, shipping_status, pay_status, add_time, " .
-           "(goods_amount + shipping_fee + insure_fee + pay_fee + pack_fee + card_fee + tax) AS total_fee ".
+           "(goods_amount + shipping_fee + insure_fee + pay_fee + pack_fee + card_fee + tax - discount) AS total_fee ".
            " FROM " .$GLOBALS['ecs']->table('order_info') .
            " WHERE user_id = '$user_id' ORDER BY add_time DESC";
     $res = $GLOBALS['db']->SelectLimit($sql, $num, $start);
@@ -296,7 +298,7 @@ function get_user_orders($user_id, $num = 10, $start = 0)
         {
             $row['handler'] = "<a href=\"user.php?act=cancel_order&order_id=" .$row['order_id']. "\" onclick=\"if (!confirm('".$GLOBALS['_LANG']['confirm_cancel']."')) return false;\">".$GLOBALS['_LANG']['cancel']."</a>";
         }
-        else if ($row['order_status'] == OS_CONFIRMED)
+        else if ($row['order_status'] == OS_SPLITED)
         {
             /* 对配送状态的处理 */
             if ($row['shipping_status'] == SS_SHIPPED)
@@ -325,6 +327,7 @@ function get_user_orders($user_id, $num = 10, $start = 0)
             $row['handler'] = '<span style="color:red">'.$GLOBALS['_LANG']['os'][$row['order_status']] .'</span>';
         }
 
+        $row['shipping_status'] = ($row['shipping_status'] == SS_SHIPPED_ING) ? SS_PREPARING : $row['shipping_status'];
         $row['order_status'] = $GLOBALS['_LANG']['os'][$row['order_status']] . ',' . $GLOBALS['_LANG']['ps'][$row['pay_status']] . ',' . $GLOBALS['_LANG']['ss'][$row['shipping_status']];
 
         $arr[] = array('order_id'       => $row['order_id'],
@@ -350,7 +353,7 @@ function get_user_orders($user_id, $num = 10, $start = 0)
 function cancel_order($order_id, $user_id = 0)
 {
     /* 查询订单信息，检查状态 */
-    $sql = "SELECT user_id, order_sn , surplus , integral , bonus_id, order_status, shipping_status, pay_status FROM " .$GLOBALS['ecs']->table('order_info') ." WHERE order_id = '$order_id'";
+    $sql = "SELECT user_id, order_id, order_sn , surplus , integral , bonus_id, order_status, shipping_status, pay_status FROM " .$GLOBALS['ecs']->table('order_info') ." WHERE order_id = '$order_id'";
     $order = $GLOBALS['db']->GetRow($sql);
 
     if (empty($order))
@@ -420,6 +423,22 @@ function cancel_order($order_id, $user_id = 0)
         {
             change_user_bonus($order['bonus_id'], $order['order_id'], false);
         }
+
+        /* 如果使用库存，且下订单时减库存，则增加库存 */
+        if ($GLOBALS['_CFG']['use_storage'] == '1' && $GLOBALS['_CFG']['stock_dec_time'] == SDT_PLACE)
+        {
+            change_order_goods_storage($order['order_id'], false, 1);
+        }
+
+        /* 修改订单 */
+        $arr = array(
+            'bonus_id'  => 0,
+            'bonus'     => 0,
+            'integral'  => 0,
+            'integral_money'    => 0,
+            'surplus'   => 0
+        );
+        update_order($order['order_id'], $arr);
 
         return true;
     }
@@ -499,7 +518,7 @@ function save_consignee($consignee, $default=false)
     if ($consignee['address_id'] > 0)
     {
         /* 修改地址 */
-        $res = $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('user_address'), $consignee, 'UPDATE', 'address_id = ' . $consignee['address_id']);
+        $res = $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('user_address'), $consignee, 'UPDATE', 'address_id = ' . $consignee['address_id']." AND `user_id`= '".$_SESSION['user_id']."'");
     }
     else
     {
@@ -560,7 +579,7 @@ function update_address($address)
     if ($address_id > 0)
     {
          /* 更新指定记录 */
-        $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('user_address'), $address, 'UPDATE', 'address_id = ' .$address_id);
+        $GLOBALS['db']->autoExecute($GLOBALS['ecs']->table('user_address'), $address, 'UPDATE', 'address_id = ' .$address_id . ' AND user_id = ' . $address['user_id']);
     }
     else
     {
@@ -701,14 +720,32 @@ function get_order_detail($order_id, $user_id = 0)
                         $virtual_card[] = array('goods_id'=>$goods['goods_id'], 'goods_name'=>$goods['goods_name'], 'info'=>$info);
                     }
                 }
+            }
+            /* 处理超值礼包里面的虚拟卡 */
+            if ($code == 'package_buy')
+            {
+                foreach ($goods_list as $goods)
+                {
+                    $sql = 'SELECT g.goods_id FROM ' . $GLOBALS['ecs']->table('package_goods') . ' AS pg, ' . $GLOBALS['ecs']->table('goods') . ' AS g ' .
+                           "WHERE pg.goods_id = g.goods_id AND pg.package_id = '" . $goods['goods_id'] . "' AND extension_code = 'virtual_card'";
+                    $vcard_arr = $GLOBALS['db']->getAll($sql);
 
-                $GLOBALS['smarty']->assign('virtual_card',      $virtual_card);
+                    foreach ($vcard_arr AS $val)
+                    {
+                        if ($info = virtual_card_result($order['order_sn'], $val))
+                        {
+                            $virtual_card[] = array('goods_id'=>$goods['goods_id'], 'goods_name'=>$goods['goods_name'], 'info'=>$info);
+                        }
+                    }
+                }
             }
         }
+        $var_card = deleteRepeat($virtual_card);
+        $GLOBALS['smarty']->assign('virtual_card', $var_card);
     }
 
     /* 确认时间 支付时间 发货时间 */
-    if ($order['confirm_time'] > 0 && $order['order_status'] == OS_CONFIRMED)
+    if ($order['confirm_time'] > 0 && ($order['order_status'] == OS_CONFIRMED || $order['order_status'] == OS_SPLITED || $order['order_status'] == OS_SPLITING_PART))
     {
         $order['confirm_time'] = sprintf($GLOBALS['_LANG']['confirm_time'], local_date($GLOBALS['_CFG']['time_format'], $order['confirm_time']));
     }
@@ -820,9 +857,9 @@ function return_to_cart($order_id)
     $basic_number = array();
 
     /* 查订单商品：不考虑赠品 */
-    $sql = "SELECT goods_id, goods_number, goods_attr, parent_id" .
+    $sql = "SELECT goods_id, product_id,goods_number, goods_attr, parent_id, goods_attr_id" .
             " FROM " . $GLOBALS['ecs']->table('order_goods') .
-            " WHERE order_id = '$order_id' AND is_gift = 0" .
+            " WHERE order_id = '$order_id' AND is_gift = 0 AND extension_code <> 'package_buy'" .
             " ORDER BY parent_id ASC";
     $res = $GLOBALS['db']->query($sql);
 
@@ -844,34 +881,44 @@ function return_to_cart($order_id)
         {
             continue;
         }
-
-        // 如果使用库存，且库存不足，修改数量
-        if ($GLOBALS['_CFG']['use_storage'] == 1 && $goods['goods_number'] < $row['goods_number'])
+        if($row['product_id'])
         {
-            if ($goods['goods_number'] == 0)
+            $order_goods_product_id=$row['product_id'];
+            $sql="SELECT product_number from ".$GLOBALS['ecs']->table('products')."where product_id='$order_goods_product_id'";
+            $product_number=$GLOBALS['db']->getOne($sql);
+        }
+        // 如果使用库存，且库存不足，修改数量
+        if ($GLOBALS['_CFG']['use_storage'] == 1 && ($row['product_id']?($product_number<$row['goods_number']):($goods['goods_number'] < $row['goods_number'])))
+        {
+            if ($goods['goods_number'] == 0 || $product_number=== 0)
             {
                 // 如果库存为0，处理下一个商品
                 continue;
             }
             else
             {
+                if($row['product_id'])
+                {
+                 $row['goods_number']=$product_number;
+                }
+                else
+                {
                 // 库存不为0，修改数量
                 $row['goods_number'] = $goods['goods_number'];
+                }
             }
         }
 
-        // 如果有属性值，查询有效的属性值
-        if ($row['goods_attr'] != '' && $goods['goods_type'] > 0)
-        {
-            $sql = "SELECT goods_attr_id " .
-                    "FROM " . $GLOBALS['ecs']->table('attribute') . " AS a, " . $GLOBALS['ecs']->table('goods_attr') . " AS ga " .
-                    "WHERE a.cat_id = '$goods[goods_type]' " .
-                    "AND a.attr_id = ga.attr_id " .
-                    "AND ga.goods_id = '$row[goods_id]' " .
-                    "AND ga.goods_attr_id " . db_create_in($row['goods_attr']);
-            $attr_id = $GLOBALS['db']->getCol($sql);
-            $row['goods_attr'] = join(',', $attr_id);
-        }
+        //检查商品价格是否有会员价格
+        $sql = "SELECT goods_number FROM" . $GLOBALS['ecs']->table('cart') . " " .
+                "WHERE session_id = '" . SESS_ID . "' " .
+                "AND goods_id = '" . $row['goods_id'] . "' " .
+                "AND rec_type = '" . CART_GENERAL_GOODS . "' LIMIT 1";
+        $temp_number = $GLOBALS['db']->getOne($sql);
+        $row['goods_number'] += $temp_number;
+
+        $attr_array           = empty($row['goods_attr_id']) ? array() : explode(',', $row['goods_attr_id']);
+        $goods['goods_price'] = get_final_price($row['goods_id'], $row['goods_number'], true, $attr_array);
 
         // 要返回购物车的商品
         $return_goods = array(
@@ -881,7 +928,8 @@ function return_to_cart($order_id)
             'market_price'  => $goods['market_price'],
             'goods_price'   => $goods['goods_price'],
             'goods_number'  => $row['goods_number'],
-            'goods_attr'    => addslashes($row['goods_attr']),
+            'goods_attr'    => empty($row['goods_attr']) ? '' : addslashes($row['goods_attr']),
+            'goods_attr_id'    => empty($row['goods_attr_id']) ? '' : addslashes($row['goods_attr_id']),
             'is_real'       => $goods['is_real'],
             'extension_code'=> addslashes($goods['extension_code']),
             'parent_id'     => '0',
@@ -942,9 +990,10 @@ function return_to_cart($order_id)
         {
             // 有相同商品，修改数量
             $sql = "UPDATE " . $GLOBALS['ecs']->table('cart') . " SET " .
-                    "goods_number = goods_number + '$return_goods[goods_number]' " .
+                    "goods_number = '" . $return_goods['goods_number'] . "' " .
+                    ",goods_price = '" . $return_goods['goods_price'] . "' " .
                     "WHERE session_id = '" . SESS_ID . "' " .
-                    "AND goods_id = '$return_goods[goods_id]' " .
+                    "AND goods_id = '" . $return_goods['goods_id'] . "' " .
                     "AND rec_type = '" . CART_GENERAL_GOODS . "' LIMIT 1";
             $GLOBALS['db']->query($sql);
         }
@@ -1095,4 +1144,22 @@ function get_user_group_buy($user_id, $num = 10, $start = 0)
      return true;
  }
 
+ /**
+  * 去除虚拟卡中重复数据
+  *
+  *
+  */
+function deleteRepeat($array){
+    $_card_sn_record = array();
+    foreach ($array as $_k => $_v){
+        foreach ($_v['info'] as $__k => $__v){
+            if (in_array($__v['card_sn'],$_card_sn_record)){
+                unset($array[$_k]['info'][$__k]);
+            } else {
+                array_push($_card_sn_record,$__v['card_sn']);
+            }
+        }
+    }
+    return $array;
+}
 ?>

@@ -3,18 +3,17 @@
 /**
  * ECSHOP 管理中心模版管理程序
  * ============================================================================
- * 版权所有 (C) 2005-2007 康盛创想（北京）科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com
+ * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com；
  * ----------------------------------------------------------------------------
- * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
- * 进行修改、使用和再发布。
+ * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
+ * 使用；不允许对程序代码以任何形式任何目的的再发布。
  * ============================================================================
  * @author:     Weber Liu <weberliu@hotmail.com>
  * @version:    v2.1
  * ---------------------------------------------
- * $Author: dolphin $
- * $Date: 2008-02-22 15:55:39 +0800 (星期五, 22 二月 2008) $
- * $Id: template.php 14181 2008-02-22 07:55:39Z dolphin $
+ * $Author: liubo $
+ * $Id: template.php 17217 2011-01-19 06:29:08Z liubo $
 */
 
 define('IN_ECS', true);
@@ -27,8 +26,11 @@ require_once('includes/lib_template.php');
 /*------------------------------------------------------ */
 if ($_REQUEST['act'] == 'list')
 {
+    admin_priv('template_select');
+
     /* 获得当前的模版的信息 */
     $curr_template = $_CFG['template'];
+    $curr_style = $_CFG['stylename'];
 
     /* 获得可用的模版 */
     $available_templates = array();
@@ -42,6 +44,16 @@ if ($_REQUEST['act'] == 'list')
     }
     @closedir($template_dir);
 
+    /* 获得可用的模版的可选风格数组 */
+    $templates_style = array();
+    if (count($available_templates) > 0)
+    {
+        foreach ($available_templates as $value)
+        {
+            $templates_style[$value['code']] = read_tpl_style($value['code'], 2);
+        }
+    }
+
     /* 清除不需要的模板设置 */
     $available_code = array();
     $sql = "DELETE FROM ".$ecs->table('template')." WHERE 1 ";
@@ -50,15 +62,15 @@ if ($_REQUEST['act'] == 'list')
         $sql .= " AND theme <> '".$tmp['code']."' ";
         $available_code[] = $tmp['code'];
     }
-    $tmp_bak_dir = @opendir(ROOT_PATH . 'templates/backup/library/');
+    $tmp_bak_dir = @opendir(ROOT_PATH . 'temp/backup/library/');
     while ($file = readdir($tmp_bak_dir))
     {
-        if ($file != '.' && $file != '..' && $file != '.svn' && $file != 'index.htm' && is_file(ROOT_PATH .'templates/backup/library/' . $file) == true)
+        if ($file != '.' && $file != '..' && $file != '.svn' && $file != 'index.htm' && is_file(ROOT_PATH .'temp/backup/library/' . $file) == true)
         {
             $code = substr($file, 0, strpos($file, '-'));
             if (!in_array($code, $available_code))
             {
-                @unlink(ROOT_PATH . 'templates/backup/library/' . $file);
+                @unlink(ROOT_PATH . 'temp/backup/library/' . $file);
             }
         }
     }
@@ -68,7 +80,9 @@ if ($_REQUEST['act'] == 'list')
     assign_query_info();
 
     $smarty->assign('ur_here',             $_LANG['template_manage']);
-    $smarty->assign('curr_template',       get_template_info($curr_template));
+    $smarty->assign('curr_tpl_style', $curr_style);
+    $smarty->assign('template_style', $templates_style);
+    $smarty->assign('curr_template',       get_template_info($curr_template, $curr_style));
     $smarty->assign('available_templates', $available_templates);
     $smarty->display('templates_list.htm');
 }
@@ -79,7 +93,7 @@ if ($_REQUEST['act'] == 'list')
 
 if ($_REQUEST['act'] == 'setup')
 {
-    admin_priv('template_manage');
+    admin_priv('template_setup');
 
     $template_theme = $_CFG['template'];
     $curr_template  = empty($_REQUEST['template_file']) ? 'index' : $_REQUEST['template_file'];
@@ -88,19 +102,47 @@ if ($_REQUEST['act'] == 'setup')
     $temp_regions   = get_template_region($template_theme, $curr_template.'.dwt', false);
     $temp_libs      = get_template_region($template_theme, $curr_template.'.dwt', true);
 
-    /* 获取数据库中数据，并跟模板中数据核对,并设置动态内容 */
-    /* 固定内容 */
-    foreach ($page_libs[$curr_template] AS $val => $number_enabled)
+    $editable_libs      = get_editable_libs($curr_template, $page_libs[$curr_template]);
+
+    if (empty($editable_libs))
     {
-        $lib = basename(strtolower(substr($val, 0, strpos($val, '.'))));
-        if (!in_array($lib, $GLOBALS['dyna_libs']))
+        /* 获取数据库中数据，并跟模板中数据核对,并设置动态内容 */
+        /* 固定内容 */
+        foreach ($page_libs[$curr_template] AS $val => $number_enabled)
         {
-            /* 先排除动态内容 */
-            $temp_options[$lib]            = get_setted($val, $temp_libs);
-            $temp_options[$lib]['desc']    = $_LANG['template_libs'][$lib];
-            $temp_options[$lib]['library'] = $val;
-            $temp_options[$lib]['number_enabled'] = $number_enabled > 0 ? 1 : 0;
-            $temp_options[$lib]['number'] = $number_enabled;
+            $lib = basename(strtolower(substr($val, 0, strpos($val, '.'))));
+            if (!in_array($lib, $GLOBALS['dyna_libs']))
+            {
+                /* 先排除动态内容 */
+                $temp_options[$lib]            = get_setted($val, $temp_libs);
+                $temp_options[$lib]['desc']    = $_LANG['template_libs'][$lib];
+                $temp_options[$lib]['library'] = $val;
+                $temp_options[$lib]['number_enabled'] = $number_enabled > 0 ? 1 : 0;
+                $temp_options[$lib]['number'] = $number_enabled;
+            }
+        }
+    }
+    else
+    {
+        /* 获取数据库中数据，并跟模板中数据核对,并设置动态内容 */
+        /* 固定内容 */
+        foreach ($page_libs[$curr_template] AS $val => $number_enabled)
+        {
+            $lib = basename(strtolower(substr($val, 0, strpos($val, '.'))));
+            if (!in_array($lib, $GLOBALS['dyna_libs']))
+            {
+                /* 先排除动态内容 */
+                $temp_options[$lib]            = get_setted($val, $temp_libs);
+                $temp_options[$lib]['desc']    = $_LANG['template_libs'][$lib];
+                $temp_options[$lib]['library'] = $val;
+                $temp_options[$lib]['number_enabled'] = $number_enabled > 0 ? 1 : 0;
+                $temp_options[$lib]['number'] = $number_enabled;
+
+                if (!in_array($lib, $editable_libs))
+                {
+                    $temp_options[$lib]['editable'] = 1;
+                }
+            }
         }
     }
 
@@ -212,7 +254,7 @@ if ($_REQUEST['act'] == 'setup')
 
 if ($_REQUEST['act'] == 'setting')
 {
-    admin_priv('template_manage');
+    admin_priv('template_setup');
 
     $curr_template = $_CFG['template'];
     $db->query("DELETE FROM " .$ecs->table('template'). " WHERE remarks = '' AND filename = '$_POST[template_file]' AND theme = '$curr_template'");
@@ -221,12 +263,12 @@ if ($_REQUEST['act'] == 'setting')
     foreach ($_POST['regions'] AS $key => $val)
     {
         $number = isset($_POST['number'][$key]) ? intval($_POST['number'][$key]) : 0;
-        if (!in_array($key, $GLOBALS['dyna_libs']) AND isset($_POST['display'][$key]) AND $_POST['display'][$key] == 1)
+        if (!in_array($key, $GLOBALS['dyna_libs']) AND (isset($_POST['display'][$key]) AND $_POST['display'][$key] == 1 OR $number > 0))
         {
             $sql = "INSERT INTO " .$ecs->table('template').
                         "(theme, filename, region, library, sort_order, number)".
                     " VALUES ".
-                        "('$curr_template', '$_POST[template_file]', '$val', '".$_POST['map'][$key]."', '" .$_POST['sort_order'][$key]. "', '$number')";
+                        "('$curr_template', '$_POST[template_file]', '$val', '".$_POST['map'][$key]."', '" . @$_POST['sort_order'][$key] . "', '$number')";
             $db->query($sql);
         }
     }
@@ -413,7 +455,7 @@ if ($_REQUEST['act'] == 'setting')
                     continue;
                 }
                 $lib_content     = file_get_contents('../themes/' . $curr_template . $lib['library']);
-                $lib_content     = preg_replace('/<meta\\shttp-equiv=["|\']Content-Type["|\']\\scontent=["|\']text\/html;\\scharset=(.*?)["|\']>/i', '', $lib_content);
+                $lib_content     = preg_replace('/<meta\\shttp-equiv=["|\']Content-Type["|\']\\scontent=["|\']text\/html;\\scharset=.*["|\']>/i', '', $lib_content);
                 $lib_content     = str_replace("\xEF\xBB\xBF", '', $lib_content);
                 $region_content .= sprintf($lib_template, $lib['library'], $lib_content);
             }
@@ -425,7 +467,8 @@ if ($_REQUEST['act'] == 'setting')
 
     if (file_put_contents($template_file, $template_content))
     {
-        clear_tpl_files(false, '.dwt.php'); // 清除对应的编译文件
+        //clear_tpl_files(false, '.dwt.php'); // 清除对应的编译文件
+        clear_cache_files();
         $lnk[] = array('text' => $_LANG['go_back'], 'href'=>'template.php?act=setup&template_file=' .$_POST['template_file']);
         sys_msg($_LANG['setup_success'], 0, $lnk);
     }
@@ -441,7 +484,7 @@ if ($_REQUEST['act'] == 'setting')
 
 if ($_REQUEST['act'] == 'library')
 {
-    admin_priv('template_manage');
+    admin_priv('library_manage');
 
     /* 包含插件语言项 */
     $sql = "SELECT code FROM ".$ecs->table('plugins');
@@ -453,7 +496,7 @@ if ($_REQUEST['act'] == 'library')
         {
             include_once(ROOT_PATH . 'plugins/'.$row['code'].'/languages/common_'.$_CFG['lang'].'.php');
         }
-    };
+    }
     $curr_template = $_CFG['template'];
     $arr_library   = array();
     $library_path  = '../themes/' . $curr_template . '/library';
@@ -494,12 +537,18 @@ if ($_REQUEST['act'] == 'library')
 
 if ($_REQUEST['act'] == 'install')
 {
-    check_authz_json('template_manage');
+    check_authz_json('backup_setting');
 
     $tpl_name = trim($_GET['tpl_name']);
+    $tpl_fg=0;
+    $tpl_fg = trim($_GET['tpl_fg']);
 
     $sql = "UPDATE " .$GLOBALS['ecs']->table('shop_config'). " SET value = '$tpl_name' WHERE code = 'template'";
-    if ($db->query($sql, 'SILENT'))
+    $step_one = $db->query($sql, 'SILENT');
+    $sql = "UPDATE " .$GLOBALS['ecs']->table('shop_config'). " SET value = '$tpl_fg' WHERE code = 'stylename'";
+    $step_two = $db->query($sql, 'SILENT');
+
+    if ($step_one && $step_two)
     {
         clear_all_files(); //清除模板编译文件
 
@@ -510,7 +559,7 @@ if ($_REQUEST['act'] == 'install')
         }
         else
         {
-            make_json_result(get_template_info($tpl_name), $_LANG['install_template_success']);
+            make_json_result(read_style_and_tpl($tpl_name, $tpl_fg), $_LANG['install_template_success']);
         }
     }
     else
@@ -525,11 +574,12 @@ if ($_REQUEST['act'] == 'install')
 
 if ($_REQUEST['act'] == 'backup')
 {
+    check_authz_json('backup_setting');
     include_once('includes/cls_phpzip.php');
+    $tpl= $_CFG['template'];
+    //$tpl = trim($_REQUEST['tpl_name']);
 
-    $tpl = trim($_REQUEST['tpl_name']);
-
-    $filename = '../templates/backup/' . $tpl . '_' . date('Ymd') . '.zip';
+    $filename = '../temp/backup/' . $tpl . '_' . date('Ymd') . '.zip';
 
     $zip = new PHPZip;
     $done = $zip->zip('../themes/' . $tpl . '/', $filename);
@@ -562,9 +612,9 @@ if ($_REQUEST['act'] == 'load_library')
 
 if ($_REQUEST['act'] == 'update_library')
 {
-    check_authz_json('template_manage');
+    check_authz_json('library_manage');
 
-    $html = stripslashes($_POST['html']);
+    $html = stripslashes(json_str_iconv($_POST['html']));
     $lib_file = '../themes/' . $_CFG['template'] . '/library/' . $_POST['lib'] . '.lbi';
     $lib_file = str_replace("0xa", '', $lib_file); // 过滤 0xa 非法字符
 
@@ -572,7 +622,7 @@ if ($_REQUEST['act'] == 'update_library')
 
     if (@file_exists($lib_file) === true && @file_put_contents($lib_file, $html))
     {
-        @file_put_contents('../templates/backup/library/' . $_CFG['template'] . '-' . $_POST['lib'] . '.lbi', $org_html);
+        @file_put_contents('../temp/backup/library/' . $_CFG['template'] . '-' . $_POST['lib'] . '.lbi', $org_html);
 
         make_json_result('', $_LANG['update_lib_success']);
     }
@@ -587,10 +637,11 @@ if ($_REQUEST['act'] == 'update_library')
 /*------------------------------------------------------ */
 if ($_REQUEST['act'] == 'restore_library')
 {
+    admin_priv('backup_setting');
     $lib_name   = trim($_GET['lib']);
     $lib_file   = '../themes/' . $_CFG['template'] . '/library/' . $lib_name . '.lbi';
     $lib_file   = str_replace("0xa", '', $lib_file); // 过滤 0xa 非法字符
-    $lib_backup = '../templates/backup/library/' . $_CFG['template'] . '-' . $lib_name . '.lbi';
+    $lib_backup = '../temp/backup/library/' . $_CFG['template'] . '-' . $lib_name . '.lbi';
     $lib_backup = str_replace("0xa", '', $lib_backup); // 过滤 0xa 非法字符
 
     if (file_exists($lib_backup) && filemtime($lib_backup) >= filemtime($lib_file))
@@ -609,6 +660,8 @@ if ($_REQUEST['act'] == 'restore_library')
 /*------------------------------------------------------ */
 if ($_REQUEST['act'] == 'backup_setting')
 {
+    admin_priv('backup_setting');
+
     $sql = "SELECT DISTINCT(remarks) FROM " . $ecs->table('template') . " WHERE theme = '" . $_CFG['template'] . "' AND remarks > ''";
     $col = $db->getCol($sql);
     $remarks = array();
@@ -690,7 +743,7 @@ if ($_REQUEST['act'] == 'restore_backup')
             {
                 $lib_content     = file_get_contents(ROOT_PATH . 'themes/' . $_CFG['template'] . $val['library']);
                 //去除lib头部
-                $lib_content     = preg_replace('/<meta\\shttp-equiv=["|\']Content-Type["|\']\\scontent=["|\']text\/html;\\scharset=(.*?)["|\']>/i', '', $lib_content);
+                $lib_content     = preg_replace('/<meta\\shttp-equiv=["|\']Content-Type["|\']\\scontent=["|\']text\/html;\\scharset=utf-8"|\']>/i', '', $lib_content);
                 //去除utf bom
                 $lib_content     = str_replace("\xEF\xBB\xBF", '', $lib_content);
                 //加入dw 标识
@@ -764,4 +817,116 @@ function load_library($curr_template, $lib_name)
     return $arr;
 }
 
+/**
+ * 读取模板风格列表
+ *
+ * @access  public
+ * @param   string  $tpl_name       模版名称
+ * @param   int     $flag           1，AJAX数据；2，Array
+ * @return
+ */
+function read_tpl_style($tpl_name, $flag=1)
+{
+    if (empty($tpl_name) && $flag == 1)
+    {
+        return 0;
+    }
+
+    /* 获得可用的模版 */
+    $temp = '';
+    $start = 0;
+    $available_templates = array();
+    $dir = ROOT_PATH . 'themes/' . $tpl_name . '/';
+    $tpl_style_dir = @opendir($dir);
+    while ($file = readdir($tpl_style_dir))
+    {
+        if ($file != '.' && $file != '..' && is_file($dir . $file) && $file != '.svn' && $file != 'index.htm')
+        {
+            if (preg_match("/^(style|style_)(.*)*/i", $file)) // 取模板风格缩略图
+            {
+                $start = strpos($file, '.');
+                $temp = substr($file, 0, $start);
+                $temp = explode('_', $temp);
+                if (count($temp) == 2)
+                {
+                    $available_templates[] = $temp[1];
+                }
+            }
+        }
+    }
+    @closedir($tpl_style_dir);
+
+    if ($flag == 1)
+    {
+        $ec = '<table border="0" width="100%" cellpadding="0" cellspacing="0" class="colortable" onMouseOver="javascript:onSOver(0, this);" onMouseOut="onSOut(this);" onclick="javascript:setupTemplateFG(0);"  bgcolor="#FFFFFF"><tr><td>&nbsp;</td></tr></table>';
+        if (count($available_templates) > 0)
+        {
+            foreach ($available_templates as $value)
+            {
+                $tpl_info = get_template_info($tpl_name, $value);
+
+                $ec .= '<table border="0" width="100%" cellpadding="0" cellspacing="0" class="colortable" onMouseOver="javascript:onSOver(\'' . $value . '\', this);" onMouseOut="onSOut(this);" onclick="javascript:setupTemplateFG(\'' . $value . '\');"  bgcolor="' . $tpl_info['type'] . '"><tr><td>&nbsp;</td></tr></table>';
+
+                unset($tpl_info);
+            }
+        }
+        else
+        {
+            $ec = '0';
+        }
+
+        return $ec;
+    }
+    elseif ($flag == 2)
+    {
+        $templates_temp = array('');
+        if (count($available_templates) > 0)
+        {
+            foreach ($available_templates as $value)
+            {
+                $templates_temp[] = $value;
+            }
+        }
+
+        return $templates_temp;
+    }
+}
+
+/**
+ * 读取当前风格信息与当前模板风格列表
+ *
+ * @access  public
+ * @param   string  $tpl_name       模版名称
+ * @param   string  $tpl_style 模版风格名
+ * @return
+ */
+function read_style_and_tpl($tpl_name, $tpl_style)
+{
+    $style_info = array();
+    $style_info = get_template_info($tpl_name, $tpl_style);
+
+    $tpl_style_info = array();
+    $tpl_style_info = read_tpl_style($tpl_name, 2);
+    $tpl_style_list = '';
+    if (count($tpl_style_info) > 1)
+    {
+        foreach ($tpl_style_info as $value)
+        {
+            $tpl_style_list .= '<span style="cursor:pointer;" onMouseOver="javascript:onSOver(\'screenshot\', \'' . $value . '\', this);" onMouseOut="onSOut(\'screenshot\', this, \'' . $style_info['screenshot'] . '\');" onclick="javascript:setupTemplateFG(\'' . $tpl_name . '\', \'' . $value . '\', \'\');" id="templateType_' . $value . '"><img src="../themes/' . $tpl_name . '/images/type' . $value . '_';
+
+            if ($value == $tpl_style)
+            {
+                $tpl_style_list .= '1';
+            }
+            else
+            {
+                $tpl_style_list .= '0';
+            }
+            $tpl_style_list .= '.gif" border="0"></span>&nbsp;';
+        }
+    }
+    $style_info['tpl_style'] = $tpl_style_list;
+
+    return $style_info;
+}
 ?>

@@ -3,7 +3,7 @@
 /**
  * ECSHOP PayEase language file
  * ============================================================================
- * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -11,15 +11,14 @@
  * republish the program code, on the premise of that your behavior is not for
  * commercial purposes.
  * ============================================================================
- * $Author: haocy $
- * $Date: 2007-03-02 16:52:13 +0800 (Saturday, 2 March 2007) $
- * $Id: cappay.php 2342 2007-03-02 17:52:13Z haocy $
+ * $Author: liubo $
+ * $Id: cappay.php 17217 2011-01-19 06:29:08Z liubo $
  */
 
 global $_LANG;
 
 $_LANG['cappay']      = 'PayEase';
-$_LANG['cappay_desc'] = 'PayEase currently focuses on Payment Service Platform that covers mobile, online, call center (CRM), retail / POS and data mining of customers\’ profile.The comprehensive payment platform is connected to over 92% of the most banks in China, supports over 64 domestic credit cards and debit cards including 4 worldwide accepted international credit cards: MasterCard, VISA, American Express and JCB cards. PayEase’s major customers cover Media, Travel, TV Shopping, Internet Shopping, Insurance, Mobile Carrier Industries and Online Game Operators throughout the country. <a href="http://www.beijing.com.cn/payease/b2c/flow.jsp?agent_id=44"><strong>Click here to sign up.</strong></a>';
+$_LANG['cappay_desc'] = 'PayEase currently focuses on Payment Service Platform that covers mobile, online, call center (CRM), retail / POS and data mining of customers\’ profile.The comprehensive payment platform is connected to over 92% of the most banks in China, supports over 64 domestic credit cards and debit cards including 4 worldwide accepted international credit cards: MasterCard, VISA, American Express and JCB cards. PayEase’s major customers cover Media, Travel, TV Shopping, Internet Shopping, Insurance, Mobile Carrier Industries and Online Game Operators throughout the country. <a href="http://cloud.ecshop.com/payment_apply.php?mod=cappay" target="_blank"><strong>Click here to sign up.</strong></a>';
 $_LANG['cappay_account'] = 'PayEase account';
 $_LANG['cappay_key']     = 'MD5 key';
 

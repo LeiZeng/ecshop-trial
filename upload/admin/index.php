@@ -2,27 +2,27 @@
 /**
  * ECSHOP 控制台首页
  * ============================================================================
- * 版权所有 (C) 2005-2007 康盛创想（北京）科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com
+ * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com；
  * ----------------------------------------------------------------------------
- * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
- * 进行修改、使用和再发布。
+ * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
+ * 使用；不允许对程序代码以任何形式任何目的的再发布。
  * ============================================================================
- * $Author: testyang $
- * $Date: 2008-02-01 23:40:15 +0800 (星期五, 01 二月 2008) $
- * $Id: index.php 14122 2008-02-01 15:40:15Z testyang $
+ * $Author: liubo $
+ * $Id: index.php 17217 2011-01-19 06:29:08Z liubo $
 */
 
 define('IN_ECS', true);
 
 require(dirname(__FILE__) . '/includes/init.php');
-require_once(ROOT_PATH . 'includes/lib_order.php');
+require_once(ROOT_PATH . '/includes/lib_order.php');
 
 /*------------------------------------------------------ */
 //-- 框架
 /*------------------------------------------------------ */
 if ($_REQUEST['act'] == '')
 {
+    $smarty->assign('shop_url', urlencode($ecs->url()));
     $smarty->display('index.htm');
 }
 
@@ -46,9 +46,13 @@ elseif ($_REQUEST['act'] == 'top')
         }
     }
 
+    // 获得管理员设置的菜单
+
     // 获得管理员ID
+    $smarty->assign('send_mail_on',$_CFG['send_mail_on']);
     $smarty->assign('nav_list', $lst);
     $smarty->assign('admin_id', $_SESSION['admin_id']);
+    $smarty->assign('certi', $_CFG['certi']);
 
     $smarty->display('top.htm');
 }
@@ -67,45 +71,10 @@ elseif ($_REQUEST['act'] == 'calculator')
 /*------------------------------------------------------ */
 elseif ($_REQUEST['act'] == 'menu')
 {
-    // 权限对照表
-    $purview['02_goods_add']         = 'goods_manage';
-    $purview['16_tag_manage']        = 'tag_manage';
-    $purview['13_batch_add']         = 'goods_manage';
-    $purview['14_batch_edit']        = 'goods_manage';
-    $purview['15_goods_script']      = 'goods_manage';
-
-    $purview['02_snatch_list']       = 'snatch_manage';
-    $purview['02_order_list']        = 'order_view';
-    $purview['03_order_query']       = 'order_view';
-    $purview['04_merge_order']       = 'order_os_edit';
-    $purview['05_edit_order_print']  = 'order_os_edit';
-    $purview['08_add_order']         = 'order_edit';
-
-    $purview['flow_stats']           = 'client_flow_stats';
-    $purview['report_guest']         = 'client_flow_stats';
-    $purview['report_order']         = 'sale_order_stats';
-    $purview['report_sell']          = 'sale_order_stats';
-    $purview['report_users']         = 'client_flow_stats';
-    $purview['sale_list']            = 'sale_order_stats';
-    $purview['sell_stats']           = 'sale_order_stats';
-    $purview['visit_buy_per']        = 'client_flow_stats';
-    $purview['z_clicks_stats']       = 'ad_manage';
-
-    $purview['04_users_add']         = 'user_manage';
-    $purview['09_user_account']      = 'surplus_manage';
-
-    $purview['admin_logs']           = 'logs_manage';
-
-    $purview['02_shop_config']       = 'shop_config';
-    $purview['05_area_list']         = 'area_manage';
-
-    $purview['03_template_setup']    = 'template_manage';
-    $purview['04_template_library']  = 'template_manage';
-
-    $purview['04_sql_query']         = 'all';
-    $purview['convert']              = 'all';
-
     include_once('includes/inc_menu.php');
+
+// 权限对照表
+    include_once('includes/inc_priv.php');
 
     foreach ($modules AS $key => $value)
     {
@@ -122,10 +91,30 @@ elseif ($_REQUEST['act'] == 'menu')
             {
                 if ( isset($purview[$k]))
                 {
-                    if (! admin_priv($purview[$k], '', false))
+                    if (is_array($purview[$k]))
                     {
-                        continue;
+                        $boole = false;
+                        foreach ($purview[$k] as $action)
+                        {
+                             $boole = $boole || admin_priv($action, '', false);
+                        }
+                        if (!$boole)
+                        {
+                            continue;
+                        }
+
                     }
+                    else
+                    {
+                        if (! admin_priv($purview[$k], '', false))
+                        {
+                            continue;
+                        }
+                    }
+                }
+                if ($k == 'ucenter_setup' && $_CFG['integrate_code'] != 'ucenter')
+                {
+                    continue;
                 }
                 $menus[$key]['children'][$k]['label']  = $_LANG[$k];
                 $menus[$key]['children'][$k]['action'] = $v;
@@ -135,16 +124,19 @@ elseif ($_REQUEST['act'] == 'menu')
         {
             $menus[$key]['action'] = $val;
         }
+
         // 如果children的子元素长度为0则删除该组
-        if(!count($menus[$key]['children']))
+        if(empty($menus[$key]['children']))
         {
             unset($menus[$key]);
         }
+
     }
 
     $smarty->assign('menus',     $menus);
     $smarty->assign('no_help',   $_LANG['no_help']);
     $smarty->assign('help_lang', $_CFG['lang']);
+    $smarty->assign('charset', EC_CHARSET);
     $smarty->assign('admin_id', $_SESSION['admin_id']);
     $smarty->display('menu.htm');
 }
@@ -196,6 +188,11 @@ elseif ($_REQUEST['act'] == 'main')
     {
         $warning[] = $_LANG['remove_upgrade'];
     }
+    
+    if (file_exists('../demo'))
+    {
+        $warning[] = $_LANG['remove_demo'];
+    }
 
     $open_basedir = ini_get('open_basedir');
     if (!empty($open_basedir))
@@ -229,41 +226,41 @@ elseif ($_REQUEST['act'] == 'main')
         $warning[] = sprintf($_LANG['not_writable'], 'cert', $_LANG['cert_cannt_write']);
     }
 
-    $result = file_mode_info('../data');
+    $result = file_mode_info('../' . DATA_DIR);
     if ($result < 2)
     {
         $warning[] = sprintf($_LANG['not_writable'], 'data', $_LANG['data_cannt_write']);
     }
     else
     {
-        $result = file_mode_info('../data/afficheimg');
+        $result = file_mode_info('../' . DATA_DIR . '/afficheimg');
         if ($result < 2)
         {
-            $warning[] = sprintf($_LANG['not_writable'], 'data/afficheimg', $_LANG['afficheimg_cannt_write']);
+            $warning[] = sprintf($_LANG['not_writable'], DATA_DIR . '/afficheimg', $_LANG['afficheimg_cannt_write']);
         }
 
-        $result = file_mode_info('../data/brandlogo');
+        $result = file_mode_info('../' . DATA_DIR . '/brandlogo');
         if ($result < 2)
         {
-            $warning[] = sprintf($_LANG['not_writable'], 'data/brandlogo', $_LANG['brandlogo_cannt_write']);
+            $warning[] = sprintf($_LANG['not_writable'], DATA_DIR . '/brandlogo', $_LANG['brandlogo_cannt_write']);
         }
 
-        $result = file_mode_info('../data/cardimg');
+        $result = file_mode_info('../' . DATA_DIR . '/cardimg');
         if ($result < 2)
         {
-            $warning[] = sprintf($_LANG['not_writable'], 'data/cardimg', $_LANG['cardimg_cannt_write']);
+            $warning[] = sprintf($_LANG['not_writable'], DATA_DIR . '/cardimg', $_LANG['cardimg_cannt_write']);
         }
 
-        $result = file_mode_info('../data/feedbackimg');
+        $result = file_mode_info('../' . DATA_DIR . '/feedbackimg');
         if ($result < 2)
         {
-            $warning[] = sprintf($_LANG['not_writable'], 'data/feedbackimg', $_LANG['feedbackimg_cannt_write']);
+            $warning[] = sprintf($_LANG['not_writable'], DATA_DIR . '/feedbackimg', $_LANG['feedbackimg_cannt_write']);
         }
 
-        $result = file_mode_info('../data/packimg');
+        $result = file_mode_info('../' . DATA_DIR . '/packimg');
         if ($result < 2)
         {
-            $warning[] = sprintf($_LANG['not_writable'], 'data/packimg', $_LANG['packimg_cannt_write']);
+            $warning[] = sprintf($_LANG['not_writable'], DATA_DIR . '/packimg', $_LANG['packimg_cannt_write']);
         }
     }
 
@@ -274,32 +271,33 @@ elseif ($_REQUEST['act'] == 'main')
     }
     else
     {
-        $result = file_mode_info('../images/upload');
+        $result = file_mode_info('../' . IMAGE_DIR . '/upload');
         if ($result < 2)
         {
-            $warning[] = sprintf($_LANG['not_writable'], 'images/upload', $_LANG['imagesupload_cannt_write']);
+            $warning[] = sprintf($_LANG['not_writable'], IMAGE_DIR . '/upload', $_LANG['imagesupload_cannt_write']);
         }
     }
 
-    $result = file_mode_info('../templates');
+    $result = file_mode_info('../temp');
     if ($result < 2)
     {
         $warning[] = sprintf($_LANG['not_writable'], 'images', $_LANG['tpl_cannt_write']);
     }
 
-    $result = file_mode_info('../templates/backup');
+    $result = file_mode_info('../temp/backup');
     if ($result < 2)
     {
         $warning[] = sprintf($_LANG['not_writable'], 'images', $_LANG['tpl_backup_cannt_write']);
     }
 
-    if (!is_writeable('../data/order_print.html'))
+    if (!is_writeable('../' . DATA_DIR . '/order_print.html'))
     {
         $warning[] = $_LANG['order_print_canntwrite'];
     }
     clearstatcache();
 
     $smarty->assign('warning_arr', $warning);
+    
 
     /* 管理员留言信息 */
     $sql = 'SELECT message_id, sender_id, receiver_id, sent_time, readed, deleted, title, message, user_name ' .
@@ -323,7 +321,7 @@ elseif ($_REQUEST['act'] == 'main')
     ' FROM ' .$ecs->table('order_info') .
     " WHERE 1 " . order_query_sql('await_ship'));
     $status['await_ship']  = CS_AWAIT_SHIP;
-
+    
     /* 待付款的订单： */
     $order['await_pay']    = $db->GetOne('SELECT COUNT(*)'.
     ' FROM ' .$ecs->table('order_info') .
@@ -335,6 +333,12 @@ elseif ($_REQUEST['act'] == 'main')
     " WHERE 1 " . order_query_sql('unconfirmed'));
     $status['unconfirmed'] = OS_UNCONFIRMED;
 
+    /* “部分发货”的订单 */
+    $order['shipped_part']  = $db->GetOne('SELECT COUNT(*) FROM ' .$ecs->table('order_info').
+    " WHERE  shipping_status=" .SS_SHIPPED_PART);
+    $status['shipped_part'] = OS_SHIPPED_PART;
+
+//    $today_start = mktime(0,0,0,date('m'),date('d'),date('Y'));
     $order['stats']        = $db->getRow('SELECT COUNT(*) AS oCount, IFNULL(SUM(order_amount), 0) AS oAmount' .
     ' FROM ' .$ecs->table('order_info'));
 
@@ -406,7 +410,7 @@ elseif ($_REQUEST['act'] == 'main')
 
     /* 未审核评论 */
     $smarty->assign('comment_number', $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('comment') .
-    ' WHERE status = 0'));
+    ' WHERE status = 0 AND parent_id = 0'));
 
     $mysql_ver = $db->version();   // 获得 MySQL 版本
 
@@ -472,20 +476,68 @@ elseif ($_REQUEST['act'] == 'main')
     /* 退款申请 */
     $smarty->assign('new_repay', $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('user_account') . ' WHERE process_type = ' . SURPLUS_RETURN . ' AND is_paid = 0 '));
 
-    /* 如果管理员的最后登陆时间大于24小时则检查最新版本 */
-    if (gmtime() - $_SESSION['last_check'] > (3600 * 12))
-    {
-        $smarty->assign('need_check_version', 1);
-    }
+
 
     assign_query_info();
-
     $smarty->assign('ecs_version',  VERSION);
     $smarty->assign('ecs_release',  RELEASE);
     $smarty->assign('ecs_lang',     $_CFG['lang']);
+    $smarty->assign('ecs_charset',  strtoupper(EC_CHARSET));
     $smarty->assign('install_date', local_date($_CFG['date_format'], $_CFG['install_date']));
     $smarty->display('start.htm');
 }
+elseif ($_REQUEST['act'] == 'main_api')
+{
+    require_once(ROOT_PATH . '/includes/lib_base.php');
+    $data = read_static_cache('api_str');
+
+    if($data === false || API_TIME < date('Y-m-d H:i:s',time()-43200))
+    {
+        include_once(ROOT_PATH . 'includes/cls_transport.php');
+        $ecs_version = VERSION;
+        $ecs_lang = $_CFG['lang'];
+        $ecs_release = RELEASE;
+        $php_ver = PHP_VERSION;
+        $mysql_ver = $db->version();
+        $order['stats'] = $db->getRow('SELECT COUNT(*) AS oCount, IFNULL(SUM(order_amount), 0) AS oAmount' .
+    ' FROM ' .$ecs->table('order_info'));
+        $ocount = $order['stats']['oCount'];
+        $oamount = $order['stats']['oAmount'];
+        $goods['total']   = $db->GetOne('SELECT COUNT(*) FROM ' .$ecs->table('goods').
+    ' WHERE is_delete = 0 AND is_alone_sale = 1 AND is_real = 1');
+        $gcount = $goods['total'];
+        $ecs_charset = strtoupper(EC_CHARSET);
+        $ecs_user = $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('users'));
+        $ecs_template = $db->getOne('SELECT value FROM ' . $ecs->table('shop_config') . ' WHERE code = \'template\'');
+        $style = $db->getOne('SELECT value FROM ' . $ecs->table('shop_config') . ' WHERE code = \'stylename\'');
+        if($style == '')
+        {
+            $style = '0';
+        }
+        $ecs_style = $style;
+        $shop_url = urlencode($ecs->url());
+
+        $patch_file = file_get_contents(ROOT_PATH.ADMIN_PATH."/patch_num");
+
+        $apiget = "ver= $ecs_version &lang= $ecs_lang &release= $ecs_release &php_ver= $php_ver &mysql_ver= $mysql_ver &ocount= $ocount &oamount= $oamount &gcount= $gcount &charset= $ecs_charset &usecount= $ecs_user &template= $ecs_template &style= $ecs_style &url= $shop_url &patch= $patch_file ";
+
+        $t = new transport;
+        $api_comment = $t->request('http://api.ecshop.com/checkver.php', $apiget);
+        $api_str = $api_comment["body"];
+        echo $api_str;
+        
+        $f=ROOT_PATH . 'data/config.php'; 
+        file_put_contents($f,str_replace("'API_TIME', '".API_TIME."'","'API_TIME', '".date('Y-m-d H:i:s',time())."'",file_get_contents($f)));
+        
+        write_static_cache('api_str', $api_str);
+    }
+    else 
+    {
+        echo $data;
+    }
+
+}
+
 
 /*------------------------------------------------------ */
 //-- 开店向导第一步
@@ -630,8 +682,23 @@ elseif ($_REQUEST['act'] == 'second')
     //设置配送方式
     if(!empty($shipping))
     {
+        $shop_add = read_modules('../includes/modules/shipping');
+        
+        foreach ($shop_add as $val)
+        {
+            $mod_shop[] = $val['code'];
+        }
+        $mod_shop = implode(',',$mod_shop);
+
         $set_modules = true;
-        include_once(ROOT_PATH . 'includes/modules/shipping/' . $shipping . '.php');
+        if(strpos($mod_shop,$shipping) === false)
+        {
+            exit;   
+        }
+        else 
+        {
+            include_once(ROOT_PATH . 'includes/modules/shipping/' . $shipping . '.php');
+        }
         $sql = "SELECT shipping_id FROM " .$ecs->table('shipping'). " WHERE shipping_code = '$shipping'";
         $shipping_id = $db->GetOne($sql);
 
@@ -807,7 +874,7 @@ elseif ($_REQUEST['act'] == 'third')
         $cat_id = $db->insert_Id();
 
         //货号
-        require_once(ROOT_PATH . 'admin/includes/lib_goods.php');
+        require_once(ROOT_PATH . ADMIN_PATH . '/includes/lib_goods.php');
         $max_id     = $db->getOne("SELECT MAX(goods_id) + 1 FROM ".$ecs->table('goods'));
         $goods_sn   = generate_goods_sn($max_id);
 
@@ -1038,7 +1105,7 @@ elseif ($_REQUEST['act'] == 'check_order')
 /*------------------------------------------------------ */
 elseif ($_REQUEST['act'] == 'save_todolist')
 {
-    $content = $_POST["content"];
+    $content = json_str_iconv($_POST["content"]);
     $sql = "UPDATE" .$GLOBALS['ecs']->table('admin_user'). " SET todolist='" . $content . "' WHERE user_id = " . $_SESSION['admin_id'];
     $GLOBALS['db']->query($sql);
 }
@@ -1052,6 +1119,11 @@ elseif ($_REQUEST['act'] == 'get_todolist')
 // 邮件群发处理
 elseif ($_REQUEST['act'] == 'send_mail')
 {
+    if ($_CFG['send_mail_on'] == 'off')
+    {
+        make_json_result('', $_LANG['send_mail_off'], 0);
+        exit();
+    }
     $sql = "SELECT * FROM " . $ecs->table('email_sendlist') . " ORDER BY pri DESC, last_send ASC LIMIT 1";
     $row = $db->getRow($sql);
 
@@ -1132,5 +1204,100 @@ elseif ($_REQUEST['act'] == 'send_mail')
         $count = $db->getOne("SELECT COUNT(*) FROM " . $ecs->table('email_sendlist'));
         make_json_result('', sprintf($_LANG['mailsend_fail'],$row['email']), array('count' => $count));
     }
+}
+
+/*------------------------------------------------------ */
+//-- license操作
+/*------------------------------------------------------ */
+elseif ($_REQUEST['act'] == 'license')
+{
+    $is_ajax = $_GET['is_ajax'];
+
+    if (isset($is_ajax) && $is_ajax)
+    {
+        // license 检查
+        include_once(ROOT_PATH . 'includes/cls_transport.php');
+        include_once(ROOT_PATH . 'includes/cls_json.php');
+        include_once(ROOT_PATH . 'includes/lib_main.php');
+        include_once(ROOT_PATH . 'includes/lib_license.php');
+
+        $license = license_check();
+        switch ($license['flag'])
+        {
+            case 'login_succ':
+                if (isset($license['request']['info']['service']['ecshop_b2c']['cert_auth']['auth_str']))
+                {
+                    make_json_result(process_login_license($license['request']['info']['service']['ecshop_b2c']['cert_auth']));
+                }
+                else
+                {
+                    make_json_error(0);
+                }
+            break;
+
+            case 'login_fail':
+            case 'login_ping_fail':
+                make_json_error(0);
+            break;
+
+            case 'reg_succ':
+                $_license = license_check();
+                switch ($_license['flag'])
+                {
+                    case 'login_succ':
+                        if (isset($_license['request']['info']['service']['ecshop_b2c']['cert_auth']['auth_str']) && $_license['request']['info']['service']['ecshop_b2c']['cert_auth']['auth_str'] != '')
+                        {
+                            make_json_result(process_login_license($license['request']['info']['service']['ecshop_b2c']['cert_auth']));
+                        }
+                        else
+                        {
+                            make_json_error(0);
+                        }
+                    break;
+
+                    case 'login_fail':
+                    case 'login_ping_fail':
+                        make_json_error(0);
+                    break;
+                }
+            break;
+
+            case 'reg_fail':
+            case 'reg_ping_fail':
+                make_json_error(0);
+            break;
+        }
+    }
+    else
+    {
+        make_json_error(0);
+    }
+}
+
+/**
+ * license check
+ * @return  bool
+ */
+function license_check()
+{
+    // return 返回数组
+    $return_array = array();
+
+    // 取出网店 license
+    $license = get_shop_license();
+
+    // 检测网店 license
+    if (!empty($license['certificate_id']) && !empty($license['token']) && !empty($license['certi']))
+    {
+        // license（登录）
+        $return_array = license_login();
+    }
+    else
+    {
+        // license（注册）
+        $return_array = license_reg();
+    }
+
+    return $return_array;
 }
 ?>

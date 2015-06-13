@@ -3,7 +3,7 @@
 /**
  * ECSHOP Article management language item
  * ============================================================================
- * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -11,17 +11,18 @@
  * republish the program code, on the premise of that your behavior is not for
  * commercial purposes.
  * ============================================================================
- * $Author: liry $
- * $Date: 2006-11-10 17:04:14 +0800 (Friday, 10 November 2006) $
- * $Id: article.php 2608 2006-11-10 09:04:14Z liry $
+ * $Author: liubo $
+ * $Id: article.php 17217 2011-01-19 06:29:08Z liubo $
 */
 
 $_LANG['title'] ='Title';
 $_LANG['cat'] ='Category';
+$_LANG['reserve'] = 'Reserve';
 $_LANG['article_type'] ='Importance';
 $_LANG['author'] ='Author';
 $_LANG['email'] ='Email';
 $_LANG['keywords'] ='Keywords';
+$_LANG['lable_description'] ='Page Description';
 $_LANG['content'] ='Content';
 $_LANG['is_open'] ='Display';
 $_LANG['article_id'] ='ID';
@@ -39,10 +40,15 @@ $_LANG['isopen'] ='Open';
 $_LANG['isclose'] ='Close';
 $_LANG['no_article'] = 'There is no article.';
 $_LANG['no_select_article'] = 'Please select an article.';
+$_LANG['no_select_act'] = 'Select Article Categories！';
 
 $_LANG['display'] = 'Display the article content.';
 $_LANG['download'] = 'Download';
 $_LANG['both'] = 'Both display content and download files.';
+$_LANG['button_remove'] ='Batch delete';
+$_LANG['button_hide'] ='Batch hidden';
+$_LANG['button_show'] ='Batch show';
+$_LANG['move_to'] = 'Transfer to the classification';
 
 $_LANG['button_remove'] ='Batch delete';
 
@@ -68,8 +74,9 @@ $_LANG['batch_remove_succeed'] = 'You have deleted %d articles successfully.';
 /*JS language item*/
 $_LANG['js_languages']['no_title'] = 'No title';
 $_LANG['js_languages']['no_cat'] = 'Please select a category.';
-$_LANG['js_languages']['not_allow_add'] = '系统保留分类，不允许在该分类添加文章';
+$_LANG['js_languages']['not_allow_add'] = 'System to retain the classification in the classification does not allow to add article';
+$_LANG['js_languages']['drop_confirm'] = 'Are you sure you want to delete this?';
 
-$_LANG['all_cat'] = '全部分类';
+$_LANG['all_cat'] = 'All Categories';
 
 ?>

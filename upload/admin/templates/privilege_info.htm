@@ -1,4 +1,4 @@
-<!-- $Id: privilege_info.htm 13961 2008-01-07 06:54:44Z dolphin $ -->
+<!-- $Id: privilege_info.htm 16616 2009-08-27 01:56:35Z liuhui $ -->
 {include file="pageheader.htm"}
 <div class="main-div">
 <form name="theForm" method="post" enctype="multipart/form-data" onsubmit="return validate();">
@@ -51,6 +51,19 @@
   </tr>
   {/if}
   {/if}
+   {if $select_role}
+    <tr>
+   <td class="label">{$lang.select_role}</td>
+    <td>
+      <select name="select_role">
+        <option value="">{$lang.select_please}</option>
+        {foreach from=$select_role item=list}
+        <option value="{$list.role_id}" {if $list.role_id eq $user.role_id} selected="selected" {/if} >{$list.role_name}</option>
+        {/foreach}
+      </select>
+    </td>
+  </tr>
+  {/if}
   {if $action eq "modif"}
   <tr>
   <td align="left" class="label">{$lang.edit_navi}</td>
@@ -70,7 +83,7 @@
         <td>
           <select id="all_menu_list" name="all_menu_list" size="15" multiple="true" style="width:150px; height: 180px" onchange="toggleAddButton()">
             {foreach from=$menus item=menu key=key}
-              {if $key neq "admin_home"}
+              {if $key neq "admin_home" && $menus.$key}
               <option value="" style="font-weight:bold;">{$lang.$key}</option>
               {foreach from=$menus.$key item=item key=k}
               <option value="{$item}">&nbsp;&nbsp;&nbsp;&nbsp;{$lang.$k}</option>
@@ -87,6 +100,7 @@
       <input type="submit" value="{$lang.button_submit}" class="button" />&nbsp;&nbsp;&nbsp;
       <input type="reset" value="{$lang.button_reset}" class="button" />
       <input type="hidden" name="act" value="{$form_act}" />
+      <input type="hidden" name="token" value="{$token}" />
       <input type="hidden" name="id" value="{$user.user_id}" /></td>
   </tr>
 </table>

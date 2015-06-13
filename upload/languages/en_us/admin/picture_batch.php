@@ -3,7 +3,7 @@
 /**
  * ECSHOP Image batch processing program language file
  * ============================================================================
- * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -11,16 +11,20 @@
  * republish the program code, on the premise of that your behavior is not for
  * commercial purposes.
  * ============================================================================
- * $Author: wj $
- * $Date: 2006-11-13 19:19:54 +0800 (Monday, 13 November 2006) $
- * $Id: picture_batch.php 2685 2006-11-13 11:19:54Z wj $
+ * $Author: liubo $
+ * $Id: picture_batch.php 17217 2011-01-19 06:29:08Z liubo $
 */
 
 $_LANG['notes'] = "Image batch processing allow you to re-create thumbnail and watermark.<br/> Please wait for processing.";
+$_LANG['change_link'] = 'After the picture for the deal to generate a new link';
+$_LANG['yes_change'] = 'New image new name and delete old image';
+$_LANG['do_album'] = 'Merchandise album deal';
+$_LANG['do_icon'] = 'Handle merchandise picture';
+$_LANG['all_goods'] = 'All merchandise';
+$_LANG['action_notice'] = 'Please select the "merchandise album deal" or "deal with merchandise picture"';
+$_LANG['no_change'] = 'New iamge replace old image';
 $_LANG['thumb'] = 'Re-create thumbnail';
 $_LANG['watermark'] = 'Re-create big photo';
-$_LANG['yes_change'] = 'New image new name and delete old image';
-$_LANG['no_change'] = 'New iamge replace old image';
 $_LANG['page'] = 'Page';
 $_LANG['total'] = 'Totle pages';
 $_LANG['time'] = 'Process time';
@@ -37,7 +41,7 @@ $_LANG['error_rename'] = 'Error: rename %s to %s';
 
 $_LANG['js_languages']['no_action'] = 'Please select operation.';
 
-$_LANG['silent'] = '出错时忽略错误,继续执行程序';
-$_LANG['no_silent'] = '出错时立即提示，并中止程序';
+$_LANG['silent'] = 'Error when ignoring the error, continue to implement procedures';
+$_LANG['no_silent'] = 'Immediately prompted an error and stay of proceedings';
 
 ?>

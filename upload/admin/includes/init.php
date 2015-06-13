@@ -3,15 +3,14 @@
 /**
  * ECSHOP 管理中心公用文件
  * ============================================================================
- * 版权所有 (C) 2005-2007 康盛创想（北京）科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com
+ * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com；
  * ----------------------------------------------------------------------------
- * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
- * 进行修改、使用和再发布。
+ * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
+ * 使用；不允许对程序代码以任何形式任何目的的再发布。
  * ============================================================================
- * $Author: testyang $
- * $Date: 2008-02-01 23:40:15 +0800 (星期五, 01 二月 2008) $
- * $Id: init.php 14122 2008-02-01 15:40:15Z testyang $
+ * $Author: liubo $
+ * $Id: init.php 17217 2011-01-19 06:29:08Z liubo $
 */
 
 if (!defined('IN_ECS'))
@@ -27,9 +26,6 @@ if (__FILE__ == '')
 {
     die('Fatal error code: 0');
 }
-
-/* 取得当前ecshop所在的根目录 */
-define('ROOT_PATH', str_replace('admin/includes/init.php', '', str_replace('\\', '/', __FILE__)));
 
 /* 初始化设置 */
 @ini_set('memory_limit',          '64M');
@@ -48,14 +44,21 @@ else
     @ini_set('include_path',      '.:' . ROOT_PATH);
 }
 
-if (file_exists(ROOT_PATH . 'data/config.php'))
+if (file_exists('../data/config.php'))
 {
-    include(ROOT_PATH . 'data/config.php');
+    include('../data/config.php');
 }
 else
 {
-    include(ROOT_PATH . 'includes/config.php');
+    include('../includes/config.php');
 }
+
+/* 取得当前ecshop所在的根目录 */
+if(!defined('ADMIN_PATH'))
+{
+    define('ADMIN_PATH','admin');
+}
+define('ROOT_PATH', str_replace(ADMIN_PATH . '/includes/init.php', '', str_replace('\\', '/', __FILE__)));
 
 if (defined('DEBUG_MODE') == false)
 {
@@ -80,9 +83,10 @@ require(ROOT_PATH . 'includes/inc_constant.php');
 require(ROOT_PATH . 'includes/cls_ecshop.php');
 require(ROOT_PATH . 'includes/cls_error.php');
 require(ROOT_PATH . 'includes/lib_time.php');
+require(ROOT_PATH . 'includes/lib_base.php');
 require(ROOT_PATH . 'includes/lib_common.php');
-require(ROOT_PATH . 'admin/includes/lib_main.php');
-require(ROOT_PATH . 'admin/includes/cls_exchange.php');
+require(ROOT_PATH . ADMIN_PATH . '/includes/lib_main.php');
+require(ROOT_PATH . ADMIN_PATH . '/includes/cls_exchange.php');
 
 /* 对用户传入的变量进行转义操作。*/
 if (!get_magic_quotes_gpc())
@@ -109,6 +113,8 @@ if (strpos(PHP_SELF, '.php/') !== false)
 
 /* 创建 ECSHOP 对象 */
 $ecs = new ECS($db_name, $prefix);
+define('DATA_DIR', $ecs->data_dir());
+define('IMAGE_DIR', $ecs->image_dir());
 
 /* 初始化数据库类 */
 require(ROOT_PATH . 'includes/cls_mysql.php');
@@ -161,26 +167,41 @@ if (file_exists(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/' . basename(
     include(ROOT_PATH . 'languages/' . $_CFG['lang'] . '/admin/' . basename(PHP_SELF));
 }
 
-if (!file_exists('../templates/caches'))
+if (!file_exists('../temp/caches'))
 {
-    @mkdir('../templates/caches', 0777);
-    @chmod('../templates/caches', 0777);
+    @mkdir('../temp/caches', 0777);
+    @chmod('../temp/caches', 0777);
 }
 
-if (!file_exists('../templates/compiled/admin'))
+if (!file_exists('../temp/compiled/admin'))
 {
-    @mkdir('../templates/compiled/admin', 0777);
-    @chmod('../templates/compiled/admin', 0777);
+    @mkdir('../temp/compiled/admin', 0777);
+    @chmod('../temp/compiled/admin', 0777);
 }
 
 clearstatcache();
+
+/* 如果有新版本，升级 */
+if (!isset($_CFG['ecs_version']))
+{
+    $_CFG['ecs_version'] = 'v2.0.5';
+}
+
+if (preg_replace('/(?:\.|\s+)[a-z]*$/i', '', $_CFG['ecs_version']) != preg_replace('/(?:\.|\s+)[a-z]*$/i', '', VERSION)
+        && file_exists('../upgrade/index.php'))
+{
+    // 转到升级文件
+    ecs_header("Location: ../upgrade/index.php\n");
+
+    exit;
+}
 
 /* 创建 Smarty 对象。*/
 require(ROOT_PATH . 'includes/cls_template.php');
 $smarty = new cls_template;
 
-$smarty->template_dir  = ROOT_PATH . 'admin/templates';
-$smarty->compile_dir   = ROOT_PATH . 'templates/compiled/admin';
+$smarty->template_dir  = ROOT_PATH . ADMIN_PATH . '/templates';
+$smarty->compile_dir   = ROOT_PATH . 'temp/compiled/admin';
 if ((DEBUG_MODE & 2) == 2)
 {
     $smarty->force_compile = true;
@@ -199,19 +220,30 @@ else
     $smarty->assign('enable_order_check', 0);
 }
 
-/* 如果有新版本，升级 */
-if (!isset($_CFG['ecs_version']))
+/* 验证通行证信息 */
+if(isset($_GET['ent_id']) && isset($_GET['ent_ac']) &&  isset($_GET['ent_sign']) && isset($_GET['ent_email']))
 {
-    $_CFG['ecs_version'] = 'v2.0.5';
-}
+    $ent_id = trim($_GET['ent_id']);
+    $ent_ac = trim($_GET['ent_ac']);
+    $ent_sign = trim($_GET['ent_sign']);
+    $ent_email = trim($_GET['ent_email']);
+    $certificate_id = trim($_CFG['certificate_id']);
+    $domain_url = $ecs->url();
+    $token=$_GET['token'];
+    if($token==md5(md5($_CFG['token']).$domain_url.ADMIN_PATH))
+    {
+        require(ROOT_PATH . 'includes/cls_transport.php');
+        $t = new transport('-1',5);
+        $apiget = "act=ent_sign&ent_id= $ent_id & certificate_id=$certificate_id";
 
-if (preg_replace('/(?:\.|\s+)[a-z]*$/i', '', $_CFG['ecs_version']) != preg_replace('/(?:\.|\s+)[a-z]*$/i', '', VERSION)
-        && file_exists('../upgrade/index.php'))
-{
-    // 转到升级文件
-    ecs_header("Location: ../upgrade/index.php\n");
-
-    exit;
+        $t->request('http://cloud.ecshop.com/api.php', $apiget);
+        $db->query('UPDATE '.$ecs->table('shop_config') . ' SET value = "'. $ent_id .'" WHERE code = "ent_id"');
+        $db->query('UPDATE '.$ecs->table('shop_config') . ' SET value = "'. $ent_ac .'" WHERE code = "ent_ac"');
+        $db->query('UPDATE '.$ecs->table('shop_config') . ' SET value = "'. $ent_sign .'" WHERE code = "ent_sign"');
+        $db->query('UPDATE '.$ecs->table('shop_config') . ' SET value = "'. $ent_email .'" WHERE code = "ent_email"');
+        clear_cache_files();
+        ecs_header("Location: ./index.php\n");
+    }
 }
 
 /* 验证管理员身份 */
@@ -291,10 +323,12 @@ if ((!isset($_SESSION['admin_id']) || intval($_SESSION['admin_id']) <= 0) &&
     }
 }
 
+$smarty->assign('token', $_CFG['token']);
+
 if ($_REQUEST['act'] != 'login' && $_REQUEST['act'] != 'signin' &&
     $_REQUEST['act'] != 'forget_pwd' && $_REQUEST['act'] != 'reset_pwd' && $_REQUEST['act'] != 'check_order')
 {
-    $admin_path = preg_replace('/:\d+/', '', $ecs->url()) . 'admin';
+    $admin_path = preg_replace('/:\d+/', '', $ecs->url()) . ADMIN_PATH;
     if (!empty($_SERVER['HTTP_REFERER']) &&
         strpos(preg_replace('/:\d+/', '', $_SERVER['HTTP_REFERER']), $admin_path) === false)
     {
@@ -320,7 +354,7 @@ if ($_REQUEST['act'] == 'phpinfo' && function_exists('phpinfo'))
 }
 
 //header('Cache-control: private');
-header('content-type: text/html; charset=utf-8');
+header('content-type: text/html; charset=' . EC_CHARSET);
 header('Expires: Fri, 14 Mar 1980 20:53:00 GMT');
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
 header('Cache-Control: no-cache, must-revalidate');

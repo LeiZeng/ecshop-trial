@@ -3,7 +3,7 @@
 /**
  * ECSHOP Convert a program language file
  * ============================================================================
- * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -11,9 +11,8 @@
  * republish the program code, on the premise of that your behavior is not for
  * commercial purposes.
  * ============================================================================
- * $Author: scottye $
- * $Date: 2006-12-26 17:00:34 +0800 (Tuesday, 26 December 2006) $
- * $Id: convert.php 3731 2006-12-26 09:00:34Z scottye $
+ * $Author: liubo $
+ * $Id: convert.php 17217 2011-01-19 06:29:08Z liubo $
  */
 
 $_LANG['confirm_convert'] ='Attention: To convert program will lose the existing data, please operate with caution.';

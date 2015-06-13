@@ -3,22 +3,21 @@
 /**
  * ECSHOP 支付响应页面
  * ============================================================================
- * 版权所有 (C) 2005-2007 康盛创想（北京）科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com
+ * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com；
  * ----------------------------------------------------------------------------
- * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
- * 进行修改、使用和再发布。
+ * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
+ * 使用；不允许对程序代码以任何形式任何目的的再发布。
  * ============================================================================
- * $Author: zhuwenyuan $
- * $Date: 2008-02-27 17:50:52 +0800 (星期三, 27 二月 2008) $
- * $Id: respond.php 14192 2008-02-27 09:50:52Z zhuwenyuan $
+ * $Author: liubo $
+ * $Id: respond.php 17217 2011-01-19 06:29:08Z liubo $
  */
 
 define('IN_ECS', true);
 
 require(dirname(__FILE__) . '/includes/init.php');
 require(ROOT_PATH . 'includes/lib_payment.php');
-
+require(ROOT_PATH . 'includes/lib_order.php');
 /* 支付方式代码 */
 $pay_code = !empty($_REQUEST['code']) ? trim($_REQUEST['code']) : '';
 
@@ -71,7 +70,7 @@ else
             include_once($plugin_file);
 
             $payment = new $pay_code();
-            $msg     = ($payment->respond()) ? $_LANG['pay_success'] : $_LANG['pay_fail'];
+            $msg     = (@$payment->respond()) ? $_LANG['pay_success'] : $_LANG['pay_fail'];
         }
         else
         {

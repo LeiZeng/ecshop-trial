@@ -1,4 +1,4 @@
-<!-- $Id: db_backup.htm 7996 2007-04-06 10:42:28Z wj $ -->
+<!-- $Id: db_backup.htm 14216 2008-03-10 02:27:21Z testyang $ -->
 {include file="pageheader.htm"}
 {if $warning}
 <ul style="padding:0; margin: 0; list-style-type:none; color: #CC0000;">
@@ -68,6 +68,10 @@
   </tr>
 </table>
 <input type="hidden" name="act" value="dumpsql">
+
+<input type="hidden" name="act" value="dumpsql">
+<input type="hidden" name="token" value="{$token}">
+
 <center><input type="submit" value="{$lang.start_backup}" class="button" /></center>
 </div>
 <!-- end  list -->

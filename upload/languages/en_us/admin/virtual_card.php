@@ -1,9 +1,9 @@
 <?php
 
 /**
- * ECSHOP Vote management
+ * ECSHOP Virtual card management
  * ============================================================================
- * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -11,28 +11,16 @@
  * republish the program code, on the premise of that your behavior is not for
  * commercial purposes.
  * ============================================================================
- * $Author: weberliu $
- * $Date: 2007-09-13 16:15:00 +0800 (星期四, 13 九月 2007) $
- * $Id: virtual_card.php 12056 2007-09-13 08:15:00Z weberliu $
+ * $Author: liubo $
+ * $Id: virtual_card.php 17217 2011-01-19 06:29:08Z liubo $
 */
-
-$_LANG['virtual_card_list'] = 'Virtual Card List';
-
-$_LANG['goods_name'] = 'Name';
-$_LANG['goods_sn'] = 'NO.';
-$_LANG['shop_price'] = 'Price';
-$_LANG['is_on_sale'] = 'On sale';
-$_LANG['goods_number'] = 'Quantity';
-$_LANG['replenish'] = 'Replenish';
-$_LANG['card'] = 'Card list';
-
-
-$_LANG['lab_goods_name'] = 'Name:';
-
 
 /*------------------------------------------------------ */
 //-- Card information
 /*------------------------------------------------------ */
+$_LANG['virtual_card_list'] = 'Virtual Goods List';
+$_LANG['lab_goods_name'] = 'Name:';
+$_LANG['replenish'] = 'Replenish';
 $_LANG['lab_card_id'] = 'ID';
 $_LANG['lab_card_sn'] = 'NO.';
 $_LANG['lab_card_password'] = 'Password';
@@ -41,9 +29,10 @@ $_LANG['lab_is_saled'] = 'Saled';
 $_LANG['lab_order_sn'] = 'Order NO.';
 $_LANG['action_success'] = 'Operation success';
 $_LANG['action_fail'] = 'Operation fail';
+$_LANG['card'] = 'Card list';
 
 $_LANG['batch_card_add'] = 'Batch add products';
-
+$_LANG['download_file'] ='Download batch CSV files.';
 $_LANG['separator'] = 'Separating character';
 $_LANG['uploadfile'] = 'Upload file';
 $_LANG['sql_error'] = 'NO. %s information was wrong:<br /> ';
@@ -82,8 +71,8 @@ $_LANG['virtual_card_change'] = 'Change encrypt string';
 $_LANG['user_guide'] = 'Direction:' .
         '<ol>' .
           '<li>Encrypt string use for ID and passwrod of encrypt virtual card</li>' .
-          '<li>Encrypt string saved in includes/lib_code.php, corresponding constants is AUTH_KEY</li>' .
-          '<li>If you want to change encrypt string, you should modify lib_code.php, set OLD_AUTH_KEY as old encrypt string, set AUTH_KEY as new encrypt string; and enter old encrypt string and new encrypt string in the textbox, check \'Confirm\' push the button</li>' .
+          '<li>Encrypt string saved in data/config.php, corresponding constants is AUTH_KEY</li>' .
+          '<li>If you want to change encrypt string, enter old encrypt string and new encrypt string in the textbox, check \'Confirm\' push the button</li>' .
         '</ol>';
 $_LANG['label_old_string'] = 'Old encrypt string';
 $_LANG['label_new_string'] = 'New encrypt string';

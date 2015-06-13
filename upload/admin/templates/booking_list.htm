@@ -1,4 +1,4 @@
-<!-- $Id: booking_list.htm 8201 2007-04-17 03:07:34Z weberliu $ -->
+<!-- $Id: booking_list.htm 14216 2008-03-10 02:27:21Z testyang $ -->
 
 {if $full_page}
 {include file="pageheader.htm"}
@@ -27,7 +27,7 @@
     {foreach from=$booking_list item=booking}
     <tr>
       <td>{$booking.rec_id}</td>
-      <td>{$booking.link_man}</td>
+      <td>{$booking.link_man|escape}</td>
       <td><a href="../goods.php?id={$booking.goods_id}" target="_blank" title="{$lang.view}">{$booking.goods_name}</a></td>
       <td align="right">{$booking.goods_number}</td>
       <td align="right">{$booking.booking_time}</td>

@@ -3,7 +3,7 @@
 /**
  * ECSHOP
  * ============================================================================
- * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -11,9 +11,8 @@
  * republish the program code, on the premise of that your behavior is not for
  * commercial purposes.
  * ============================================================================
- * $Author: liry $
- * $Date: 2007-02-03 19:41:07 +0800 (Saturday, 03 February 2007) $
- * $Id: friend_link.php 5062 2007-02-03 11:41:07Z liry $
+ * $Author: liubo $
+ * $Id: friend_link.php 17217 2011-01-19 06:29:08Z liubo $
 */
 
 /* Links field information */
@@ -24,8 +23,10 @@ $_LANG['link_logo'] = 'Logo';
 $_LANG['url_logo'] = 'Or link URL';
 $_LANG['link_type'] = 'Type';
 $_LANG['show_order'] = 'Display orders';
+
 $_LANG['link_text'] = 'Text';
 $_LANG['link_img'] = 'Image';
+
 $_LANG['cur_link_logo'] = 'Current link LOGO';
 $_LANG['list_link'] = 'Links List';
 $_LANG['add_link'] = 'Add New Link';
@@ -40,12 +41,16 @@ $_LANG['continue_add'] = 'Continue add friend link.';
 $_LANG['js_languages']['link_name_empty'] = 'Please enter link name!';
 $_LANG['js_languages']['link_url_empty'] = 'Please enter link URL!';
 $_LANG['js_languages']['show_order_type'] = 'Display the order must be a figure!';
+
 $_LANG['link_name_empty'] = 'Link name can\'t be blank!';
 $_LANG['link_url_empty'] = 'Link URL can\'t be blank!';
+
 $_LANG['link_logo_empty'] = 'Link LOGO can\'t be blank!';
 $_LANG['link_img_empty'] = 'Link image can\'t be blank!';
+
 $_LANG['link_url_exist'] = 'Links URL already exists.';
 $_LANG['link_name_exist'] = 'Links name already exists.';
+
 $_LANG['enter_int'] = 'Display the order must be an integer!';
 
 /* Help information */

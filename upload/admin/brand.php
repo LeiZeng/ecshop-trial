@@ -3,15 +3,14 @@
 /**
  * ECSHOP 管理中心品牌管理
  * ============================================================================
- * 版权所有 (C) 2005-2007 康盛创想（北京）科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com
+ * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com；
  * ----------------------------------------------------------------------------
- * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
- * 进行修改、使用和再发布。
+ * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
+ * 使用；不允许对程序代码以任何形式任何目的的再发布。
  * ============================================================================
- * $Author: testyang $
- * $Date: 2008-02-01 23:40:15 +0800 (星期五, 01 二月 2008) $
- * $Id: brand.php 14122 2008-02-01 15:40:15Z testyang $
+ * $Author: liubo $
+ * $Id: brand.php 17217 2011-01-19 06:29:08Z liubo $
 */
 
 define('IN_ECS', true);
@@ -55,7 +54,7 @@ elseif ($_REQUEST['act'] == 'add')
     $smarty->assign('form_action', 'insert');
 
     assign_query_info();
-    $smarty->assign('brand', array('sort_order'=>0, 'is_show'=>1));
+    $smarty->assign('brand', array('sort_order'=>50, 'is_show'=>1));
     $smarty->display('brand_info.htm');
 }
 elseif ($_REQUEST['act'] == 'insert')
@@ -182,7 +181,7 @@ elseif ($_REQUEST['act'] == 'edit_brand_name')
     check_authz_json('brand_manage');
 
     $id     = intval($_POST['id']);
-    $name   = trim($_POST['val']);
+    $name   = json_str_iconv(trim($_POST['val']));
 
     /* 检查名称是否重复 */
     if ($exc->num("brand_name",$name, $id) != 0)
@@ -205,7 +204,7 @@ elseif ($_REQUEST['act'] == 'edit_brand_name')
 
 elseif($_REQUEST['act'] == 'add_brand')
 {
-    $brand = empty($_REQUEST['brand']) ? '' : trim($_REQUEST['brand']);
+    $brand = empty($_REQUEST['brand']) ? '' : json_str_iconv(trim($_REQUEST['brand']));
 
     if(brand_exists($brand))
     {
@@ -276,7 +275,7 @@ elseif ($_REQUEST['act'] == 'remove')
     $logo_name = $db->getOne($sql);
     if (!empty($logo_name))
     {
-        @unlink(ROOT_PATH . 'data/brandlogo/' .$logo_name);
+        @unlink(ROOT_PATH . DATA_DIR . '/brandlogo/' .$logo_name);
     }
 
     $exc->drop($id);
@@ -306,7 +305,7 @@ elseif ($_REQUEST['act'] == 'drop_logo')
 
     if (!empty($logo_name))
     {
-        @unlink(ROOT_PATH . 'data/brandlogo/' .$logo_name);
+        @unlink(ROOT_PATH . DATA_DIR . '/brandlogo/' .$logo_name);
         $sql = "UPDATE " .$ecs->table('brand'). " SET brand_logo = '' WHERE brand_id = '$brand_id'";
         $db->query($sql);
     }
@@ -320,7 +319,6 @@ elseif ($_REQUEST['act'] == 'drop_logo')
 elseif ($_REQUEST['act'] == 'query')
 {
     $brand_list = get_brandlist();
-
     $smarty->assign('brand_list',   $brand_list['brand']);
     $smarty->assign('filter',       $brand_list['filter']);
     $smarty->assign('record_count', $brand_list['record_count']);
@@ -345,13 +343,36 @@ function get_brandlist()
         $filter = array();
 
         /* 记录总数以及页数 */
-        $sql = "SELECT COUNT(*) FROM ".$GLOBALS['ecs']->table('brand');
+        if (isset($_POST['brand_name']))
+        {
+            $sql = "SELECT COUNT(*) FROM ".$GLOBALS['ecs']->table('brand') .' WHERE brand_name = \''.$_POST['brand_name'].'\'';
+        }
+        else
+        {
+            $sql = "SELECT COUNT(*) FROM ".$GLOBALS['ecs']->table('brand');
+        }
+
         $filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
         $filter = page_and_size($filter);
 
         /* 查询记录 */
-        $sql = "SELECT * FROM ".$GLOBALS['ecs']->table('brand')." ORDER BY sort_order ASC";
+        if (isset($_POST['brand_name']))
+        {
+            if(strtoupper(EC_CHARSET) == 'GBK')
+            {
+                $keyword = iconv("UTF-8", "gb2312", $_POST['brand_name']);
+            }
+            else
+            {
+                $keyword = $_POST['brand_name'];
+            }
+            $sql = "SELECT * FROM ".$GLOBALS['ecs']->table('brand')." WHERE brand_name like '%{$keyword}%' ORDER BY sort_order ASC";
+        }
+        else
+        {
+            $sql = "SELECT * FROM ".$GLOBALS['ecs']->table('brand')." ORDER BY sort_order ASC";
+        }
 
         set_filter($filter, $sql);
     }
@@ -366,7 +387,7 @@ function get_brandlist()
     while ($rows = $GLOBALS['db']->fetchRow($res))
     {
         $brand_logo = empty($rows['brand_logo']) ? '' :
-            '<a href="../data/brandlogo/'.$rows['brand_logo'].'" target="_brank"><img src="images/picflag.gif" width="16" height="16" border="0" alt='.$GLOBALS['_LANG']['brand_logo'].' /></a>';
+            '<a href="../' . DATA_DIR . '/brandlogo/'.$rows['brand_logo'].'" target="_brank"><img src="images/picflag.gif" width="16" height="16" border="0" alt='.$GLOBALS['_LANG']['brand_logo'].' /></a>';
         $site_url   = empty($rows['site_url']) ? 'N/A' : '<a href="'.$rows['site_url'].'" target="_brank">'.$rows['site_url'].'</a>';
 
         $rows['brand_logo'] = $brand_logo;

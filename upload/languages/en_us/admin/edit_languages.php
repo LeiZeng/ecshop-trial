@@ -3,7 +3,7 @@
 /**
  * ECSHOP Edit language
  * ============================================================================
- * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -11,9 +11,8 @@
  * republish the program code, on the premise of that your behavior is not for
  * commercial purposes.
  * ============================================================================
- * $Author: liry $
- * $Date: 2007-02-03 16:54:43 +0800 (Saturday, 03 February 2007) $
- * $Id: edit_languages.php 5035 2007-02-03 08:54:43Z liry $
+ * $Author: liubo $
+ * $Id: edit_languages.php 17217 2011-01-19 06:29:08Z liubo $
  */
 
 $_LANG['edit_languages'] = 'Edit Language Item';

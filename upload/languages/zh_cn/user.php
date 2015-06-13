@@ -3,15 +3,14 @@
 /**
  * ECSHOP 用户中心语言项
  * ============================================================================
- * 版权所有 (C) 2005-2007 康盛创想（北京）科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com
+ * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com；
  * ----------------------------------------------------------------------------
- * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
- * 进行修改、使用和再发布。
+ * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
+ * 使用；不允许对程序代码以任何形式任何目的的再发布。
  * ============================================================================
- * $Author: fenghl $
- * $Date: 2007-12-26 16:22:08 +0800 (星期三, 26 十二月 2007) $
- * $Id: user.php 13900 2007-12-26 08:22:08Z fenghl $
+ * $Author: liubo $
+ * $Id: user.php 17217 2011-01-19 06:29:08Z liubo $
 */
 
 
@@ -19,6 +18,7 @@
 $_LANG['require_login'] = '非法入口。<br />必须登录才能完成操作。';
 
 $_LANG['no_records'] = '没有记录';
+$_LANG['shot_message'] = "短消息";
 
 /* 用户菜单 */
 $_LANG['label_welcome'] = '欢迎页';
@@ -145,6 +145,8 @@ $_LANG['profile_js']['old_password_empty'] = '请输入您的原密码！';
 $_LANG['profile_js']['new_password_empty'] = '请输入您的新密码！';
 $_LANG['profile_js']['confirm_password_empty'] = '请输入您的确认密码！';
 $_LANG['profile_js']['both_password_error'] = '您现两次输入的密码不一致！';
+$_LANG['profile_js']['msg_blank'] = '不能为空';
+$_LANG['profile_js']['no_select_question'] = '- 您没有完成密码提示问题的操作';
 
 /* 支付方式 */
 $_LANG['pay_name'] = '名称';
@@ -194,6 +196,11 @@ $_LANG['parm_error'] = '参数错误，请返回！';
 $_LANG['edit_password_failure'] = '您输入的原密码不正确！';
 $_LANG['edit_password_success'] = '您的新密码已设置成功！';
 $_LANG['username_not_match_email'] = '用户名与电子邮件地址不匹配，请重新输入！';
+$_LANG['get_question_username'] = '请输入您注册的用户名以取得您的密码提示问题。';
+$_LANG['no_passwd_question'] = '您没有设置密码提示问题，无法通过这种方式找回密码。';
+$_LANG['input_answer'] = '请根据您注册时设置的密码问题输入设置的答案';
+$_LANG['wrong_passwd_answer'] = '您输入的密码答案是错误的';
+
 //JS语言项
 $_LANG['password_js']['user_name_empty'] = '请输入您的用户名！';
 $_LANG['password_js']['email_address_empty'] = '请输入您的电子邮件地址！';
@@ -230,7 +237,7 @@ $_LANG['upload_file_limit'] = '文件大小超过了限制 %dKB';
 $_LANG['img_type_tips'] = '<font color="red">小提示：</font>';
 $_LANG['img_type_list'] = '您可以上传以下格式的文件：<br />gif、jpg、png、word、excel、txt、zip、ppt、pdf';
 $_LANG['view_upload_file'] = '查看上传的文件';
-$_LANG['upload_file_type'] = '您上傳的文件类型不正确,请重新上传！';
+$_LANG['upload_file_type'] = '您上传的文件类型不正确,请重新上传！';
 $_LANG['upload_file_error'] = '文件上传出现错误,请重新上传！';
 $_LANG['message_empty'] = '您现在还没有留言！';
 $_LANG['msg_success'] = '您的留言已成功提交！';
@@ -272,6 +279,7 @@ $_LANG['order_sn_empty'] = '合并主订单号不能为空';
 $_LANG['merge_order_notice'] = '订单合并是在发货前将相同状态的订单合并成一新的订单。<br />收货地址，送货方式等以主定单为准。';
 $_LANG['order_exist'] = '该订单不存在！';
 $_LANG['order_is_group_buy'] = '[团购]';
+$_LANG['order_is_exchange'] = '[积分商城]';
 $_LANG['gb_deposit'] = '（保证金）';
 $_LANG['notice_gb_order_amount'] = '（备注：团购如果有保证金，第一次只需支付保证金和相应的支付费用）';
 $_LANG['business_message'] = '发送/查看商家留言';
@@ -282,6 +290,8 @@ $_LANG['return_integral_on_cancel'] = '取消订单 %s，退回支付订单时�
 /* 订单状态 */
 $_LANG['os'][OS_UNCONFIRMED] = '未确认';
 $_LANG['os'][OS_CONFIRMED] = '已确认';
+$_LANG['os'][OS_SPLITED] = '已确认';
+$_LANG['os'][OS_SPLITING_PART] = '已确认';
 $_LANG['os'][OS_CANCELED] = '已取消';
 $_LANG['os'][OS_INVALID] = '无效';
 $_LANG['os'][OS_RETURNED] = '退货';
@@ -290,6 +300,8 @@ $_LANG['ss'][SS_UNSHIPPED] = '未发货';
 $_LANG['ss'][SS_PREPARING] = '配货中';
 $_LANG['ss'][SS_SHIPPED] = '已发货';
 $_LANG['ss'][SS_RECEIVED] = '收货确认';
+$_LANG['ss'][SS_SHIPPED_PART] = '已发货(部分商品)';
+$_LANG['ss'][SS_SHIPPED_ING] = '配货中'; // 已分单
 
 $_LANG['ps'][PS_UNPAYED] = '未付款';
 $_LANG['ps'][PS_PAYING] = '付款中';
@@ -356,12 +368,15 @@ $_LANG['shipping_time'] = '发货于 %s';
 
 $_LANG['select_payment'] = '所选支付方式';
 $_LANG['order_amount'] = '应付款金额';
-$_LANG['update_address'] = '更新收货地址';
+$_LANG['update_address'] = '更新收货人信息';
 $_LANG['virtual_card_info'] = '虚拟卡信息';
 
 /* 取回密码 */
 $_LANG['back_home_lnk'] = '返回首页';
 $_LANG['get_password_lnk'] = '返回获取密码页面';
+$_LANG['get_password_by_question'] = '密码问题找回密码';
+$_LANG['get_password_by_mail'] = '注册邮件找回密码';
+$_LANG['back_retry_answer'] = '返回重试';
 
 /* 登录 注册 */
 $_LANG['label_username'] = '用户名';
@@ -375,6 +390,7 @@ $_LANG['other_qq'] = 'QQ';
 $_LANG['other_office_phone'] = '办公电话';
 $_LANG['other_home_phone'] = '家庭电话';
 $_LANG['other_mobile_phone'] = '手机';
+$_LANG['remember'] = '请保存我这次的登录信息。';
 
 $_LANG['msg_un_blank'] = '用户名不能为空';
 $_LANG['msg_un_length'] = '用户名最长不得超过7个汉字';
@@ -401,6 +417,7 @@ $_LANG['logout'] = '您已经成功的退出了。';
 $_LANG['username_empty'] = '用户名为空';
 $_LANG['username_invalid'] = '用户名 %s 含有敏感字符';
 $_LANG['username_exist'] = '用户名 %s 已经存在';
+$_LANG['username_not_allow'] = '用户名 %s 不允许注册';
 $_LANG['confirm_register'] = '确认注册';
 
 $_LANG['agreement'] = "我已看过并接受《<a href=\"article.php?cat_id=-1\" style=\"color:blue\" target=\"_blank\">用户协议</a>》";
@@ -408,8 +425,14 @@ $_LANG['agreement'] = "我已看过并接受《<a href=\"article.php?cat_id=-1\"
 $_LANG['email_empty'] = 'email为空';
 $_LANG['email_invalid'] = '%s 不是合法的email地址';
 $_LANG['email_exist'] = '%s 已经存在';
+$_LANG['email_not_allow'] = 'Email %s 不允许注册';
 $_LANG['register'] = '注册新用户名';
 $_LANG['register_success'] = '用户名 %s 注册成功';
+
+$_LANG['passwd_question'] = '密码提示问题';
+$_LANG['sel_question'] = '请选择密码提示问题';
+$_LANG['passwd_answer'] = '密码问题答案';
+$_LANG['passwd_balnk'] = '密码中不能包含空格';
 
 /* 用户中心默认页面 */
 $_LANG['welcome_to'] = '欢迎您回到';
@@ -435,6 +458,7 @@ $_LANG['horizontal'] = '横排';
 $_LANG['verticle'] = '竖排';
 $_LANG['generate'] = '生成代码';
 $_LANG['label_goods_num'] = '显示商品数量：';
+$_LANG['label_rows_num'] = '排列显示条目数：';
 $_LANG['label_arrange'] = '选择商品排列方式：';
 $_LANG['label_charset'] = '选择编码：';
 $_LANG['charset']['utf8'] = '国际化编码（utf8）';
@@ -442,6 +466,8 @@ $_LANG['charset']['zh_cn'] = '简体中文';
 $_LANG['charset']['zh_tw'] = '繁体中文';
 $_LANG['goods_num_must_be_int'] = '商品数量应该是整数';
 $_LANG['goods_num_must_over_0'] = '商品数量应该大于0';
+$_LANG['rows_num_must_be_int'] = '排列显示条目数应该是整数';
+$_LANG['rows_num_must_over_0'] = '排列显示条目数应该大于0';
 
 $_LANG['last_month_order'] = '您最近30天内提交了';
 $_LANG['order_unit'] = '个订单';
@@ -476,6 +502,9 @@ $_LANG['passport_js']['msg_can_rg'] = '* 可以注册';
 $_LANG['passport_js']['msg_email_blank'] = '* 邮件地址不能为空';
 $_LANG['passport_js']['msg_email_registered'] = '* 邮箱已存在,请重新输入';
 $_LANG['passport_js']['msg_email_format'] = '* 邮件地址不合法';
+$_LANG['passport_js']['msg_blank'] = '不能为空';
+$_LANG['passport_js']['no_select_question'] = '- 您没有完成密码提示问题的操作';
+$_LANG['passport_js']['passwd_balnk'] = '- 密码中不能包含空格';
 
 
 /* user_clips.dwt js 语言文件 */
@@ -513,6 +542,10 @@ $_LANG['had_use'] = '已使用';
 
 /* 用户推荐 */
 $_LANG['affiliate_mode'] = '分成模式';
+$_LANG['affiliate_detail'] = '分成明细';
+$_LANG['affiliate_member'] = '我推荐的会员';
+$_LANG['affiliate_code'] = '推荐代码';
+$_LANG['firefox_copy_alert'] = "您的firefox安全限制限制您进行剪贴板操作，请打开’about:config’将signed.applets.codebase_principal_support’设置为true’之后重试";
 $_LANG['affiliate_type'][0] = '推荐注册分成';
 $_LANG['affiliate_type'][1] = '推荐订单分成';
 $_LANG['affiliate_type'][-1] = '推荐注册分成';
@@ -547,6 +580,7 @@ $_LANG['affiliate_stats'][0] = '等待处理';
 $_LANG['affiliate_stats'][1] = '已分成';
 $_LANG['affiliate_stats'][2] = '取消分成';
 $_LANG['affiliate_stats'][3] = '已撤销';
+$_LANG['affiliate_stats'][4] = '等待买家付款';
 
 $_LANG['level_point'] = '积分分成百分比';
 $_LANG['level_money'] = '现金分成百分比';
@@ -572,7 +606,7 @@ $_LANG['validate_fail'] = '验证失败，请确认你的验证链接是否正�
 $_LANG['validate_mail_ok'] = '验证邮件发送成功';
 
 $_LANG['not_validated'] = '您还没有通过邮件认证';
-$_LANG['resend_hash_mail'] = '重新发送认证邮件';
+$_LANG['resend_hash_mail'] = '点此发送认证邮件';
 
 $_LANG['query_status'] = '查询状态';
 
@@ -587,6 +621,10 @@ $_LANG['expire_unit']['week'] = '周';
 
 $_LANG['recommend_webcode'] = '网页签名代码';
 $_LANG['recommend_bbscode'] = '论坛签名代码';
+$_LANG['im_code'] = '聊天分享';
+$_LANG['code_copy'] = '复制代码';
+$_LANG['show_good_to_you'] = '推荐给你一个好东西';
+
 
 /* 积分兑换 */
 $_LANG['transform_points'] = '积分兑换';
@@ -605,13 +643,44 @@ $_LANG['rule'] = '兑换规则';
 $_LANG['transform_num'] = '兑换数量';
 $_LANG['transform_result'] = '兑换结果';
 $_LANG['bbs'] = '论坛';
-$_LANG['pay_points'] = '商城消费积分';
+$_LANG['exchange_amount'] = '支出';
+$_LANG['exchange_desamount'] = '收入';
+$_LANG['exchange_ratio'] = '兑换比率';
+$_LANG['exchange_points'][0] = '商城等级积分';
+$_LANG['exchange_points'][1] = '商城消费积分';
+$_LANG['exchange_action'] = '换';
+$_LANG['exchange_js']['deny'] = '禁止兑换';
+$_LANG['exchange_js']['balance'] = '您的{%s}余额不足，请重新输入';
+$_LANG['exchange_deny'] = '该积分不允许兑换';
+$_LANG['exchange_success'] = '恭喜您， 你用%s个%s兑换了%s个%s';
+$_LANG['exchange_error_1'] = 'UCenter提交积分兑换时发生错误';
 $_LANG['rank_points'] = '商城等级积分';
-
+$_LANG['pay_points'] = '商城消费积分';
 
 /* 密码强度 */
 $_LANG['pwd_lower'] = '弱';
 $_LANG['pwd_middle'] = '中';
 $_LANG['pwd_high'] = '强';
+$_LANG['user_reg_info'][0] = '如果您不是会员，请注册';
+$_LANG['user_reg_info'][1] = '友情提示';
+$_LANG['user_reg_info'][2] = '不注册为会员也可在本店购买商品';
+$_LANG['user_reg_info'][8] = '不注册为会员不可以在本店购买商品';
+$_LANG['user_reg_info'][3] = '但注册之后您可以';
+$_LANG['user_reg_info'][4] = '保存您的个人资料';
+$_LANG['user_reg_info'][5] = '收藏您关注的商品';
+$_LANG['user_reg_info'][6] = '享受会员积分制度';
+$_LANG['user_reg_info'][7] = '订阅本店商品信息';
+$_LANG['add_bonus'] = '添加红包';
+
+/* 密码找回问题 */
+$_LANG['passwd_questions']['friend_birthday'] = '我最好朋友的生日？';
+$_LANG['passwd_questions']['old_address']     = '我儿时居住地的地址？';
+$_LANG['passwd_questions']['motto']           = '我的座右铭是？';
+$_LANG['passwd_questions']['favorite_movie']  = '我最喜爱的电影？';
+$_LANG['passwd_questions']['favorite_song']   = '我最喜爱的歌曲？';
+$_LANG['passwd_questions']['favorite_food']   = '我最喜爱的食物？';
+$_LANG['passwd_questions']['interest']        = '我最大的爱好？';
+$_LANG['passwd_questions']['favorite_novel']  = '我最喜欢的小说？';
+$_LANG['passwd_questions']['favorite_equipe'] = '我最喜欢的运动队？';
 
 ?>

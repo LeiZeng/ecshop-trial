@@ -1,4 +1,4 @@
-<!-- $Id: area_list.htm 12683 2007-10-09 01:49:50Z hackfan $ -->
+<!-- $Id: area_list.htm 14216 2008-03-10 02:27:21Z testyang $ -->
 {if $full_page}
 {include file="pageheader.htm"}
 {insert_scripts files="../js/utils.js,listtable.js"}
@@ -39,7 +39,7 @@
        <a href="area_manage.php?act=list&type={$list.region_type+1}&pid={$list.region_id}" title="{$lang.manage_area}">
          {$lang.manage_area}</a>&nbsp;&nbsp;
        {/if}
-       <a href="javascript:listTable.remove({$list.region_id}, '{$lang.drop_confirm}', 'drop_area')" title="{$lang.drop}">{$lang.drop}</a>
+       <a href="javascript:listTable.remove({$list.region_id}, '{$lang.area_drop_confirm}', 'drop_area')" title="{$lang.drop}">{$lang.drop}</a>
        </span>
       </td>
     {/foreach}

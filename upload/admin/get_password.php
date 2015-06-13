@@ -3,15 +3,14 @@
 /**
  * ECSHOP 找回管理员密码
  * ============================================================================
- * 版权所有 (C) 2005-2007 康盛创想（北京）科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com
+ * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com；
  * ----------------------------------------------------------------------------
- * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
- * 进行修改、使用和再发布。
+ * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
+ * 使用；不允许对程序代码以任何形式任何目的的再发布。
  * ============================================================================
- * $Author: testyang $
- * $Date: 2008-02-01 23:40:15 +0800 (星期五, 01 二月 2008) $
- * $Id: get_password.php 14122 2008-02-01 15:40:15Z testyang $
+ * $Author: liubo $
+ * $Id: get_password.php 17217 2011-01-19 06:29:08Z liubo $
 */
 
 define('IN_ECS', true);
@@ -105,7 +104,7 @@ else
 
             /* 设置重置邮件模板所需要的内容信息 */
             $template    = get_mail_template('send_password');
-            $reset_email = $ecs->url() . 'admin/get_password.php?act=reset_pwd&uid='.$admin_id.'&code='.$code;
+            $reset_email = $ecs->url() . ADMIN_PATH . '/get_password.php?act=reset_pwd&uid='.$admin_id.'&code='.$code;
 
             $smarty->assign('user_name',   $admin_username);
             $smarty->assign('reset_email', $reset_email);
@@ -163,7 +162,8 @@ else
         }
 
         //更新管理员的密码
-        $sql = "UPDATE " .$ecs->table('admin_user'). "SET password = '".md5($new_password)."' ".
+		$ec_salt=rand(1,9999);
+        $sql = "UPDATE " .$ecs->table('admin_user'). "SET password = '".md5(md5($new_password).$ec_salt)."',`ec_salt`='$ec_salt' ".
                "WHERE user_id = '$adminid'";
         $result = $db->query($sql);
         if ($result)

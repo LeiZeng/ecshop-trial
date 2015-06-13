@@ -3,15 +3,14 @@
 /**
  * shopex4.7转换程序插件
  * ============================================================================
- * 版权所有 (C) 2005-2007 康盛创想（北京）科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com
+ * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com；
  * ----------------------------------------------------------------------------
- * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
- * 进行修改、使用和再发布。
+ * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
+ * 使用；不允许对程序代码以任何形式任何目的的再发布。
  * ============================================================================
- * $Author: scottye $
- * $Date: 2007-11-19 13:39:39 +0800 (星期一, 19 十一月 2007) $
- * $Id: shopex47.php 13680 2007-11-19 05:39:39Z scottye $
+ * $Author: liubo $
+ * $Id: shopex47.php 17217 2011-01-19 06:29:08Z liubo $
  */
 
 if (!defined('IN_ECS'))
@@ -69,9 +68,17 @@ class shopex47
         $this->sprefix = $sprefix;
         $this->sroot = $sroot;
         $this->troot = str_replace('/includes/modules/convert', '', str_replace('\\', '/', dirname(__FILE__)));
-        $this->tdocroot = str_replace('/admin', '', dirname(PHP_SELF));
+        $this->tdocroot = str_replace('/' . ADMIN_PATH, '', dirname(PHP_SELF));
         $this->scharset = $scharset;
-        $this->tcharset = 'UTF8';
+        if (EC_CHARSET == 'utf-8')
+        {
+            $tcharset = 'UTF8';
+        }
+        elseif (EC_CHARSET == 'gbk')
+        {
+            $tcharset = 'GB2312';
+        }
+        $this->tcharset = $tcharset;
     }
 
     /**
@@ -196,7 +203,7 @@ class shopex47
         {
             $cat = array();
             $cat['cat_id']      = $row['catid'];
-            $cat['cat_name']    = ecs_iconv($this->scharset, $this->tcharset, addslashes($row['cat']));
+            $cat['cat_name']    = $row['cat'];
             $cat['parent_id']   = $row['pid'];
             $cat['sort_order']  = $row['catord'];
 
@@ -214,7 +221,7 @@ class shopex47
         {
             $type = array();
             $type['cat_id']     = $row['prop_cat_id'];
-            $type['cat_name']   = ecs_iconv($this->scharset, $this->tcharset, addslashes($row['cat_name']));
+            $type['cat_name']   = $row['cat_name'];
             $type['enabled']    = '1';
             if (!$db->autoExecute($ecs->table('goods_type'), $type, 'INSERT', '', 'SILENT'))
             {
@@ -229,7 +236,7 @@ class shopex47
         {
             $attr = array();
             $attr['attr_id']         = $row['prop_id'];
-            $attr['attr_name']       = ecs_iconv($this->scharset, $this->tcharset, addslashes($row['prop_name']));
+            $attr['attr_name']       = $row['prop_name'];
             $attr['cat_id']          = $row['prop_cat_id'];
             $attr['sort_order']      = $row['ordnum'];
             $attr['attr_input_type'] = '1';
@@ -264,7 +271,7 @@ class shopex47
         while ($row = $this->sdb->fetchRow($res))
         {
             $brand = array(
-                'brand_name' => ecs_iconv($this->scharset, $this->tcharset, addslashes($row['brand_name'])),
+                'brand_name' => $row['brand_name'],
                 'brand_desc' => '',
                 'site_url' => ecs_iconv($this->scharset, $this->tcharset, addslashes($row['brand_site_url'])),
                 'brand_logo' => ecs_iconv($this->scharset, $this->tcharset, addslashes($row['brand_logo']))
@@ -352,7 +359,7 @@ class shopex47
             $goods['goods_id']      = $row['gid'];
             $goods['cat_id']        = $row['catid'];
             $goods['goods_sn']      = ecs_iconv($this->scharset, $this->tcharset, addslashes($row['bn']));
-            $goods['goods_name']    = ecs_iconv($this->scharset, $this->tcharset, addslashes($row['goods']));
+            $goods['goods_name']    = $row['goods'];
             $goods['brand_id']      = trim($row['brand']) == '' ? '0' : $brand_list[ecs_iconv($this->scharset, $this->tcharset, addslashes($row['brand']))];
             $goods['goods_number']  = $row['storage'];
             $goods['goods_weight']  = $row['weight'];
@@ -377,6 +384,7 @@ class shopex47
             $goods['is_hot']        = $row['hot2'];
             $goods['is_promote']    = $row['tejia2'];
             $goods['goods_type']    = isset($cat_type_list[$row['catid']]) ? $cat_type_list[$row['catid']] : 0;
+            $goods['last_update'] = gmtime();
 
             /* 图片：如果没有本地文件，取远程图片 */
             $file = $this->troot . '/images/' . date('Ym') . '/small_' . $row['gid'];
@@ -634,6 +642,7 @@ class shopex47
             {
                 //return $db->error();
             }
+          //  uc_call('uc_user_register', array($user['user_name'], $user['password'], $user['email']));
         }
 
         /* 收货人地址 */

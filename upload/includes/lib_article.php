@@ -3,15 +3,14 @@
 /**
  * ECSHOP 文章及文章分类相关函数库
  * ============================================================================
- * 版权所有 (C) 2005-2007 康盛创想（北京）科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com
+ * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com；
  * ----------------------------------------------------------------------------
- * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
- * 进行修改、使用和再发布。
+ * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
+ * 使用；不允许对程序代码以任何形式任何目的的再发布。
  * ============================================================================
- * $Author: weberliu $
- * $Date: 2007-10-11 10:16:36 +0800 (星期四, 11 十月 2007) $
- * $Id: lib_article.php 12790 2007-10-11 02:16:36Z weberliu $
+ * $Author: liubo $
+ * $Id: lib_article.php 17217 2011-01-19 06:29:08Z liubo $
 */
 
 if (!defined('IN_ECS'))
@@ -29,7 +28,7 @@ if (!defined('IN_ECS'))
  *
  * @return  array
  */
-function get_cat_articles($cat_id, $page = 1, $size = 20)
+function get_cat_articles($cat_id, $page = 1, $size = 20 ,$requirement='')
 {
     //取出所有非0的文章
     if ($cat_id == '-1')
@@ -40,10 +39,23 @@ function get_cat_articles($cat_id, $page = 1, $size = 20)
     {
         $cat_str = get_article_children($cat_id);
     }
-    $sql = 'SELECT article_id, title, author, add_time, file_url, open_type' .
-           ' FROM ' .$GLOBALS['ecs']->table('article') .
-           " WHERE is_open = 1 AND " . $cat_str .
-           ' ORDER BY article_type DESC, article_id DESC';
+    //增加搜索条件，如果有搜索内容就进行搜索    
+    if ($requirement != '')
+    {
+        $sql = 'SELECT article_id, title, author, add_time, file_url, open_type' .
+               ' FROM ' .$GLOBALS['ecs']->table('article') .
+               ' WHERE is_open = 1 AND title like \'%' . $requirement . '%\' ' .
+               ' ORDER BY article_type DESC, article_id DESC';
+    }
+    else 
+    {
+        
+        $sql = 'SELECT article_id, title, author, add_time, file_url, open_type' .
+               ' FROM ' .$GLOBALS['ecs']->table('article') .
+               ' WHERE is_open = 1 AND ' . $cat_str .
+               ' ORDER BY article_type DESC, article_id DESC';
+    }
+
     $res = $GLOBALS['db']->selectLimit($sql, $size, ($page-1) * $size);
 
     $arr = array();
@@ -72,12 +84,17 @@ function get_cat_articles($cat_id, $page = 1, $size = 20)
  *
  * @return  integer
  */
-function get_article_count($cat_id)
+function get_article_count($cat_id ,$requirement='')
 {
     global $db, $ecs;
-
-    $count = $db->getOne("SELECT COUNT(*) FROM " . $ecs->table('article') . " WHERE " . get_article_children($cat_id) . " AND is_open = 1");
-
+    if ($requirement != '')
+    {
+        $count = $db->getOne('SELECT COUNT(*) FROM ' . $ecs->table('article') . ' WHERE ' . get_article_children($cat_id) . ' AND  title like \'%' . $requirement . '%\'  AND is_open = 1');
+    }
+    else
+    {
+        $count = $db->getOne("SELECT COUNT(*) FROM " . $ecs->table('article') . " WHERE " . get_article_children($cat_id) . " AND is_open = 1");
+    }
     return $count;
 }
 

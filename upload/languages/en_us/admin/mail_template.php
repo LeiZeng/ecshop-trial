@@ -2,7 +2,7 @@
 /**
  * ECSHOP Control panel mail template manage language file
  * ============================================================================
- * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -10,9 +10,8 @@
  * republish the program code, on the premise of that your behavior is not for
  * commercial purposes.
  * ============================================================================
- * $Author: paulgao $
- * $Date: 2007-01-30 16:02:08 +0800 (Tuesday, 30 January 2007) $
- * $Id: mail_template.php 4752 2007-01-30 08:02:08Z paulgao $
+ * $Author: liubo $
+ * $Id: mail_template.php 17217 2011-01-19 06:29:08Z liubo $
 */
 
 $_LANG['select_template'] = 'Please select mail template:';
@@ -31,7 +30,12 @@ $_LANG['order_cancel'] = 'Cancel order template';
 $_LANG['order_invalid'] = 'Fail order template';
 $_LANG['send_bonus'] = 'Send bonus template';
 $_LANG['group_buy'] = 'Associates template';
+$_LANG['register_validate'] = 'E-mail authentication template';
+$_LANG['virtual_card'] = 'Virtual card templates';
 $_LANG['remind_of_new_order'] = 'Remind of new order template';
+$_LANG['goods_booking'] = 'Reply to goods booking template';
+$_LANG['user_message'] = 'Reply to message template';
+$_LANG['recomment'] = 'Reply to comment template';
 
 $_LANG['subject_empty'] = 'Sorry, mail subject can\'t be blank.';
 $_LANG['content_empty'] = 'Sorry, mail content can\'t be blank.';

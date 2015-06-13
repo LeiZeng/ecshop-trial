@@ -3,21 +3,35 @@
 /**
  * ECSHOP 管理中心商店设置
  * ============================================================================
- * 版权所有 (C) 2005-2007 康盛创想（北京）科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com
+ * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com；
  * ----------------------------------------------------------------------------
- * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
- * 进行修改、使用和再发布。
+ * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
+ * 使用；不允许对程序代码以任何形式任何目的的再发布。
  * ============================================================================
- * $Author: testyang $
- * $Date: 2008-01-28 18:33:06 +0800 (星期一, 28 一月 2008) $
- * $Id: shop_config.php 14079 2008-01-28 10:33:06Z testyang $
+ * $Author: liubo $
+ * $Id: shop_config.php 17217 2011-01-19 06:29:08Z liubo $
  */
 
 define('IN_ECS', true);
 
 /* 代码 */
 require(dirname(__FILE__) . '/includes/init.php');
+
+if($GLOBALS['_CFG']['certificate_id']  == '')
+{
+    $certi_id='error';
+}
+else
+{
+    $certi_id=$GLOBALS['_CFG']['certificate_id'];
+}
+
+$sess_id = $GLOBALS['sess']->get_session_id();
+
+$auth = time();
+$ac = md5($certi_id.'SHOPEX_SMS'.$auth);
+$url = 'http://service.shopex.cn/sms/index.php?certificate_id='.$certi_id.'&sess_id='.$sess_id.'&auth='.$auth.'&ac='.$ac;
 
 /*------------------------------------------------------ */
 //-- 列表编辑 ?act=list_edit
@@ -43,6 +57,16 @@ if ($_REQUEST['act'] == 'list_edit')
     $smarty->assign('ur_here',      $_LANG['01_shop_config']);
     $smarty->assign('group_list',   get_settings(null, array('5')));
     $smarty->assign('countries',    get_regions());
+
+    if (strpos(strtolower($_SERVER['SERVER_SOFTWARE']), 'iis') !== false)
+    {
+        $rewrite_confirm = $_LANG['rewrite_confirm_iis'];
+    }
+    else
+    {
+        $rewrite_confirm = $_LANG['rewrite_confirm_apache'];
+    }
+    $smarty->assign('rewrite_confirm', $rewrite_confirm);
 
     if ($_CFG['shop_country'] > 0)
     {
@@ -70,6 +94,7 @@ elseif ($_REQUEST['act'] == 'mail_settings')
 
     assign_query_info();
 
+    $smarty->assign('ur_here',      $_LANG['mail_settings']);
     $smarty->assign('cfg', $arr[5]['vars']);
     $smarty->display('shop_config_mail_settings.htm');
 }
@@ -214,15 +239,17 @@ elseif ($_REQUEST['act'] == 'post')
     $spt .= "&qq=$_CFG[qq]&ww=$_CFG[ww]&ym=$_CFG[ym]&msn=$_CFG[msn]";
     $spt .= "&email=$_CFG[service_email]&phone=$_CFG[service_phone]&icp=".urlencode($_CFG['icp_number']);
     $spt .= "&version=".VERSION."&language=$_CFG[lang]&php_ver=" .PHP_VERSION. "&mysql_ver=" .$db->version();
+    $spt .= "&charset=".EC_CHARSET;
     $spt .= '"></script>';
 
-    $links[] = array('text' => $_LANG['back_shop_config'], 'href' => 'shop_config.php?act=list_edit');
     if ($type == 'mail_setting')
     {
+        $links[] = array('text' => $_LANG['back_mail_settings'], 'href' => 'shop_config.php?act=mail_settings');
         sys_msg($_LANG['mail_save_success'].$spt, 0, $links);
     }
     else
     {
+        $links[] = array('text' => $_LANG['back_shop_config'], 'href' => 'shop_config.php?act=list_edit');
         sys_msg($_LANG['save_success'].$spt, 0, $links);
     }
 }
@@ -242,7 +269,7 @@ elseif ($_REQUEST['act'] == 'send_test_email')
     $_CFG['mail_service'] = intval($_POST['mail_service']);
     $_CFG['smtp_host']    = trim($_POST['smtp_host']);
     $_CFG['smtp_port']    = trim($_POST['smtp_port']);
-    $_CFG['smtp_user']    = trim($_POST['smtp_user']);
+    $_CFG['smtp_user']    = json_str_iconv(trim($_POST['smtp_user']));
     $_CFG['smtp_pass']    = trim($_POST['smtp_pass']);
     $_CFG['smtp_mail']    = trim($_POST['reply_email']);
     $_CFG['mail_charset'] = trim($_POST['mail_charset']);
@@ -350,6 +377,10 @@ function get_settings($groups=null, $excludes=null)
         $item['name'] = isset($_LANG['cfg_name'][$item['code']]) ? $_LANG['cfg_name'][$item['code']] : $item['code'];
         $item['desc'] = isset($_LANG['cfg_desc'][$item['code']]) ? $_LANG['cfg_desc'][$item['code']] : '';
 
+        if ($item['code'] == 'sms_shop_mobile')
+        {
+            $item['url'] = 1;
+        }
         if ($pid == 0)
         {
             /* 分组 */

@@ -3,51 +3,73 @@
 /**
  * ECSHOP 程序说明
  * ===========================================================
- * 版权所有 (C) 2005-2006 康盛创想（北京）科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com
+ * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com；
  * ----------------------------------------------------------
- * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
- * 进行修改、使用和再发布。
+ * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
+ * 使用；不允许对程序代码以任何形式任何目的的再发布。
  * ==========================================================
- * $Author$
- * $Date$
- * $Id$
+ * $Author: liubo $
+ * $Id: cron.php 17217 2011-01-19 06:29:08Z liubo $
  */
 
-$_LANG['cron_name'] = '计划任务名称';
-$_LANG['cron_code'] = '此计划任务';
-$_LANG['if_open'] = '开启';
-$_LANG['version'] = '版本';
-$_LANG['cron_desc'] = '计划任务描述';
-$_LANG['cron_author'] = '插件作者';
-$_LANG['cron_time'] = '计划任务执行时间';
-$_LANG['cron_next'] = '下次执行时间';
-$_LANG['cron_this'] = '上次执行时间';
-$_LANG['cron_allow_ip'] = '允许执行的服务器ip';
-$_LANG['cron_run_once'] = '执行后关闭';
-$_LANG['cron_alow_files'] = '允许执行文件';
-$_LANG['notice_alow_files'] = '空格分隔,例:index.php goods.php';
-$_LANG['notice_alow_ip'] = '请用空格分隔多个ip';
-$_LANG['notice_minute'] = '请用空格分隔多个分钟';
-$_LANG['cron_do'] = '执行';
-$_LANG['do_ok'] = '执行成功';
-$_LANG['cron_day'] = '日';
-$_LANG['cron_week'] = '周';
-$_LANG['cron_hour'] = '小时';
-$_LANG['cron_minute'] = '分钟';
-$_LANG['install_ok'] = '安装成功';
-$_LANG['edit_ok'] = '编辑成功';
-$_LANG['week'][1] = '星期一';
-$_LANG['week'][2] = '星期二';
-$_LANG['week'][3] = '星期三';
-$_LANG['week'][4] = '星期四';
-$_LANG['week'][5] = '星期五';
-$_LANG['week'][6] = '星期六';
-$_LANG['week'][7] = '星期日';
+$_LANG['cron_name'] = 'Name planned mission';
+$_LANG['cron_code'] = 'The program mission';
+$_LANG['if_open'] = 'Open';
+$_LANG['version'] = 'Version';
+$_LANG['cron_desc'] = 'Plan Task Description';
+$_LANG['cron_author'] = 'Plug-Author';
+$_LANG['cron_time'] = 'Mission plan execution time';
+$_LANG['cron_next'] = 'The next execution time';
+$_LANG['cron_this'] = 'Last execution time';
+$_LANG['cron_allow_ip'] = 'Permit the implementation of the server ip';
+$_LANG['cron_run_once'] = 'Turn off after the implementation of';
+$_LANG['cron_alow_files'] = 'Permit the implementation of the page';
+$_LANG['notice_alow_files'] = 'Front trigger is scheduled to run pages, blank pages that were triggered in all';
+$_LANG['notice_alow_ip'] = 'Mission plans to permit the server to run IP, please use comma to separate multiple IP';
+$_LANG['notice_minute'] = 'Use commas to separate multiple minutes';
+$_LANG['cron_do'] = 'Perform';
+$_LANG['do_ok'] = 'Implementation of successful';
+$_LANG['cron_month'] = 'Monthly';
+$_LANG['cron_day'] = 'Date';
+$_LANG['cron_week'] = 'Weekly';
+$_LANG['cron_thatday'] = 'Day';
+$_LANG['cron_hour'] = 'Hours';
+$_LANG['cron_minute'] = 'Minutes';
+$_LANG['cron_unlimit'] = 'Daily';
+$_LANG['cron_advance'] = 'Advanced Options';
+$_LANG['cron_show_advance'] = 'Show advanced options';
+$_LANG['install_ok'] = 'Installed successfully';
+$_LANG['edit_ok'] = 'Editor successful';
+$_LANG['week'][1] = 'Monday';
+$_LANG['week'][2] = 'Tuesday';
+$_LANG['week'][3] = 'Wednesday';
+$_LANG['week'][4] = 'Thursday';
+$_LANG['week'][5] = 'Friday';
+$_LANG['week'][6] = 'Saturday';
+$_LANG['week'][7] = 'Sunday';
 
-$_LANG['uninstall_ok'] = '卸载成功';
-$_LANG['cron_not_available'] = '该计划任务不存在或尚未安装';
-$_LANG['back_list'] = '返回计划任务列表';
-$_LANG['name_is_null'] = '您没有输入计划任务名称！';
-$_LANG['js_languages']['lang_removeconfirm'] = '您确定要卸载此计划任务吗？';
+$_LANG['uninstall_ok'] = 'Uninstall successful';
+$_LANG['cron_not_available'] = 'Mission of the plan does not exist or is not installed';
+$_LANG['back_list'] = 'Plans to return a list of mission';
+$_LANG['name_is_null'] = 'You do not have plans to enter the name of mission!';
+$_LANG['js_languages']['lang_removeconfirm'] = 'Are you sure you want to uninstall the program mission?';
+
+
+$_LANG['page']['index'] = 'Home';
+
+$_LANG['page']['user'] = 'User Center';
+$_LANG['page']['pick_out'] = 'Shopping center';
+$_LANG['page']['flow'] = 'Shopping Cart';
+$_LANG['page']['group_buy'] = 'Buy merchandise';
+$_LANG['page']['snatch'] = 'Indiana Jones';
+$_LANG['page']['tag_cloud'] = 'Tag cloud';
+
+$_LANG['page']['category'] = 'Merchandise list page';
+$_LANG['page']['goods'] = 'Merchandise page';
+$_LANG['page']['article_cat'] = 'Article list page';
+$_LANG['page']['article'] = 'Article page';
+$_LANG['page']['brand'] = 'Brand Area';
+$_LANG['page']['search'] = 'Search results pages';
+
 ?>

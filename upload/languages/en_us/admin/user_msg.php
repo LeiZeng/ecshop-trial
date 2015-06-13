@@ -3,7 +3,7 @@
 /**
  * ECSHOP User message language item
  * ============================================================================
- * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -11,19 +11,26 @@
  * republish the program code, on the premise of that your behavior is not for
  * commercial purposes.
  * ============================================================================
- * $Author: paulgao $
- * $Date: 2007-01-30 16:02:08 +0800 (Tuesday, 30 January 2007) $
- * $Id: user_msg.php 4752 2007-01-30 08:02:08Z paulgao $
+ * $Author: liubo $
+ * $Id: user_msg.php 17217 2011-01-19 06:29:08Z liubo $
 */
 
 $_LANG['msg_title'] = 'Title';
 $_LANG['list_all'] = 'View all messages';
-
 $_LANG['msg_id'] = 'ID';
 $_LANG['msg_time'] = 'Time';
 $_LANG['msg_content'] = 'Contents';
 $_LANG['user_name'] = 'Username';
 $_LANG['msg_type'] = 'Type';
+$_LANG['msg_status'] = 'Status';
+$_LANG['hidden'] = 'Hide';
+$_LANG['display'] = 'display';
+$_LANG['allow'] = 'Allowed to show';
+$_LANG['forbid'] = 'forbid the display';
+$_LANG['user_center'] = 'user center';
+$_LANG['message_board'] = 'message board';
+$_LANG['send_email_notice'] = 'Email notification';
+$_LANG['delete'] = 'Delete messages';
 
 $_LANG['from'] = 'From';
 
@@ -44,11 +51,21 @@ $_LANG['edit_reply'] = 'Edit';
 $_LANG['reply_content'] = 'Reply content';
 $_LANG['email'] = 'email';
 
-$_LANG['msg_for_order'] = '对订单 %s 的留言';
-$_LANG['order_detail'] = '订单详情';
-$_LANG['confirm_delete'] = '你是否确认要删除该留言';
+$_LANG['batch_drop_success'] = 'Command successfully!';
+
+$_LANG['msg_for_order'] = 'Order %s on the Guest Book';
+$_LANG['order_detail'] = 'Order Details';
+$_LANG['confirm_delete'] = 'Do you confirm that you want to delete the Guest Book';
+
+$_LANG['cfm_allow'] = 'Are you sure you want to allow shows the selected comments?';
+$_LANG['cfm_remove'] = 'Are you sure you want to delete the selected comments?';
+$_LANG['cfm_deny'] = 'Are you sure you want to ban shows the selected comments?';
 
 /* js */
-$_LANG['js_languages']['no_content'] = 'The reply content can\'t be blank.';
+$_LANG['js_languages']['no_content'] = 'The content can\'t be blank.';
+$_LANG['js_languages']['no_reply_content'] = 'The reply content can\'t be blank.';
+$_LANG['js_languages']['no_title'] = 'The title can\'t be blank.';
 
+$_LANG['mail_send_fail'] = 'Mail sent failed, please check the e-mail server settings and try again.';
+$_LANG['remail'] = 'Re-issued e-mail';
 ?>

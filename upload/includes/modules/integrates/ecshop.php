@@ -3,15 +3,14 @@
 /**
  * ECSHOP 会员数据处理类
  * ============================================================================
- * 版权所有 (C) 2005-2007 康盛创想（北京）科技有限公司，并保留所有权利。
+ * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
  * 网站地址: http://www.ecshop.com
  * ----------------------------------------------------------------------------
  * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
  * 进行修改、使用和再发布。
  * ============================================================================
- * $Author: wj $
- * $Date: 2007-11-07 15:02:20 +0800 (星期三, 07 十一月 2007) $
- * $Id: ecshop.php 13465 2007-11-07 07:02:20Z wj $
+ * $Author: liubo $
+ * $Id: ecshop.php 17217 2011-01-19 06:29:08Z liubo $
  */
 
 if (!defined('IN_ECS'))
@@ -65,6 +64,7 @@ class ecshop extends integrate
         parent::integrate(array());
         $this->user_table = 'users';
         $this->field_id = 'user_id';
+        $this->ec_salt = 'ec_salt';
         $this->field_name = 'user_name';
         $this->field_pass = 'password';
         $this->field_email = 'email';
@@ -105,11 +105,11 @@ class ecshop extends integrate
         }
         else
         {
-            $sql = "SELECT user_id, password, salt " .
+            $sql = "SELECT user_id, password, salt,ec_salt " .
                    " FROM " . $this->table($this->user_table).
                    " WHERE user_name='$post_username'";
             $row = $this->db->getRow($sql);
-
+			$ec_salt=$row['ec_salt'];
             if (empty($row))
             {
                 return 0;
@@ -117,12 +117,21 @@ class ecshop extends integrate
 
             if (empty($row['salt']))
             {
-                if ($row['password'] != $this->compile_password(array('password'=>$password)))
+                if ($row['password'] != $this->compile_password(array('password'=>$password,'ec_salt'=>$ec_salt)))
                 {
                     return 0;
                 }
                 else
                 {
+					if(empty($ec_salt))
+				    {
+						$ec_salt=rand(1,9999);
+						$new_password=md5(md5($password).$ec_salt);
+					    $sql = "UPDATE ".$this->table($this->user_table)."SET password= '" .$new_password."',ec_salt='".$ec_salt."'".
+                   " WHERE user_name='$post_username'";
+                         $this->db->query($sql);
+
+					}
                     return $row['user_id'];
                 }
             }
@@ -143,6 +152,9 @@ class ecshop extends integrate
                     //case other :
                     //  ----------------------------------
                     //  break;
+                    case ENCRYPT_UC :
+                        $encrypt_password = md5(md5($password).$encrypt_salt);
+                        break;
 
                     default:
                         $encrypt_password = '';

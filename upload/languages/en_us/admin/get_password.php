@@ -3,7 +3,7 @@
 /**
  * ECSHOP Control panel administrator's password repossess file
  * ============================================================================
- * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -11,9 +11,8 @@
  * republish the program code, on the premise of that your behavior is not for
  * commercial purposes.
  * ============================================================================
- * $Author: liry $
- * $Date: 2007-02-07 11:26:53 +0800 (Wednesday, 07 February 2007) $
- * $Id: get_password.php 5296 2007-02-07 03:26:53Z liry $
+ * $Author: liubo $
+ * $Id: get_password.php 17217 2011-01-19 06:29:08Z liubo $
 */
 
 /* Field information */
@@ -35,6 +34,7 @@ $_LANG['js_languages']['email_error'] = 'Email address format is invalid!';
 $_LANG['js_languages']['admin_pwd_empty'] = 'Please enter administrator new password!';
 $_LANG['js_languages']['confirm_pwd_empty'] = 'Please re-enter administrator password!';
 $_LANG['js_languages']['both_pwd_error'] = 'The two passwords you entered did not match. Please type it again!';
+
 $_LANG['email_username_error'] = 'Username and Email address must match, please return!';
 $_LANG['send_mail_error'] = 'Error send email, please check your mail server config!';
 $_LANG['code_param_error'] = 'Your request is invalid, please return!';

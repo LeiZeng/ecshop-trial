@@ -3,15 +3,14 @@
 /**
  * ECSHOP 订单管理语言文件
  * ============================================================================
- * 版权所有 (C) 2005-2006 康盛创想（北京）科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com
+ * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com；
  * ----------------------------------------------------------------------------
- * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
- * 进行修改、使用和再发布。
+ * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
+ * 使用；不允许对程序代码以任何形式任何目的的再发布。
  * ============================================================================
- * $Author: fenghl $
- * $Date: 2008-02-15 11:22:13 +0800 (星期五, 15 二月 2008) $
- * $Id: order.php 14139 2008-02-15 03:22:13Z fenghl $
+ * $Author: liubo $
+ * $Id: order.php 17217 2011-01-19 06:29:08Z liubo $
  */
 
 /* 订单搜索 */
@@ -23,26 +22,33 @@ $_LANG['cs'][OS_UNCONFIRMED] = '待确认';
 $_LANG['cs'][CS_AWAIT_PAY] = '待付款';
 $_LANG['cs'][CS_AWAIT_SHIP] = '待发货';
 $_LANG['cs'][CS_FINISHED] = '已完成';
+$_LANG['cs'][PS_PAYING] = '付款中';
 $_LANG['cs'][OS_CANCELED] = '取消';
 $_LANG['cs'][OS_INVALID] = '无效';
 $_LANG['cs'][OS_RETURNED] = '退货';
+$_LANG['cs'][OS_SHIPPED_PART] = '部分发货';
 
 /* 订单状态 */
 $_LANG['os'][OS_UNCONFIRMED] = '未确认';
 $_LANG['os'][OS_CONFIRMED] = '已确认';
-$_LANG['os'][OS_CANCELED] = '取消';
-$_LANG['os'][OS_INVALID] = '无效';
-$_LANG['os'][OS_RETURNED] = '退货';
+$_LANG['os'][OS_CANCELED] = '<font color="red"> 取消</font>';
+$_LANG['os'][OS_INVALID] = '<font color="red">无效</font>';
+$_LANG['os'][OS_RETURNED] = '<font color="red">退货</font>';
+$_LANG['os'][OS_SPLITED] = '已分单';
+$_LANG['os'][OS_SPLITING_PART] = '部分分单';
 
 $_LANG['ss'][SS_UNSHIPPED] = '未发货';
 $_LANG['ss'][SS_PREPARING] = '配货中';
 $_LANG['ss'][SS_SHIPPED] = '已发货';
 $_LANG['ss'][SS_RECEIVED] = '收货确认';
+$_LANG['ss'][SS_SHIPPED_PART] = '已发货(部分商品)';
+$_LANG['ss'][SS_SHIPPED_ING] = '发货中';
 
 $_LANG['ps'][PS_UNPAYED] = '未付款';
 $_LANG['ps'][PS_PAYING] = '付款中';
 $_LANG['ps'][PS_PAYED] = '已付款';
 
+$_LANG['ss_admin'][SS_SHIPPED_ING] = '发货中（前台状态：未发货）';
 /* 订单操作 */
 $_LANG['label_operable_act'] = '当前可执行操作：';
 $_LANG['label_action_note'] = '操作备注：';
@@ -59,14 +65,21 @@ $_LANG['op_invalid'] = '无效';
 $_LANG['op_return'] = '退货';
 $_LANG['op_unpay'] = '设为未付款';
 $_LANG['op_unship'] = '未发货';
+$_LANG['op_cancel_ship'] = '取消发货';
 $_LANG['op_receive'] = '已收货';
 $_LANG['op_assign'] = '指派给';
 $_LANG['op_after_service'] = '售后';
 $_LANG['act_ok'] = '操作成功';
+$_LANG['act_false'] = '操作失败';
+$_LANG['act_ship_num'] = '此单发货数量不能超出订单商品数量';
+$_LANG['act_good_vacancy'] = '商品已缺货';
+$_LANG['act_good_delivery'] = '货已发完';
 $_LANG['notice_gb_ship'] = '备注：团购活动未处理为成功前，不能发货';
 $_LANG['back_list'] = '返回订单列表';
 $_LANG['op_remove'] = '删除';
 $_LANG['op_you_can'] = '您可进行的操作';
+$_LANG['op_split'] = '生成发货单';
+$_LANG['op_to_delivery'] = '去发货';
 
 /* 订单列表 */
 $_LANG['order_amount'] = '应付金额';
@@ -78,6 +91,8 @@ $_LANG['order_time'] = '下单时间';
 $_LANG['detail'] = '查看';
 $_LANG['phone'] = '电话';
 $_LANG['group_buy'] = '（团购）';
+$_LANG['error_get_goods_info'] = '获取订单商品信息错误';
+$_LANG['exchange_goods'] = '（积分兑换）';
 
 $_LANG['js_languages']['remove_confirm'] = '删除订单将清除该订单的所有信息。您确定要这么做吗？';
 
@@ -103,9 +118,13 @@ $_LANG['label_time'] = '下单时间：';
 $_LANG['prev'] = '前一个订单';
 $_LANG['next'] = '后一个订单';
 $_LANG['print_order'] = '打印订单';
+$_LANG['print_shipping'] = '打印快递单';
 $_LANG['print_order_sn'] = '订单编号：';
 $_LANG['print_buy_name'] = '购 货 人：';
 $_LANG['label_consignee_address'] = '收货地址：';
+$_LANG['no_print_shipping'] = '很抱歉,目前您还没有设置打印快递单模板.不能进行打印';
+$_LANG['suppliers_no'] = '不指定供货商本店自行处理';
+$_LANG['restaurant'] = '本店';
 
 $_LANG['order_info'] = '订单信息';
 $_LANG['base_info'] = '基本信息';
@@ -113,6 +132,7 @@ $_LANG['other_info'] = '其他信息';
 $_LANG['consignee_info'] = '收货人信息';
 $_LANG['fee_info'] = '费用信息';
 $_LANG['action_info'] = '操作信息';
+$_LANG['shipping_info'] = '配送信息';
 
 $_LANG['label_how_oos'] = '缺货处理：';
 $_LANG['label_how_surplus'] = '余额处理：';
@@ -135,6 +155,11 @@ $_LANG['label_shop_address'] = '地址：';
 $_LANG['label_service_phone'] = '电话：';
 $_LANG['label_print_time'] = '打印时间：';
 
+$_LANG['label_suppliers'] = '选择供货商：';
+$_LANG['label_agency'] = '办事处：';
+$_LANG['suppliers_name'] = '供货商';
+
+$_LANG['product_sn'] = '货品号';
 $_LANG['goods_info'] = '商品信息';
 $_LANG['goods_name'] = '商品名称';
 $_LANG['goods_name_brand'] = '商品名称 [ 品牌 ]';
@@ -142,6 +167,8 @@ $_LANG['goods_sn'] = '货号';
 $_LANG['goods_price'] = '价格';
 $_LANG['goods_number'] = '数量';
 $_LANG['goods_attr'] = '属性';
+$_LANG['goods_delivery'] = '已发货数量';
+$_LANG['goods_delivery_curr'] = '此单发货数量';
 $_LANG['storage'] = '库存';
 $_LANG['subtotal'] = '小计';
 $_LANG['label_total'] = '合计：';
@@ -152,6 +179,7 @@ $_LANG['label_discount'] = '折扣：';
 $_LANG['label_tax'] = '发票税额：';
 $_LANG['label_shipping_fee'] = '配送费用：';
 $_LANG['label_insure_fee'] = '保价费用：';
+$_LANG['label_insure_yn'] = '是否保价：';
 $_LANG['label_pay_fee'] = '支付费用：';
 $_LANG['label_pack_fee'] = '包装费用：';
 $_LANG['label_card_fee'] = '贺卡费用：';
@@ -176,6 +204,7 @@ $_LANG['pay_note'] = '支付备注：';
 
 $_LANG['sms_time_format'] = 'm月j日G时';
 $_LANG['order_shipped_sms'] = '您的订单%s已于%s发货 [%s]';
+$_LANG['order_splited_sms'] = '您的订单%s,%s正在%s [%s]';
 $_LANG['order_removed'] = '订单删除成功。';
 $_LANG['return_list'] = '返回订单列表';
 
@@ -230,6 +259,7 @@ $_LANG['edit_template_success'] = '编辑订单打印模板操作成功!';
 $_LANG['remark_fittings'] = '（配件）';
 $_LANG['remark_gift'] = '（赠品）';
 $_LANG['remark_favourable'] = '（特惠品）';
+$_LANG['remark_package'] = '（礼包）';
 
 /* 订单来源统计 */
 $_LANG['from_order'] = '订单来源：';
@@ -300,6 +330,7 @@ $_LANG['return_order_surplus'] = '由于取消、无效或退货操作，退回�
 $_LANG['return_order_integral'] = '由于取消、无效或退货操作，退回支付订单 %s 时使用的积分';
 $_LANG['order_gift_integral'] = '订单 %s 赠送的积分';
 $_LANG['return_order_gift_integral'] = '由于退货或未发货操作，退回订单 %s 赠送的积分';
+$_LANG['invoice_no_mall'] = '&nbsp;&nbsp;&nbsp;&nbsp;多个发货单号，请用英文逗号（“,”）隔开。';
 
 $_LANG['js_languages']['input_price'] = '自定义价格';
 $_LANG['js_languages']['pls_search_user'] = '请搜索并选择会员';
@@ -316,6 +347,7 @@ $_LANG['js_languages']['pls_input_cancel'] = '请您填写取消原因！';
 $_LANG['js_languages']['pls_select_refund'] = '请选择退款方式！';
 $_LANG['js_languages']['pls_select_agency'] = '请选择办事处！';
 $_LANG['js_languages']['pls_select_other_agency'] = '该订单现在就属于这个办事处，请选择其他办事处！';
+$_LANG['js_languages']['loading'] = '加载中...';
 
 /* 订单操作 */
 $_LANG['order_operate'] = '订单操作：';
@@ -332,4 +364,41 @@ $_LANG['order_pay'] = '订单支付：%s';
 $_LANG['send_mail_fail'] = '发送邮件失败';
 
 $_LANG['send_message'] = '发送/查看留言';
+
+/* 发货单操作 */
+$_LANG['delivery_operate'] = '发货单操作：';
+$_LANG['delivery_sn_number'] = '发货单流水号：';
+$_LANG['invoice_no_sms'] = '请填写发货单号！';
+
+/* 发货单搜索 */
+$_LANG['delivery_sn'] = '发货单';
+
+/* 发货单状态 */
+$_LANG['delivery_status'][0] = '已发货';
+$_LANG['delivery_status'][1] = '退货';
+$_LANG['delivery_status'][2] = '正常';
+
+/* 发货单标签 */
+$_LANG['label_delivery_status'] = '发货单状态';
+$_LANG['label_suppliers_name'] = '供货商';
+$_LANG['label_delivery_time'] = '生成时间';
+$_LANG['label_delivery_sn'] = '发货单流水号';
+$_LANG['label_add_time'] = '下单时间';
+$_LANG['label_update_time'] = '发货时间';
+$_LANG['label_send_number'] = '发货数量';
+
+/* 发货单提示 */
+$_LANG['tips_delivery_del'] = '发货单删除成功！';
+
+/* 退货单操作 */
+$_LANG['back_operate'] = '退货单操作：';
+
+/* 退货单标签 */
+$_LANG['return_time'] = '退货时间：';
+$_LANG['label_return_time'] = '退货时间';
+
+/* 退货单提示 */
+$_LANG['tips_back_del'] = '退货单删除成功！';
+
+$_LANG['goods_num_err'] = '库存不足，请重新选择！';
 ?>

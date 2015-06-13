@@ -3,7 +3,7 @@
 /**
  * ECSHOP Control panel administrator operate content language file
  * ============================================================================
- * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -11,9 +11,8 @@
  * republish the program code, on the premise of that your behavior is not for
  * commercial purposes.
  * ============================================================================
- * $Author: scottye $
- * $Date: 2007-01-31 14:28:33 +0800 (Wednesday, 31 January 2007) $
- * $Id: log_action.php 4807 2007-01-31 06:28:33Z scottye $
+ * $Author: liubo $
+ * $Id: log_action.php 17217 2011-01-19 06:29:08Z liubo $
 */
 
 /*------------------------------------------------------ */
@@ -71,6 +70,7 @@ $_LANG['log_action']['users_comment'] = 'User comments';
 $_LANG['log_action']['ads_position'] = ' ADs position';
 $_LANG['log_action']['ads'] = 'Ads';
 $_LANG['log_action']['area'] = 'Area';
+
 $_LANG['log_action']['group_buy'] = 'Associates';
 $_LANG['log_action']['goods_type'] = 'Product type';
 $_LANG['log_action']['booking'] = 'Booking management';
@@ -79,7 +79,16 @@ $_LANG['log_action']['shop_config'] = ' Shop config';
 $_LANG['log_action']['languages'] = 'Foreground language item';
 $_LANG['log_action']['user_surplus'] = 'User balance';
 $_LANG['log_action']['message'] = 'User Message';
+$_LANG['log_action']['fckfile'] = 'FCK file';
 
-$_LANG['log_action']['db_backup'] = '数据库备份';
+$_LANG['log_action']['db_backup'] = 'Database Backup';
+
+$_LANG['log_action']['package'] = 'Preferential Packeage';
+
+$_LANG['log_action']['exchange_goods'] = 'Integral convertible goods';
+
+$_LANG['log_action']['suppliers'] = 'Suppliers';
+
+$_LANG['log_action']['reg_fields'] = 'User register options';
 
 ?>

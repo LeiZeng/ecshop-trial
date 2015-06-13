@@ -2,7 +2,7 @@
 /**
  * ECSHOP Control panel shop cinfig language file
  * ============================================================================
- * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -10,11 +10,11 @@
  * republish the program code, on the premise of that your behavior is not for
  * commercial purposes.
  * ============================================================================
- * $Author: wj $
- * $Date: 2007-02-07 11:26:58 +0800 (Wednesday, 07 February 2007) $
- * $Id: shop_config.php 5297 2007-02-07 03:26:58Z wj $
+ * $Author: liubo $
+ * $Id: shop_config.php 17217 2011-01-19 06:29:08Z liubo $
  */
 
+require(ROOT_PATH.ADMIN_PATH.'/sms_url.php');
 $_LANG['cfg_name']['basic'] = 'Basic';
 $_LANG['cfg_name']['display'] = 'Display';
 $_LANG['cfg_name']['shop_info'] = 'Shop information';
@@ -31,8 +31,8 @@ $_LANG['cfg_name']['market_price_rate'] = 'Market price rate';
 $_LANG['cfg_name']['rewrite'] = 'URL rewrite';
 $_LANG['cfg_name']['integral_name'] = 'Consume points name';
 $_LANG['cfg_name']['integral_scale'] = 'Points convert rate';
-$_LANG['cfg_name']['enable_order_check'] = '是否啟用新訂單提醒';
-$_LANG['cfg_name']['default_storage'] = '默认库存';
+$_LANG['cfg_name']['enable_order_check'] = 'Whether the opening of the new orders to remind';
+$_LANG['cfg_name']['default_storage'] = 'Default Stock';
 $_LANG['cfg_name']['integral_percent'] = 'Points payout ratio';
 $_LANG['cfg_name']['date_format'] = 'Date format';
 $_LANG['cfg_name']['time_format'] = 'Time format';
@@ -61,6 +61,7 @@ $_LANG['cfg_name']['shop_country'] = 'Country';
 $_LANG['cfg_name']['shop_province'] = 'Province';
 $_LANG['cfg_name']['shop_city'] = 'City';
 $_LANG['cfg_name']['shop_address'] = 'Address';
+$_LANG['cfg_name']['licensed'] = 'Display Licensed?';
 $_LANG['cfg_name']['qq'] = 'Customer service QQ';
 $_LANG['cfg_name']['ww'] = 'Taobao WangWang';
 $_LANG['cfg_name']['skype'] = 'Skype';
@@ -70,7 +71,15 @@ $_LANG['cfg_name']['service_email'] = 'Customer service email';
 $_LANG['cfg_name']['service_phone'] = 'Customer service phone';
 $_LANG['cfg_name']['can_invoice'] = 'Invoice';
 $_LANG['cfg_name']['user_notice'] = 'Member center notice';
-$_LANG['cfg_name']['shop_notice'] = '商店公告';
+$_LANG['cfg_name']['shop_notice'] = 'Notice stores';
+$_LANG['cfg_name']['shop_reg_closed'] = 'Registration is closed';
+$_LANG['cfg_name']['send_mail_on'] = 'Whether or not to open automatically send e-mail';
+$_LANG['cfg_name']['auto_generate_gallery'] = 'Merchandise is automatically upload album chart';
+$_LANG['cfg_name']['retain_original_img'] = 'Upload goods whether to retain image';
+$_LANG['cfg_name']['member_email_validate'] = 'E-mail to verify whether or not to open membership';
+$_LANG['cfg_name']['send_verify_email'] = 'Send registration verification email automatically';
+$_LANG['cfg_name']['message_board'] = 'Whether the opening of the message board function';
+$_LANG['cfg_name']['message_check'] = 'Users need to examine whether the message';
 //$_LANG['cfg_name']['use_package'] = 'Whether use packing';
 //$_LANG['cfg_name']['use_card'] = 'Whether use card';
 $_LANG['cfg_name']['use_integral'] = 'Use points';
@@ -95,14 +104,16 @@ $_LANG['cfg_name']['close_comment'] = 'Close shop reason';
 $_LANG['cfg_name']['watermark_alpha'] = 'Watermark transparency';
 $_LANG['cfg_name']['icp_number'] = 'ICP certificate or ICP certificate number of record';
 $_LANG['cfg_name']['invoice_content'] = 'Invoice contents';
-$_LANG['cfg_name']['invoice_type'] = '发票类型及税率';
-$_LANG['cfg_name']['stock_dec_time'] = '减库存的时机';
+$_LANG['cfg_name']['invoice_type'] = 'Invoice types and rates';
+$_LANG['cfg_name']['stock_dec_time'] = 'Stock minus the time';
 $_LANG['cfg_name']['comment_check'] = 'Check user comment';
-$_LANG['cfg_name']['comment_factor'] = '商品评论的条件';
+$_LANG['cfg_name']['comment_factor'] = 'Comments merchandise conditions';
 $_LANG['cfg_name']['no_picture'] = 'Default image of product';
 $_LANG['cfg_name']['stats_code'] = 'Statistics coding';
 $_LANG['cfg_name']['cache_time'] = 'Cache time(second)';
 $_LANG['cfg_name']['page_size'] = 'Category page list quantity';
+$_LANG['cfg_name']['article_page_size'] = 'Article category page list quantity';
+$_LANG['cfg_name']['page_style'] = 'Page Style';
 $_LANG['cfg_name']['sort_order_type'] = 'Category page default sort type';
 $_LANG['cfg_name']['sort_order_method'] = 'Category page default sort method';
 $_LANG['cfg_name']['show_order_type'] = 'Category page default show type';
@@ -112,8 +123,8 @@ $_LANG['cfg_name']['register_points'] = 'Register points';
 $_LANG['cfg_name']['shop_logo'] = 'Shop Logo';
 $_LANG['cfg_name']['enable_gzip'] = 'Enable Gzip mode';
 $_LANG['cfg_name']['anonymous_buy'] = 'Allow to shop without login';
-$_LANG['cfg_name']['min_goods_amount'] = '最小购物金额';
-$_LANG['cfg_name']['one_step_buy'] = '是否一步购物';
+$_LANG['cfg_name']['min_goods_amount'] = 'The smallest to the amount of';
+$_LANG['cfg_name']['one_step_buy'] = 'Whether the step to';
 $_LANG['cfg_name']['show_goodssn'] = 'NO.';
 $_LANG['cfg_name']['show_brand'] = 'Brand';
 $_LANG['cfg_name']['show_goodsweight'] = 'Weight';
@@ -123,6 +134,9 @@ $_LANG['cfg_name']['show_marketprice'] = 'Show market price?';
 $_LANG['cfg_name']['goodsattr_style'] = 'Attribute';
 $_LANG['cfg_name']['test_mail_address'] = 'Email';
 $_LANG['cfg_name']['send'] = 'Test';
+$_LANG['cfg_name']['send_service_email'] = 'Send email to shop owner when a new order generate.';
+$_LANG['cfg_name']['show_goods_in_cart'] = 'Display Type In Cart';
+$_LANG['cfg_name']['show_attr_in_cart'] = 'Shows attributes of goods?';
 $_LANG['test_mail_title'] = 'Test email';
 $_LANG['cfg_name']['email_content'] = 'How are you! Tupload_size_limithis is the test mail of an examination mail server setting. Receive this mail, and your mail server config exactitude! You can carry on other mails to send out of operate!';
 $_LANG['cfg_name']['sms'] = 'SMS';
@@ -134,15 +148,18 @@ $_LANG['cfg_name']['attr_related_number'] = 'Product quantity of relational attr
 $_LANG['cfg_name']['top10_time'] = 'Ranking time';
 $_LANG['cfg_name']['goods_gallery_number'] = 'Details page gallery image quantity';
 $_LANG['cfg_name']['article_title_length'] = 'Article title length';
-$_LANG['cfg_name']['cron_method'] = '是否开启命令行调用计划任务';
-$_LANG['cfg_name']['upload_size_limit'] = '附件上傳大小';
-$_LANG['cfg_name']['timezone'] = '默认时区';
-$_LANG['cfg_name']['bgcolor'] = '缩略图背景色';
-$_LANG['cfg_name']['name_of_region_1'] = '一级配送区域名称';
-$_LANG['cfg_name']['name_of_region_2'] = '二级配送区域名称';
-$_LANG['cfg_name']['name_of_region_3'] = '三级配送区域名称';
-$_LANG['cfg_name']['name_of_region_4'] = '四级配送区域名称';
-$_LANG['cfg_name']['related_goods_number'] = '关联商品显示数量';
+$_LANG['cfg_name']['cron_method'] = 'Whether it plans to open a command line call mission';
+$_LANG['cfg_name']['upload_size_limit'] = 'From the size of attachment';
+$_LANG['cfg_name']['timezone'] = 'The default time zone';
+$_LANG['cfg_name']['search_keywords'] = 'Search Keywords';
+$_LANG['cfg_name']['cart_confirm'] = 'Cart Confirm Prompt';
+$_LANG['cfg_name']['bgcolor'] = 'Thumbnail background color';
+$_LANG['cfg_name']['name_of_region_1'] = 'The name of a regional distribution';
+$_LANG['cfg_name']['name_of_region_2'] = '2 Distribution of regional Name';
+$_LANG['cfg_name']['name_of_region_3'] = 'Name three regional distribution';
+$_LANG['cfg_name']['name_of_region_4'] = '4 Distribution of regional Name';
+$_LANG['cfg_name']['related_goods_number'] = 'Associated merchandise display quantity';
+$_LANG['cfg_name']['visit_stats'] = 'Visit stats';
 $_LANG['cfg_name']['help_open'] = 'Open the user help';
 
 $_LANG['cfg_desc']['smtp'] = 'Config SMTP basic parameter';
@@ -158,6 +175,7 @@ $_LANG['cfg_desc']['smtp_user'] = 'Send out attestation number for mails, it is 
 $_LANG['cfg_desc']['bought_goods'] = 'How many records are displayed, that customers who bought this item also bought products?';
 $_LANG['cfg_desc']['currency_format'] = 'Display product price format, the %s will be replaced corresponding price figure.';
 $_LANG['cfg_desc']['image_height'] = 'If your server support GD, the system will auto appointed picture size when you upload the picture.';
+$_LANG['cfg_desc']['watermark'] = 'Gif format, watermark documents should be support for the transparency settings.';
 $_LANG['cfg_desc']['watermark_alpha'] = 'Diaphaneity of watermark, choice value range is 0 to 100. It is opacity when the value is 100.';
 $_LANG['cfg_desc']['invoice_content'] = 'Customer can choose contents in invoice. For example:Office equipment. Every line represent an options.';
 $_LANG['cfg_desc']['stats_code'] = 'You can add the code that other interviews statistics service company to provide to each page.';
@@ -171,14 +189,39 @@ $_LANG['cfg_desc']['enable_gzip'] = 'Size of send page may be compressed if the 
 $_LANG['cfg_desc']['skype'] = 'If you have several Skype number, please divided each number by DBC case comma(, ).    Hint: You need enable display function in your Skype privacy setting.';
 $_LANG['cfg_desc']['attr_related_number'] = 'How many relational products are displaied in the product details page.';
 $_LANG['cfg_desc']['user_notice'] = 'The information will be showed in welcome page of member center.';
-$_LANG['cfg_desc']['comment_factor'] = '选取较高的评论条件可以有效的减少垃圾评论的产生。只有用户订单完成后才认为该用户有购买行为';
-$_LANG['cfg_desc']['min_goods_amount'] = '达到此购物金额，才能提交订单。';
-$_LANG['cfg_desc']['shop_notice'] = '以上内容将显示在首页商店公告中，注意控制公告内容长度不要超过公告显示区域大小。';
-$_LANG['cfg_desc']['bgcolor'] = '颜色请以#FFFFFF格式填写';
-$_LANG['cfg_desc']['use_how_oos'] = '使用缺货处理时前台订单确认页面允许用户选择缺货时处理方法。';
+$_LANG['cfg_desc']['comment_factor'] = 'Select higher comments condition can effectively reduce the garbage generated comment. Orders after the completion of only the user that the user purchase behavior has';
+$_LANG['cfg_desc']['min_goods_amount'] = 'To achieve this amount in order to submit orders.';
+$_LANG['cfg_desc']['search_keywords'] = 'Keywords displayed on index, please divided each keyword by comma(, ).';
+$_LANG['cfg_desc']['shop_notice'] = 'Above will appear in the home store announcement, attention to controlling the content of the length of notice should not exceed the size of bulletin display area.';
+$_LANG['cfg_desc']['bgcolor'] = 'Color Please fill in the format # FFFFFF';
+$_LANG['cfg_desc']['use_how_oos'] = 'Out of stock when the deal with the future use order confirmation page allows the user to choose when out-of-stock approach.';
+$_LANG['cfg_desc']['cart_confirm'] = 'Allows users click on the "Add to Cart" after the prompt and the subsequent action.';
+$_LANG['cfg_desc']['send_service_email'] = 'If service email is empty,the option is invalid.';
+$_LANG['cfg_desc']['send_mail_on'] = 'Enable this option, it will automatically send mail in the maillist';
+$_LANG['cfg_desc']['sms_shop_mobile'] = 'Please register your mobile SMS or mobile phone number and then';
+$_LANG['cfg_desc']['send_verify_email'] = 'If you want to use "Send registration verification email automatically","E-mail to verify whether or not to open membership" must be open.';
 
+$_LANG['cfg_range']['cart_confirm'][1] = 'Prompts the user, click "OK" into the Shopping Cart
+';
+$_LANG['cfg_range']['cart_confirm'][2] = 'Prompts the user, click "Cancel" into the Shopping Cart';
+$_LANG['cfg_range']['cart_confirm'][3] = 'Go directly to Cart';
+$_LANG['cfg_range']['cart_confirm'][4] = 'Do not prompt and remain in the current page';
 $_LANG['cfg_range']['shop_closed']['0'] = 'No';
 $_LANG['cfg_range']['shop_closed']['1'] = 'yes';
+$_LANG['cfg_range']['licensed']['0'] = 'No';
+$_LANG['cfg_range']['licensed']['1'] = 'Yes';
+$_LANG['cfg_range']['send_mail_on']['on'] = 'Open';
+$_LANG['cfg_range']['send_mail_on']['off'] = 'Off';
+$_LANG['cfg_range']['member_email_validate']['1'] = 'Open';
+$_LANG['cfg_range']['member_email_validate']['0'] = 'Off';
+$_LANG['cfg_range']['send_verify_email']['1'] = 'Open';
+$_LANG['cfg_range']['send_verify_email']['0'] = 'Off';
+$_LANG['cfg_range']['message_board']['1'] = 'Open';
+$_LANG['cfg_range']['message_board']['0'] = 'Off';
+$_LANG['cfg_range']['auto_generate_gallery']['1'] = 'Yes';
+$_LANG['cfg_range']['auto_generate_gallery']['0'] = 'No';
+$_LANG['cfg_range']['retain_original_img']['1'] = 'Yes';
+$_LANG['cfg_range']['retain_original_img']['0'] = 'No';
 $_LANG['cfg_range']['watermark_place']['0'] = 'No';
 $_LANG['cfg_range']['watermark_place']['1'] = 'Top-left';
 $_LANG['cfg_range']['watermark_place']['2'] = 'Top-right';
@@ -236,10 +279,12 @@ $_LANG['cfg_range']['mail_charset']['GB2312'] = 'Simplified Chinese character';
 $_LANG['cfg_range']['mail_charset']['BIG5'] = 'Traditional Chinese character';
 $_LANG['cfg_range']['comment_check']['0'] = 'No';
 $_LANG['cfg_range']['comment_check']['1'] = 'Yes';
-$_LANG['cfg_range']['comment_factor']['0'] = '所有用户';
-$_LANG['cfg_range']['comment_factor']['1'] = '仅登录用户';
-$_LANG['cfg_range']['comment_factor']['2'] = '有过一次以上购买行为用户';
-$_LANG['cfg_range']['comment_factor']['3'] = '仅购买过该商品用户';
+$_LANG['cfg_range']['message_check']['0'] = 'Yes';
+$_LANG['cfg_range']['message_check']['1'] = 'No';
+$_LANG['cfg_range']['comment_factor']['0'] = 'All users';
+$_LANG['cfg_range']['comment_factor']['1'] = 'Logged-on user only';
+$_LANG['cfg_range']['comment_factor']['2'] = 'Has more than once a user purchase behavior';
+$_LANG['cfg_range']['comment_factor']['3'] = 'Only have the merchandise customers buy';
 $_LANG['cfg_range']['enable_gzip']['1'] = 'Enable';
 $_LANG['cfg_range']['enable_gzip']['0'] = 'Disable';
 $_LANG['cfg_range']['price_format']['0'] = 'Don\'t operate.';
@@ -253,6 +298,13 @@ $_LANG['cfg_range']['sort_order_type']['1'] = 'By product price';
 $_LANG['cfg_range']['sort_order_type']['2'] = 'By lastest update time';
 $_LANG['cfg_range']['sort_order_method']['0'] = 'Descending sort';
 $_LANG['cfg_range']['sort_order_method']['1'] = 'Ascending sort';
+$_LANG['cfg_range']['show_order_type'][0] = 'List shows';
+$_LANG['cfg_range']['show_order_type'][1] = 'Table shows';
+$_LANG['cfg_range']['show_order_type'][2] = 'Text shows';
+$_LANG['cfg_range']['help_open'][0] = 'Off';
+$_LANG['cfg_range']['help_open'][1] = 'Open';
+$_LANG['cfg_range']['page_style'][0] = 'Classical';
+$_LANG['cfg_range']['page_style'][1] = 'Popular';
 
 $_LANG['cfg_range']['anonymous_buy']['0'] = 'Disallow';
 $_LANG['cfg_range']['anonymous_buy']['1'] = 'Allow';
@@ -278,18 +330,23 @@ $_LANG['cfg_range']['sms_order_payed']['1'] = 'Send sms';
 $_LANG['cfg_range']['sms_order_payed']['0'] = 'Not send sms';
 $_LANG['cfg_range']['sms_order_shipped']['1'] = 'Send sms';
 $_LANG['cfg_range']['sms_order_shipped']['0'] = 'Not send sms';
-
+$_LANG['cfg_range']['cron_method']['0'] = 'No';
+$_LANG['cfg_range']['cron_method']['1'] = 'Yes';
 $_LANG['cfg_range']['enable_order_check']['0'] = 'No';
 $_LANG['cfg_range']['enable_order_check']['1'] = 'Yes';
-$_LANG['cfg_range']['stock_dec_time']['0'] = '发货时';
-$_LANG['cfg_range']['stock_dec_time']['1'] = '下订单时';
-$_LANG['cfg_range']['help_open'][0] = 'Close';
-$_LANG['cfg_range']['help_open'][1] = 'Open';
-
-$_LANG['rewrite_confirm'] ="The function of URL rewrite request your Web Server to must be Apache, and enable rewrite module. \\nPlease confirm the htaccess.txt file has already named .htaccess.";
-$_LANG['gzip_confirm'] ="The GZip function needs your server support zlib expand database. \\nIf your found junk after open the Gzip page, may be your server has already openned Gzip, you needn\'t open again in the ECSHOP.";
-$_LANG['msg_invalid_file'] = 'You upload an illegal file type. That file name is: %s.';
-$_LANG['msg_upload_failed'] = 'Upload a file the %s failure, please check the %s directory can be wrote or not.';
+$_LANG['cfg_range']['enable_order_check']['0'] = 'No';
+$_LANG['cfg_range']['enable_order_check']['1'] = 'Yes';
+$_LANG['cfg_range']['stock_dec_time']['0'] = 'Shipped';
+$_LANG['cfg_range']['stock_dec_time']['1'] = 'Under orders';
+$_LANG['cfg_range']['send_service_email']['0'] = 'No';
+$_LANG['cfg_range']['send_service_email']['1'] = 'Yes';
+$_LANG['cfg_range']['show_goods_in_cart']['1'] = 'Only Text';
+$_LANG['cfg_range']['show_goods_in_cart']['2'] = 'Only Images';
+$_LANG['cfg_range']['show_goods_in_cart']['3'] = 'Text and Images';
+$_LANG['cfg_range']['show_attr_in_cart']['0'] = 'No';
+$_LANG['cfg_range']['show_attr_in_cart']['1'] = 'Yes';
+$_LANG['cfg_range']['shop_reg_closed']['0'] = 'No';
+$_LANG['cfg_range']['shop_reg_closed']['1'] = 'Yes';
 
 $_LANG['cfg_range']['timezone']['-12'] = '(GMT -12:00) Eniwetok, Kwajalein';
 $_LANG['cfg_range']['timezone']['-11'] = '(GMT -11:00) Midway Island, Samoa';
@@ -324,11 +381,31 @@ $_LANG['cfg_range']['timezone']['10'] = '(GMT +10:00) Canberra, Guam, Melbourne,
 $_LANG['cfg_range']['timezone']['11'] = '(GMT +11:00) Magadan, New Caledonia, Solomon Islands';
 $_LANG['cfg_range']['timezone']['12'] = '(GMT +12:00) Auckland, Wellington, Fiji, Marshall Island';
 
+$_LANG['cfg_range']['upload_size_limit']['-1'] = 'Default';
+$_LANG['cfg_range']['upload_size_limit']['0'] = '0KB';
+$_LANG['cfg_range']['upload_size_limit']['64'] = '64KB';
+$_LANG['cfg_range']['upload_size_limit']['128'] = '128KB';
+$_LANG['cfg_range']['upload_size_limit']['256'] = '256KB';
+$_LANG['cfg_range']['upload_size_limit']['512'] = '512KB';
+$_LANG['cfg_range']['upload_size_limit']['1024'] = '1MB';
+$_LANG['cfg_range']['upload_size_limit']['2048'] = '2MB';
+$_LANG['cfg_range']['upload_size_limit']['4096'] = '4MB';
+$_LANG['cfg_range']['visit_stats']['on'] = 'Open';
+$_LANG['cfg_range']['visit_stats']['off'] = 'Off';
+
+$_LANG['rewrite_confirm_apache'] ="The function of URL rewrite request your Web Server to must be Apache, and enable rewrite module. \\nPlease confirm the htaccess.txt file has already named .htaccess.";
+$_LANG['rewrite_confirm_iis'] ="The function of URL rewrite request your Web Server to must be installed IIS, and enable ISAPI Rewrite module. \\nIf you are using a commercial version of ISAPI Rewrite, please confirm whether you have httpd.txt rename the file to httpd.ini.If you are using a free version of ISAPI Rewrite, please confirm whether you have httpd.txt and copy the contents of the document to the ISAPI Rewrite installation directory httpd.ini.";
+$_LANG['gzip_confirm'] ="The GZip function needs your server support zlib expand database. \\nIf your found junk after open the Gzip page, may be your server has already openned Gzip, you needn\'t open again in the ECSHOP.";
+$_LANG['retain_original_confirm'] = 'If you do not retain the image of goods, in the "image batch processing"\\n will not be re-generated image of the product does not contain a picture.\\n Please use this feature carefully!';
+$_LANG['msg_invalid_file'] = 'You upload an illegal file type. That file name is: %s.';
+$_LANG['msg_upload_failed'] = 'Upload a file the %s failure, please check the %s directory can be wrote or not.';
+$_LANG['smtp_ssl_confirm'] = 'This feature requires that you must support the php module OpenSSL, if you want to use this feature, please contact your provider to confirm the space to support the module';
+
 /* 邮件设置语言项 */
-$_LANG['cfg_name']['mail_service'] = '邮件服务';
-$_LANG['cfg_desc']['mail_service'] = '如果您选择了采用服务器内置的 Mail 服务，您不需要填写下面的内容。';
-$_LANG['cfg_range']['mail_service'][0] = '采用服务器内置的 Mail 服务';
-$_LANG['cfg_range']['mail_service'][1] = '采用其他的 SMTP 服务';
+$_LANG['cfg_name']['mail_service'] = 'E-mail Service';
+$_LANG['cfg_desc']['mail_service'] = 'If you choose the server using the built-in Mail Services, you do not need to fill the following form.';
+$_LANG['cfg_range']['mail_service'][0] = 'Using the server built-in Mail Services';
+$_LANG['cfg_range']['mail_service'][1] = 'Using other SMTP Service';
 
 $_LANG['cfg_name']['smtp_host'] = 'SMTP server';
 $_LANG['cfg_name']['smtp_port'] = 'SMTP port';
@@ -336,8 +413,11 @@ $_LANG['cfg_name']['smtp_user'] = 'Email send account number';
 $_LANG['cfg_name']['smtp_pass'] = 'Account number password';
 $_LANG['cfg_name']['smtp_mail'] = 'Email reply address';
 $_LANG['cfg_name']['mail_charset'] = 'Email charset';
+$_LANG['cfg_name']['smtp_ssl'] = 'Mail servers require encrypted connections(SSL)';
+$_LANG['cfg_range']['smtp_ssl'][0] = 'No';
+$_LANG['cfg_range']['smtp_ssl'][1] = 'Yes';
 
-$_LANG['mail_settings_note'] = '如果您的服务器支持 Mail 函数（具体信息请咨询您的空间提供商）。我们建议您使用系统的 Mail 函数。<br />当您的服务器不支持 Mail 函数的时候您也可以选用 SMTP 作为邮件服务器。';
+$_LANG['mail_settings_note'] = 'If your server to support the Mail function (specific information please consult your space provider). We recommend that you use the Mail function system. <br /> When your server does not support Mail function when you can choose to use SMTP as a mail server.';
 
 $_LANG['save_success'] = 'Save shop setting successfully.';
 $_LANG['mail_save_success'] = 'Save mail setting successfully.';
@@ -357,16 +437,17 @@ $_LANG['cfg_range']['wap_config'][1] = 'Enable';
 $_LANG['cfg_name']['wap_logo']       = 'Upload WAP LOGO';
 $_LANG['cfg_desc']['wap_logo']      = 'The LOGO better to be png type for all kinds of phones';
 
-$_LANG['cfg_range']['upload_size_limit']['default'] = 'Default';
-$_LANG['cfg_range']['upload_size_limit']['0'] = '0KB';
-$_LANG['cfg_range']['upload_size_limit']['64'] = '64KB';
-$_LANG['cfg_range']['upload_size_limit']['128'] = '128KB';
-$_LANG['cfg_range']['upload_size_limit']['256'] = '256KB';
-$_LANG['cfg_range']['upload_size_limit']['512'] = '512KB';
-$_LANG['cfg_range']['upload_size_limit']['1024'] = '1MB';
-$_LANG['cfg_range']['upload_size_limit']['2048'] = '2MB';
-$_LANG['cfg_range']['upload_size_limit']['4096'] = '4MB';
+$_LANG['cfg_desc']['wap_config'] = 'This feature only supports Simplified Chinese and only in China Effective';
+$_LANG['cfg_name']['recommend_order'] = 'Recommended products sort';
+$_LANG['cfg_desc']['recommend_order'] = 'Recommended sort is adequate for a small number of goods，Random show s adequate for a large number of goods';
+$_LANG['cfg_range']['recommend_order'][0] = 'Recommended sort';
+$_LANG['cfg_range']['recommend_order'][1] = 'Random show';
 
+$_LANG['invoice_type'] = 'Type';
+$_LANG['invoice_rate'] = 'Rate(%)';
 $_LANG['back_shop_config'] = 'Back to shop config';
+$_LANG['back_mail_settings'] = 'Return e-mail server settings';
+$_LANG['mail_settings'] = 'E-mail server settings';
 
+$_LANG['sms_url'] = '<a href="'.$url.'" target="_blank">Click here to register mobile phone short message service</a>';
 ?>

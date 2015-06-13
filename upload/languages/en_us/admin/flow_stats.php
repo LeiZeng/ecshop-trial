@@ -3,7 +3,7 @@
 /**
  * ECSHOP Statistics of visitors language file
  * ============================================================================
- * All right reserved (C) 2005-2007 Beijing Yi Shang Interactive Technology
+ * All right reserved (C) 2005-2011 Beijing Yi Shang Interactive Technology
  * Development Ltd.
  * Web site: http://www.ecshop.com
  * ----------------------------------------------------------------------------
@@ -11,9 +11,8 @@
  * republish the program code, on the premise of that your behavior is not for
  * commercial purposes.
  * ============================================================================
- * $Author: liry $
- * $Date: 2007-02-06 12:21:25 +0800 (Tuesday, 06 February 2007) $
- * $Id: flow_stats.php 5230 2007-02-06 04:21:25Z liry $
+ * $Author: liubo $
+ * $Id: flow_stats.php 17217 2011-01-19 06:29:08Z liubo $
 */
 
 $_LANG['tab_general'] = 'General visitors count';

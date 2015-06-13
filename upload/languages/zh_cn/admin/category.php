@@ -3,15 +3,14 @@
 /**
  * ECSHOP 商品分类管理语言文件
  * ============================================================================
- * 版权所有 (C) 2005-2006 康盛创想（北京）科技有限公司，并保留所有权利。
- * 网站地址: http://www.ecshop.com
+ * * 版权所有 2005-2012 上海商派网络科技有限公司，并保留所有权利。
+ * 网站地址: http://www.ecshop.com；
  * ----------------------------------------------------------------------------
- * 这是一个免费开源的软件；这意味着您可以在不用于商业目的的前提下对程序代码
- * 进行修改、使用和再发布。
+ * 这不是一个自由软件！您只能在不用于商业目的的前提下对程序代码进行修改和
+ * 使用；不允许对程序代码以任何形式任何目的的再发布。
  * ============================================================================
- * $Author: hackfan $
- * $Date: 2007-10-15 11:55:09 +0800 (星期一, 15 十月 2007) $
- * $Id: category.php 12908 2007-10-15 03:55:09Z hackfan $
+ * $Author: liubo $
+ * $Id: category.php 17217 2011-01-19 06:29:08Z liubo $
 */
 
 /* 商品分类字段信息 */
@@ -31,12 +30,17 @@ $_LANG['cat_top'] = '顶级分类';
 $_LANG['show_in_nav'] = '是否显示在导航栏';
 $_LANG['cat_style'] = '分类的样式表文件';
 $_LANG['is_show'] = '是否显示';
+$_LANG['show_in_index'] = '设置为首页推荐';
+$_LANG['notice_show_in_index'] = '该设置可以在首页的最新、热门、推荐处显示该分类下的推荐商品';
 $_LANG['goods_number'] = '商品数量';
 $_LANG['grade'] = '价格区间个数';
 $_LANG['notice_grade'] = '该选项表示该分类下商品最低价与最高价之间的划分的等级个数，填0表示不做分级，最多不能超过10个。';
 $_LANG['short_grade'] = '价格分级';
 
 $_LANG['nav'] = '导航栏';
+$_LANG['index_new'] = '最新';
+$_LANG['index_best'] = '精品';
+$_LANG['index_hot'] = '热门';
 
 $_LANG['back_list'] = '返回分类列表';
 $_LANG['continue_add'] = '继续添加分类';
@@ -72,11 +76,14 @@ $_LANG['sel_goods_type'] = '请选择商品类型';
 $_LANG['sel_filter_attr'] = '请选择筛选属性';
 $_LANG['filter_attr'] = '筛选属性';
 $_LANG['filter_attr_notic'] = '筛选属性可在前分类页面筛选商品';
+$_LANG['filter_attr_not_repeated'] = '筛选属性不可重复';
 
 /*JS 语言项*/
 $_LANG['js_languages']['catname_empty'] = '分类名称不能为空!';
 $_LANG['js_languages']['unit_empyt'] = '数量单位不能为空!';
 $_LANG['js_languages']['is_leafcat'] = '您选定的分类是一个末级分类。\r\n新分类的上级分类不能是一个末级分类';
 $_LANG['js_languages']['not_leafcat'] = '您选定的分类不是一个末级分类。\r\n商品的分类转移只能在末级分类之间才可以操作。';
+$_LANG['js_languages']['filter_attr_not_repeated'] = '筛选属性不可重复';
+$_LANG['js_languages']['filter_attr_not_selected'] = '请选择筛选属性';
 
 ?>
