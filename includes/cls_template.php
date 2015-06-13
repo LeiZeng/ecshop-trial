@@ -284,6 +284,7 @@ class cls_template
         {
             $source = $this->smarty_prefilter_preCompile($source);
         }
+        
         $source=preg_replace("/([^a-zA-Z0-9_]{1,1})+(copy|fputs|fopen|file_put_contents|fwrite|eval|phpinfo)+( |\()/is", "", $source);
         if(preg_match_all('~(<\?(?:\w+|=)?|\?>|language\s*=\s*[\"\']?php[\"\']?)~is', $source, $sp_match))
         {
@@ -297,9 +298,16 @@ class cls_template
                  $source= str_replace('%%%SMARTYSP'.$curr_sp.'%%%', '<?php echo \''.str_replace("'", "\'", $sp_match[1][$curr_sp]).'\'; ?>'."\n", $source);
             }
          }
-         return preg_replace_callback("/{([^\}\{\n]*)}", function ($r) {
-           return this->select($r[1]);
-         },  $source);
+
+         
+         return preg_replace_callback("/{([^\}\{\n]*)}/", array( &$this, 'fetch_str_t'), $source);
+         //return preg_replace("/{([^\}\{\n]*)}/e", "\$this->select('\\1');", $source);
+    }
+    
+    function fetch_str_t($r)
+    {
+
+    	return $this->select($r['1']);
     }
 
     /**
@@ -421,8 +429,9 @@ class cls_template
         }
         else
         {
-            $tag_sel = explode(' ', $tag)
-            $tag_sel = array_shift($tag_sel);
+        	$tag_t=explode(' ', $tag);
+        	$tag_sel = array_shift($tag_t);
+            //$tag_sel = array_shift(explode(' ', $tag));
             switch ($tag_sel)
             {
                 case 'if':
@@ -492,10 +501,9 @@ class cls_template
 
                 case 'insert' :
                     $t = $this->get_para(substr($tag, 7), false);
-
-                    $out = "<?php \n" . '$k = ' . "\$this->select('\\1');",preg_replace_callback("/(\'\\$[^,]+)" , function($r){return stripslashes(trim($r[1],'\''));}, var_export($t, true)) . ";\n";
+                    $out = "<?php \n" . '$k = ' .preg_replace_callback("/(\'\\$[^,]+)/" , array(&$this,'stripslashes_t'), var_export($t, true)). ";\n";
                     $out .= 'echo $this->_echash . $k[\'name\'] . \'|\' . serialize($k) . $this->_echash;' . "\n?>";
-
+                    //var_dump($out);exit;
                     return $out;
                     break;
 
@@ -539,7 +547,10 @@ class cls_template
             }
         }
     }
-
+    function stripslashes_t($r)
+    {
+       return  stripslashes(trim($r['1'],'\''));
+    }
     /**
      * 处理smarty标签中的变量标签
      *
@@ -548,11 +559,17 @@ class cls_template
      *
      * @return  bool
      */
+     function get_val_t($r)
+     {
+     	 return '.'.str_replace('$','\$',$r['1']);
+     }
+     
+     
     function get_val($val)
     {
         if (strrpos($val, '[') !== false)
         {
-            $val = preg_replace_callback("/\[([^\[\]]*)\]/is", function($r)"'.'.str_replace('$','\$','\\1')", $val);
+            $val = preg_replace_callback("/\[([^\[\]]*)\]/is", array(&$this,'get_val_t'), $val);
         }
 
         if (strrpos($val, '|') !== false)
@@ -1058,6 +1075,15 @@ class cls_template
         return $str;
     }
 
+    function smarty_prefilter_t($r)
+   {
+   	   //var_dump(strtolower($r[1]));
+   	  return  $replacement = '{include file='.strtolower($r['1']). '}';
+   }
+
+
+
+
     function smarty_prefilter_preCompile($source)
     {
         $file_type = strtolower(strrchr($this->_current_file, '.'));
@@ -1069,12 +1095,14 @@ class cls_template
         if ($file_type == '.dwt')
         {
             /* 将模板中所有library替换为链接 */
-            $pattern     = '/<!--\s#BeginLibraryItem\s\"\/(.*?)\"\s-->.*?<!--\s#EndLibraryItem\s-->/se';
+            $pattern     = '/<!--\s#BeginLibraryItem\s\"\/(.*?)\"\s-->.*?<!--\s#EndLibraryItem\s-->/s';
             $replacement = "'{include file='.strtolower('\\1'). '}'";
-            $source      = preg_replace($pattern, $replacement, $source);
-
+            
+            $source      = preg_replace_callback($pattern, array( &$this, 'smarty_prefilter_t'), $source);
+           //var_dump($source);
             /* 检查有无动态库文件，如果有为其赋值 */
             $dyna_libs = get_dyna_libs($GLOBALS['_CFG']['template'], $this->_current_file);
+            //var_dump( $GLOBALS['_CFG']['template'],$this->_current_file);
             if ($dyna_libs)
             {
                 foreach ($dyna_libs AS $region => $libs)
@@ -1094,7 +1122,7 @@ class cls_template
                         $lib_pattern = '/{include\sfile=(' . substr($lib_pattern, 1) . ')}/';
                         /* 修改$reg_content中的内容 */
                         $GLOBALS['libs'] = $libs;
-                        $reg_content = preg_replace_callback($lib_pattern, 'dyna_libs_replace', $reg_content);
+                        $reg_content = preg_replace_callback($lib_pattern, array(&$this,'dyna_libs_replace'), $reg_content);
 
                         /* 用修改过的内容替换原来当前区域中内容 */
                         $source = preg_replace($pattern, $reg_content, $source);
@@ -1113,6 +1141,7 @@ class cls_template
 
             /* 更换编译模板的编码类型 */
             $source = preg_replace('/<meta\shttp-equiv=["|\']Content-Type["|\']\scontent=["|\']text\/html;\scharset=(?:.*?)["|\'][^>]*?>\r?\n?/i', '<meta http-equiv="Content-Type" content="text/html; charset=' . EC_CHARSET . '" />' . "\n", $source);
+            //var_dump($source);exit;
 
         }
 
@@ -1437,6 +1466,55 @@ class cls_template
 
         return $str;
     }
+    
+    
+	/**
+	 * 替换动态模块
+	 *
+	 * @access  public
+	 * @param   string       $matches    匹配内容
+	 *
+	 * @return string        结果
+	 */
+	function dyna_libs_replace($matches)
+	{
+	    $key = '/' . $matches[1];
+
+	    if ($row = array_shift($GLOBALS['libs'][$key]))
+	    {
+	        $str = '';
+	        switch($row['type'])
+	        {
+	            case 1:
+	                // 分类的商品
+	                $str = '{assign var="cat_goods" value=$cat_goods_' .$row['id']. '}{assign var="goods_cat" value=$goods_cat_' .$row['id']. '}';
+	                break;
+	            case 2:
+	                // 品牌的商品
+	                $str = '{assign var="brand_goods" value=$brand_goods_' .$row['id']. '}{assign var="goods_brand" value=$goods_brand_' .$row['id']. '}';
+	                break;
+	            case 3:
+	                // 文章列表
+	                $str = '{assign var="articles" value=$articles_' .$row['id']. '}{assign var="articles_cat" value=$articles_cat_' .$row['id']. '}';
+	                break;
+	            case 4:
+	                //广告位
+	                $str = '{assign var="ads_id" value=' . $row['id'] . '}{assign var="ads_num" value=' . $row['number'] . '}';
+	                break;
+	        }
+	        return $str . $matches[0];
+	    }
+	    else
+	    {
+	        return $matches[0];
+	    }
+	}
+    
+    
+    
+    
+    
+    
 }
 
 ?>

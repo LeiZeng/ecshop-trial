@@ -184,7 +184,8 @@ if (!defined('INIT_NO_SMARTY'))
         $smarty->direct_output = false;
         $smarty->force_compile = false;
     }
-
+        $smarty->direct_output = false;
+        $smarty->force_compile = false;
     $smarty->assign('lang', $_LANG);
     $smarty->assign('ecs_charset', EC_CHARSET);
     if (!empty($_CFG['stylename']))

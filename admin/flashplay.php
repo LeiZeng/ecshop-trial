@@ -128,7 +128,8 @@ elseif ($_REQUEST['act'] == 'add')
             {
                 $name .= chr(mt_rand(97, 122));
             }
-            $name .= '.' . end(explode('.', $_FILES['img_file_src']['name']));
+            $name_t=explode('.', $_FILES['img_file_src']['name']);
+            $name .= '.' . end( $name_t);
             $target = ROOT_PATH . DATA_DIR . '/afficheimg/' . $name;
             if (move_upload_file($_FILES['img_file_src']['tmp_name'], $target))
             {
@@ -137,11 +138,8 @@ elseif ($_REQUEST['act'] == 'add')
         }
         elseif (!empty($_POST['img_src']))
         {
-            if(!get_file_suffix($_POST['img_src'], $allow_suffix))
-            {
-                sys_msg($_LANG['invalid_type']);
-            }
             $src = $_POST['img_src'];
+
             if(strstr($src, 'http') && !strstr($src, $_SERVER['SERVER_NAME']))
             {
                 $src = get_url_image($src);
@@ -246,10 +244,7 @@ elseif ($_REQUEST['act'] == 'edit')
         else if (!empty($_POST['img_src']))
         {
             $src =$_POST['img_src'];
-            if(!get_file_suffix($_POST['img_src'], $allow_suffix))
-            {
-                sys_msg($_LANG['invalid_type']);
-            }
+
             if(strstr($src, 'http') && !strstr($src, $_SERVER['SERVER_NAME']))
             {
                 $src = get_url_image($src);
@@ -863,7 +858,7 @@ function get_flash_tpl_info($dir, $file)
     return $info;
 }
 
-function set_flash_data($tplname, &$msg)
+function set_flash_data($tplname, $msg)
 {
     $flashdata = get_flash_xml();
     if (empty($flashdata))

@@ -342,7 +342,7 @@ function send_mail($name, $email, $subject, $content, $type = 0, $notification=f
 function gd_version()
 {
     include_once(ROOT_PATH . 'includes/cls_image.php');
-
+    
     return cls_image::gd_version();
 }
 
@@ -1225,7 +1225,9 @@ function to_utf8_iconv($str)
  */
 function get_file_suffix($file_name, $allow_type = array())
 {
-    $file_suffix = strtolower(array_pop(explode('.', $file_name)));
+	$file_suffix =explode('.', $file_name);
+	$file_suffix =array_pop($file_suffix);
+    $file_suffix = strtolower($file_suffix);
     if (empty($allow_type))
     {
         return $file_suffix;

@@ -85,6 +85,19 @@ class captcha
      * @param   integer $height     图片高度
      * @return  bool
      */
+    /**
+     * 构造函数
+     *
+     * @access  public
+     * @param
+     *
+     * @return void
+     */
+    function __construct($folder = '', $width = 145, $height = 20)
+    {
+        $this->captcha($folder, $width, $height);
+    }
+    
     function captcha($folder = '', $width = 145, $height = 20)
     {
         if (!empty($folder))
@@ -108,18 +121,7 @@ class captcha
         }
     }
 
-    /**
-     * 构造函数
-     *
-     * @access  public
-     * @param
-     *
-     * @return void
-     */
-    function __construct($folder = '', $width = 145, $height = 20)
-    {
-        $this->captcha($folder, $width, $height);
-    }
+
 
 
     /**

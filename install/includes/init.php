@@ -3,6 +3,7 @@
 /* 报告所有错误 */
 @ini_set('display_errors', 1);
 error_reporting(E_ALL ^ E_NOTICE);
+date_default_timezone_set ('Asia/Shanghai');
 
 /* 清除所有和文件操作相关的状态信息 */
 clearstatcache();
